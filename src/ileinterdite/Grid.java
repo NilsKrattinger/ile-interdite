@@ -8,9 +8,25 @@ public class Grid {
 	Collection<Adventurer> pawn;
 	Collection<Treasure> treasures;
 
-	public Collection<State> getEtatCases() {
+	/**
+	 * Methode qui renvoie un tableau un 6x6 contenant l'etat de chaque case.
+	 * @return
+	 */
+	public  State[][] getStatCells() {
 		// TODO - implement ileinterdite.Grid.getEtatCases
-		throw new UnsupportedOperationException();
+		State[][] StatCells;
+		StatCells = new State[6][6];
+		for (int i = 0; i <= 5; i++) {
+			for (int j = 0; j <= 5; j++) {
+				Cell cellTmp;
+				cellTmp = this.getTuile(i,j);
+				if (cellTmp != null){
+					StatCells[i][j] = cellTmp.getState();
+				}
+			}
+
+		}
+		return StatCells;
 	}
 
 	/**
@@ -31,7 +47,7 @@ public class Grid {
 	 * @param x
 	 * @param y
 	 */
-	public void getTuile(int x, int y) {
+	public Cell getTuile(int x, int y) {
 		// TODO - implement ileinterdite.Grid.getTuile
 		throw new UnsupportedOperationException();
 	}
