@@ -14,26 +14,24 @@ public class Explorer extends Adventurer {
 		throw new UnsupportedOperationException();
 	}
 
-
 	/**
-	 * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par l'aventurier
+	 * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par l'explorateur
 	 * @param tab
 	 */
-
+	@Override
 	public void cellChoiceMoving(State[][] tab) {
-		for (i=0; i<=5; i++) {
-			for (j=0; j<=5; j++) {
-				state = tab[i][j];
-				if ((state ==State.FLOODED || state ==State.NORMAL)
-						&& (this.y==j && (this.state ==i-1
-						|| this.state ==i+1) || this.state ==i
-						&& (this.y==j-1 || this.y==j+1))) {
-					tab[i][j]=State.ACCESSIBLE;
+		for (int i=0; i<=5; i++) {
+			for (int j=0; j<=5; j++) {
+				State state = tab[i][j];
+				if ((state == State.FLOODED || state == State.NORMAL)
+						&& this.getX() >= i-1 && this.getX() <= i+1
+						&& this.getY() >= j-1 && this.getY() <= j+1
+						&& (this.getX() != i || this.getY() != j)) {
+					tab[i][j] = State.ACCESSIBLE;
 				} else {
-					tab[i][j]=State.INACCESSIBLE;
+					tab[i][j] = State.INACCESSIBLE;
 				}
 			}
 		}
 	}
-
 }
