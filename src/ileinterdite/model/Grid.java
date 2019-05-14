@@ -1,4 +1,7 @@
-package ileinterdite;
+package ileinterdite.model;
+
+import ileinterdite.util.State;
+import ileinterdite.model.adventurers.Adventurer;
 
 import java.util.*;
 
@@ -9,7 +12,7 @@ public class Grid {
 	Collection<Treasure> treasures;
 
 	public Collection<State> getEtatCases() {
-		// TODO - implement ileinterdite.Grid.getEtatCases
+		// TODO - implement ileinterdite.model.Grid.getEtatCases
 		throw new UnsupportedOperationException();
 	}
 
@@ -22,7 +25,7 @@ public class Grid {
 	 * @param adv
 	 */
 	public void move(int x, int y, int x_old, int y_old, Adventurer adv) {
-		// TODO - implement ileinterdite.Grid.move
+		// TODO - implement ileinterdite.model.Grid.move
 		throw new UnsupportedOperationException();
 	}
 
@@ -32,7 +35,7 @@ public class Grid {
 	 * @param y
 	 */
 	public void getTuile(int x, int y) {
-		// TODO - implement ileinterdite.Grid.getTuile
+		// TODO - implement ileinterdite.model.Grid.getTuile
 		throw new UnsupportedOperationException();
 	}
 
@@ -42,7 +45,7 @@ public class Grid {
 	 * @param y
 	 */
 	public void dry(int x, int y) {
-		// TODO - implement ileinterdite.Grid.dry
+		// TODO - implement ileinterdite.model.Grid.dry
 		throw new UnsupportedOperationException();
 	}
 
