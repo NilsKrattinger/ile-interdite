@@ -9,19 +9,28 @@ public class Adventurer {
 	private int x;
 	private int y;
 
-	public Collection<State> getAvailableCells() {
-		// TODO - implement ileinterdite.Adventurer.getAvailableCells
-		throw new UnsupportedOperationException();
+	/**
+	 * Methode qui retourne un tableau avec les casse accesible par l'anavturier
+	 * @return State[][] avec un marque accesible ou non
+	 */
+	public State[][] getAccessibleCells() {
+		State[][] StatCells;
+		StatCells = new State[6][6];
+		StatCells = grid.getStatCells();
+		//TODO ADD Choix Tuile sur StatCells.
+
+		return StatCells;
 	}
 
 	/**
-	 * 
-	 * @param x
-	 * @param y
+	 * Deplace l'aventureir sur la nouvelle case et le suprime de sont ancient emplacement
+	 * @param xNew int
+	 * @param yNew int
 	 */
-	public void movement(int x, int y) {
-		// TODO - implement ileinterdite.Adventurer.movement
-		throw new UnsupportedOperationException();
+	public void movement(int xNew, int yNew) {
+		int x = this.getX();
+		int y = this.getY();
+		grid.move(xNew,yNew,x,y,this);
 	}
 
 	public void getPosition() {
@@ -37,6 +46,16 @@ public class Adventurer {
 	public Collection<State> getDryableCells() {
 		// TODO - implement ileinterdite.Adventurer.getDryableCells
 		throw new UnsupportedOperationException();
+	}
+
+
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
 	}
 
 }

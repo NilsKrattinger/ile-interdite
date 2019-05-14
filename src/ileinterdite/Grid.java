@@ -10,7 +10,7 @@ public class Grid {
 
 	/**
 	 * Methode qui renvoie un tableau un 6x6 contenant l'etat de chaque case.
-	 * @return
+	 * @return State[][]
 	 */
 	public  State[][] getStatCells() {
 		// TODO - implement ileinterdite.Grid.getEtatCases
@@ -19,7 +19,7 @@ public class Grid {
 		for (int i = 0; i <= 5; i++) {
 			for (int j = 0; j <= 5; j++) {
 				Cell cellTmp;
-				cellTmp = this.getTuile(i,j);
+				cellTmp = this.getCell(i,j);
 				if (cellTmp != null){
 					StatCells[i][j] = cellTmp.getState();
 				}
@@ -29,17 +29,23 @@ public class Grid {
 		return StatCells;
 	}
 
+
 	/**
-	 * 
-	 * @param x
-	 * @param y
-	 * @param x_old
-	 * @param y_old
-	 * @param adv
+	 *
+	 * @param x int
+	 * @param y int
+	 * @param x_old int
+	 * @param y_old int
+	 * @param adv int
+	 *
+	 *            enleve l'aventurier de son ancienne pos et l'ajoute sur la nouvelle.
 	 */
 	public void move(int x, int y, int x_old, int y_old, Adventurer adv) {
-		// TODO - implement ileinterdite.Grid.move
-		throw new UnsupportedOperationException();
+		Cell tmpCell;
+		tmpCell = getCell(x_old,y_old); //get the actual cell of the adventurer
+		tmpCell.removeAdventurer(adv);
+		tmpCell = getCell(x,y); //get the new cell of the adventurer
+		tmpCell.addAdventurer(adv);
 	}
 
 	/**
@@ -47,7 +53,7 @@ public class Grid {
 	 * @param x
 	 * @param y
 	 */
-	public Cell getTuile(int x, int y) {
+	public Cell getCell(int x, int y) {
 		// TODO - implement ileinterdite.Grid.getTuile
 		throw new UnsupportedOperationException();
 	}
