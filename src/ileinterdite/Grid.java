@@ -21,8 +21,8 @@ public class Grid {
 	 * @param y_old
 	 * @param adv
 	 */
-	public void changerPos(int x, int y, int x_old, int y_old, Adventurer adv) {
-		// TODO - implement ileinterdite.Grid.changerPos
+	public void move(int x, int y, int x_old, int y_old, Adventurer adv) {
+		// TODO - implement ileinterdite.Grid.move
 		throw new UnsupportedOperationException();
 	}
 
@@ -41,8 +41,8 @@ public class Grid {
 	 * @param x
 	 * @param y
 	 */
-	public void assécher(int x, int y) {
-		// TODO - implement ileinterdite.Grid.assécher
+	public void dry(int x, int y) {
+		// TODO - implement ileinterdite.Grid.dry
 		throw new UnsupportedOperationException();
 	}
 
