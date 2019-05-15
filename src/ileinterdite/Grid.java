@@ -5,12 +5,12 @@ import java.util.*;
 public class Grid {
 
 	Cell[][] cells;
-	Collection<Adventurer> pawn;
+	Collection<Adventurer> pawns;
 	Collection<Treasure> treasures;
 
-	public Grid(Cell[][] cells, Collection<Adventurer> pawn, Collection<Treasure> treasures) {
+	public Grid(Cell[][] cells, Collection<Adventurer> pawns, Collection<Treasure> treasures) {
 		this.cells = cells;
-		this.pawn = pawn;
+		this.pawns = pawns;
 		this.treasures = treasures;
 	}
 
@@ -18,24 +18,21 @@ public class Grid {
 	 * Methode qui renvoie un tableau un 6x6 contenant l'etat de chaque case.
 	 * @return State[][]
 	 */
-
-
-
 	public  State[][] getStatCells() {
 		// TODO - implement ileinterdite.Grid.getEtatCases
-		State[][] StatCells;
-		StatCells = new State[6][6];
+		State[][] statCells;
+		statCells = new State[6][6];
 		for (int i = 0; i <= 5; i++) {
 			for (int j = 0; j <= 5; j++) {
 				Cell cellTmp;
 				cellTmp = this.getCell(i,j);
 				if (cellTmp != null){
-					StatCells[i][j] = cellTmp.getState();
+					statCells[i][j] = cellTmp.getState();
 				}
 			}
 
 		}
-		return StatCells;
+		return statCells;
 	}
 
 
