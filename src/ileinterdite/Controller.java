@@ -11,7 +11,7 @@ public class Controller extends Observer {
 	Collection<Deck> decks;
 	Collection<DiscardPile> discardPiles;
 	State[][] cellStates;
-	Adventurer actualAdventurer;
+	Adventurer currentAdventurer;
 
 	public void beginTurn() {
 		// TODO - implement ileinterdite.Controller.beginTurn
@@ -63,7 +63,7 @@ public class Controller extends Observer {
 	 */
 	public void movement(int x, int y){
 		if (isMovementAvailable(x,y)){
-			this.actualAdventurer.movement(x,y);
+			this.currentAdventurer.movement(x,y);
 			//TODO actualisation de la vue
 		}
 	}

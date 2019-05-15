@@ -21,7 +21,7 @@ public class Grid {
 	 * Methode qui renvoie un tableau un 6x6 contenant l'etat de chaque case.
 	 * @return State[][]
 	 */
-	public  State[][] getStatCells() {
+	public  State[][] getStateOfCells() {
 		// TODO - implement ileinterdite.Grid.getEtatCases
 		State[][] statCells;
 		statCells = new State[getWIDTH()][getHEIGTH()];

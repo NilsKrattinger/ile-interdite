@@ -10,7 +10,7 @@ public class Adventurer {
 	private int y;
 
 	/**
-	 * Methode qui retourne un tableau avec les casse accesible par l'anavturier
+	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
 	 * @return State[][] avec un marque accesible ou non
 	 */
 	public State[][] getAccessibleCells() {
@@ -51,10 +51,12 @@ public class Adventurer {
 
 
 	public int getX() {
+
 		return x;
 	}
 
 	public int getY() {
+
 		return y;
 	}
 
