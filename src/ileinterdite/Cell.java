@@ -7,6 +7,10 @@ public class Cell {
 	Collection<Adventurer> adventurers;
 	private State state;
 
+	public Cell(State state) {
+		this.state = state;
+	}
+
 	/**
 	 * 
 	 * @param adv

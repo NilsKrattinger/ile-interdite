@@ -4,14 +4,23 @@ import java.util.*;
 
 public class Grid {
 
-	Collection<Cell> cells;
+	Cell[][] cells;
 	Collection<Adventurer> pawn;
 	Collection<Treasure> treasures;
+
+	public Grid(Cell[][] cells, Collection<Adventurer> pawn, Collection<Treasure> treasures) {
+		this.cells = cells;
+		this.pawn = pawn;
+		this.treasures = treasures;
+	}
 
 	/**
 	 * Methode qui renvoie un tableau un 6x6 contenant l'etat de chaque case.
 	 * @return State[][]
 	 */
+
+
+
 	public  State[][] getStatCells() {
 		// TODO - implement ileinterdite.Grid.getEtatCases
 		State[][] StatCells;
@@ -54,8 +63,7 @@ public class Grid {
 	 * @param y
 	 */
 	public Cell getCell(int x, int y) {
-		// TODO - implement ileinterdite.Grid.getTuile
-		throw new UnsupportedOperationException();
+		return cells[x][y];
 	}
 
 	/**
