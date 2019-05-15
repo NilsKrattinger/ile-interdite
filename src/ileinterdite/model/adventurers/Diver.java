@@ -1,6 +1,6 @@
 package ileinterdite.model.adventurers;
 
-import ileinterdite.util.State;
+import ileinterdite.util.Utils;
 
 import java.util.Collection;
 
@@ -16,7 +16,7 @@ public class Diver extends Adventurer {
 		throw new UnsupportedOperationException();
 	}
 
-	public Collection<State> getAvailableCells() {
+	public Collection<Utils.State> getAvailableCells() {
 		// TODO - implement ileinterdite.model.adventurers.Diver.getAvailableCells
 		throw new UnsupportedOperationException();
 	}

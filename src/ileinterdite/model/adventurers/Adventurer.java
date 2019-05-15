@@ -2,7 +2,7 @@ package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
-import ileinterdite.util.State;
+import ileinterdite.util.Utils;
 
 import java.util.Collection;
 
@@ -13,7 +13,7 @@ public class Adventurer {
 	private int x;
 	private int y;
 
-	public Collection<State> getAvailableCells() {
+	public Collection<Utils.State> getAvailableCells() {
 		// TODO - implement ileinterdite.model.adventurers.Adventurer.getAvailableCells
 		throw new UnsupportedOperationException();
 	}
@@ -38,7 +38,7 @@ public class Adventurer {
 		throw new UnsupportedOperationException();
 	}
 
-	public Collection<State> getDryableCells() {
+	public Collection<Utils.State> getDryableCells() {
 		// TODO - implement ileinterdite.model.adventurers.Adventurer.getDryableCells
 		throw new UnsupportedOperationException();
 	}

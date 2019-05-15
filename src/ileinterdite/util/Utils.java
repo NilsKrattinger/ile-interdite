@@ -17,15 +17,27 @@ import ileinterdite.model.adventurers.Adventurer;
  * @author Eric
  */
 public class Utils {
+
+    public static enum Action {
+        MOVE,
+        DRY,
+        GIVE_CARD,
+        GET_TREASURE,
+        END_TURN,
+        CANCEL_ACTION
+    }
  
-    public static enum EtatTuile {
-        ASSECHEE("Asséchée"), 
-        INONDEE("Inondée"),
-        COULEE("Coulée");
+    public static enum State {
+        NORMAL("Asséchée"),
+        FLOODED("Inondée"),
+        SUNKEN("Coulée"),
+        NON_EXISTENT(""),
+        ACCESSIBLE("Accessible"),
+        INACCESSIBLE("Inaccessible");
 
         String libelle ;
         
-        EtatTuile(String libelle) {
+        State(String libelle) {
             this.libelle = libelle ;
         }
 

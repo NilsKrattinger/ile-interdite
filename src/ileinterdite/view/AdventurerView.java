@@ -3,6 +3,7 @@ package ileinterdite.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.Observable;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,11 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
+
 import javax.swing.border.MatteBorder;
-import ileinterdite.util.Utils.Pion;
+
+import ileinterdite.util.Utils;
 
 
-public class AdventurerView  {
+public class AdventurerView extends Observable {
 
     private final JPanel panelBoutons ;
     private final JPanel panelCentre ;
@@ -24,14 +27,11 @@ public class AdventurerView  {
     private final JPanel mainPanel;
     private final JButton btnBouger  ;
     private final JButton btnAssecher;
-    private final JButton btnAutreAction;
+    private final JButton btnValiderTuile;
     private final JButton btnTerminerTour;
     private JTextField position;
 
-
-
-
-    public AdventurerView(String nomJoueur, String nomAventurier, Color couleur){
+    public AdventurerView(String nomJoueur, String nomAventurier, Color couleur) {
 
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,15 +72,41 @@ public class AdventurerView  {
         mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
 
         this.btnBouger = new JButton("Bouger") ;
+        btnBouger.addActionListener(e -> {
+            setChanged();
+            notifyObservers(Utils.Action.MOVE);
+        });
         this.btnAssecher = new JButton( "Assecher");
-        this.btnAutreAction = new JButton("AutreAction") ;
-        this.btnTerminerTour = new JButton("Terminer Tour") ;
+        btnAssecher.addActionListener(e -> {
+            setChanged();
+            notifyObservers(Utils.Action.DRY);
+        });
+        this.btnValiderTuile = new JButton("Valider tuile");
+        btnValiderTuile.addActionListener(e -> {
+            String pos = position.getText();
+            if (pos.length() == 0) {
+                position.setBorder(BorderFactory.createLineBorder(Color.RED));
+                position.grabFocus();
+            } else {
+                position.setBorder(null);
+                setChanged();
+                notifyObservers(pos);
+                position.setText("");
+            }
+        });
+        this.btnTerminerTour = new JButton("Terminer Tour");
+        btnTerminerTour.addActionListener(e -> {
+            setChanged();
+            notifyObservers(Utils.Action.END_TURN);
+        });
 
         this.panelBoutons.add(btnBouger);
         this.panelBoutons.add(btnAssecher);
-        this.panelBoutons.add(btnAutreAction);
+        this.panelBoutons.add(btnValiderTuile);
         this.panelBoutons.add(btnTerminerTour);
+    }
 
+    public void setVisible() {
         this.window.setVisible(true);
     }
 
@@ -88,8 +114,8 @@ public class AdventurerView  {
         this.position.setText(pos);
     }
 
-    public JButton getBtnAutreAction() {
-        return btnAutreAction;
+    public JButton getBtnValiderTuile() {
+        return btnValiderTuile;
     }
 
     public String getPosition() {
@@ -106,11 +132,6 @@ public class AdventurerView  {
 
     public JButton getBtnTerminerTour() {
         return btnTerminerTour;
-    }
-
-    public static void main(String [] args) {
-        // Instanciation de la fenêtre 
-        AdventurerView vueAventurier = new AdventurerView("Manon", "Explorateur",Pion.ROUGE.getCouleur() );
     }
 }
 

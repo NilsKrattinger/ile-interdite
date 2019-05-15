@@ -1,7 +1,7 @@
 package ileinterdite.model;
 
-import ileinterdite.util.State;
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.Utils;
 
 import java.util.*;
 
@@ -11,7 +11,7 @@ public class Grid {
 	Collection<Adventurer> pawn;
 	Collection<Treasure> treasures;
 
-	public Collection<State> getEtatCases() {
+	public Collection<Utils.State> getEtatCases() {
 		// TODO - implement ileinterdite.model.Grid.getEtatCases
 		throw new UnsupportedOperationException();
 	}
