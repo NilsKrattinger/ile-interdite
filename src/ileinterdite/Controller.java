@@ -10,7 +10,7 @@ public class Controller extends Observer {
 	AdventurerView advemoventurerView;
 	Collection<Deck> decks;
 	Collection<DiscardPile> discardPiles;
-	State[][] cellStatements;
+	State[][] cellStates;
 	Adventurer actualAdventurer;
 
 	public void beginTurn() {
@@ -37,11 +37,11 @@ public class Controller extends Observer {
 	 * puis l'interaction avec l'interface
 	 * @param adventurer
 	 */
-	public void initmovement(Adventurer adventurer){
+	public void initMovement(Adventurer adventurer){
 		int x;
-		int y;
-		cellStatements = new State[6][6];
-		cellStatements = adventurer.getAccessibleCells();
+		int y; 
+		cellStates = new State[6][6];
+		cellStates = adventurer.getAccessibleCells();
 		//TODO declancher snteraction avec joueurs
 	}
 
@@ -51,7 +51,7 @@ public class Controller extends Observer {
 	 * @return boolean
 	 */
 	public boolean isMovementAvailable(int x, int y){
-		return cellStatements[x][y] == State.ACCESSIBLE;
+		return cellStates[x][y] == State.ACCESSIBLE;
 	}
 
 	/**
