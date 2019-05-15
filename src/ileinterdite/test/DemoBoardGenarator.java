@@ -18,8 +18,10 @@ public class DemoBoardGenarator {
         State[] cellStat = new State[36];
         String line;
 
-        fileInit(filepath);
+
         try{
+            fileInit(filepath);
+
             for (int i = 0; i < 36 ; i++) {
 
                 line = reader.readLine();
@@ -48,17 +50,15 @@ public class DemoBoardGenarator {
             }
 
         } catch (IOException e) {
-            System.err.println("IO Except");
+            e.printStackTrace();
          }
         return cellStat;
     }
 
-    private static void fileInit(String filepath) {
-        try {
+    private static void fileInit(String filepath) throws FileNotFoundException {
+
             reader = new BufferedReader(new FileReader(filepath));
 
-        } catch (FileNotFoundException e) {
-            System.err.println("FileNotFound");
-        }
+
     }
 }

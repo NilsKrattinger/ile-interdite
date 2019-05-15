@@ -21,7 +21,9 @@ public class TestEtatCase {
         cellState = DBG.boardBuilder("../../Case.txt");
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {
-                board[j][i] = new Cell(cellState[i + (j * 6)]);
+
+                board[j][i] = new Cell();
+                board[j][i].setState(cellState[i + (j * 6)]);
             }
         }
 
