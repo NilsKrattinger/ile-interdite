@@ -16,14 +16,14 @@ public class TestEtatCase {
 
         State[] cellState;
 
-        board = new Cell[6][6];
+        board = new Cell[Grid.WIDTH][Grid.HEIGTH];
         DemoBoardGenarator dbg = new DemoBoardGenarator();
         cellState = dbg.boardBuilder("../../Case.txt");
-        for (int j = 0; j < 6; j++) {
-            for (int i = 0; i < 6; i++) {
+        for (int j = 0; j < Grid.WIDTH; j++) {
+            for (int i = 0; i < Grid.HEIGTH; i++) {
 
                 board[j][i] = new Cell();
-                board[j][i].setState(cellState[i + (j * 6)]);
+                board[j][i].setState(cellState[i + (j * Grid.WIDTH)]);
             }
         }
 

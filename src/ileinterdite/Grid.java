@@ -5,8 +5,8 @@ import java.util.*;
 public class Grid {
 
 	private Cell[][] cells;
-	private final int WIDTH = 6;
-	private final int HEIGTH = 6;
+	public final static int WIDTH = 6;
+	public final static int HEIGTH = 6;
 	Collection<Adventurer> pawns;
 	Collection<Treasure> treasures;
 
@@ -23,9 +23,9 @@ public class Grid {
 	 */
 	public  State[][] getStateOfCells() {
 		State[][] statCells;
-		statCells = new State[getWIDTH()][getHEIGTH()];
-		for (int i = 0; i <= getHEIGTH() - 1; i++) {
-			for (int j = 0; j <= getWIDTH() - 1; j++) {
+		statCells = new State[Grid.WIDTH][Grid.HEIGTH];
+		for (int i = 0; i <= Grid.HEIGTH - 1; i++) {
+			for (int j = 0; j <= Grid.WIDTH - 1; j++) {
 				Cell cellTmp;
 				cellTmp = this.getCell(i,j);
 				if (cellTmp != null){
@@ -75,11 +75,5 @@ public class Grid {
 		throw new UnsupportedOperationException();
 	}
 
-	public int getWIDTH() {
-		return WIDTH;
-	}
 
-	public int getHEIGTH() {
-		return HEIGTH;
-	}
 }
