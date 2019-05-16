@@ -29,11 +29,11 @@ public class TestEtatCase {
 
         Grid grid= new Grid(board,null,null);
 
-        State[][] gettedState = grid.getStateOfCells();
+        State[][] retrievedStates = grid.getStateOfCells();
 
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {
-                System.out.println("Case " + "x : " +(i+1) + " y :" + (j+1) + " " +gettedState[j][i].toString() );
+                System.out.println("Case " + "x : " +(i+1) + " y :" + (j+1) + " " +retrievedStates[j][i].toString() );
 
             }
         }
