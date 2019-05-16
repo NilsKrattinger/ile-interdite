@@ -23,7 +23,7 @@ public class Adventurer {
 	}
 
 	/**
-	 * Deplace l'aventureir sur la nouvelle case et le suprime de sont ancient emplacement
+	 * Deplace l'aventurier sur la nouvelle case et le supprime de son ancien emplacement
 	 * @param xNew int
 	 * @param yNew int
 	 */
