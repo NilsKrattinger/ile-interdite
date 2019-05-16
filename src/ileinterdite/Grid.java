@@ -22,7 +22,6 @@ public class Grid {
 	 * @return State[][]
 	 */
 	public  State[][] getStateOfCells() {
-		// TODO - implement ileinterdite.Grid.getEtatCases
 		State[][] statCells;
 		statCells = new State[getWIDTH()][getHEIGTH()];
 		for (int i = 0; i <= getHEIGTH() - 1; i++) {

@@ -29,7 +29,7 @@ public class TestEtatCase {
 
         Grid grid= new Grid(board,null,null);
 
-        State[][] gettedState = grid.getStatCells();
+        State[][] gettedState = grid.getStateOfCells();
 
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {
