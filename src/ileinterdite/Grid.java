@@ -24,8 +24,8 @@ public class Grid {
 	public  State[][] getStateOfCells() {
 		State[][] cellsState;
 		cellsState = new State[Grid.WIDTH][Grid.HEIGTH];
-		for (int i = 0; i <= Grid.HEIGTH - 1; i++) {
-			for (int j = 0; j <= Grid.WIDTH - 1; j++) {
+		for (int i = 0; i < Grid.HEIGTH ; i++) {
+			for (int j = 0; j < Grid.WIDTH ; j++) {
 				Cell cellTmp;
 				cellTmp = this.getCell(i,j);
 				if (cellTmp != null){
@@ -35,7 +35,7 @@ public class Grid {
 
 		}
 		return cellsState;
-s	}
+}
 
 
 	/**
