@@ -7,11 +7,11 @@ public class Grid {
 	private Cell[][] cells;
 	public final static int WIDTH = 6;
 	public final static int HEIGTH = 6;
+	private Treasure[] treasures;
 	Collection<Adventurer> pawns;
-	Collection<Treasure> treasures;
 
 
-	public Grid(Cell[][] cells, Collection<Adventurer> pawns, Collection<Treasure> treasures) {
+	public Grid(Cell[][] cells, Collection<Adventurer> pawns, Treasure[] treasures) {
 		this.cells = cells;
 		this.pawns = pawns;
 		this.treasures = treasures;
@@ -22,20 +22,20 @@ public class Grid {
 	 * @return State[][]
 	 */
 	public  State[][] getStateOfCells() {
-		State[][] statCells;
-		statCells = new State[Grid.WIDTH][Grid.HEIGTH];
+		State[][] cellsState;
+		cellsState = new State[Grid.WIDTH][Grid.HEIGTH];
 		for (int i = 0; i <= Grid.HEIGTH - 1; i++) {
 			for (int j = 0; j <= Grid.WIDTH - 1; j++) {
 				Cell cellTmp;
 				cellTmp = this.getCell(i,j);
 				if (cellTmp != null){
-					statCells[i][j] = cellTmp.getState();
+					cellsState[i][j] = cellTmp.getState();
 				}
 			}
 
 		}
-		return statCells;
-	}
+		return cellsState;
+s	}
 
 
 	/**
