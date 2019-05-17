@@ -50,7 +50,7 @@ public class Controller extends Observer {
 	 * @param x,y
 	 * @return boolean
 	 */
-	public boolean isMovementPossible(int x, int y){
+	public boolean isMovementAvailable(int x, int y){
 		return cellStates[x][y] == State.ACCESSIBLE;
 	}
 
@@ -62,8 +62,8 @@ public class Controller extends Observer {
 	 * deplacement de l'avanturier en X,Y et actualisation de la vue
 	 */
 	public void movement(int x, int y){
-		if (isMovementPossible(x,y)){
-			this.currentAdventurer.movement(x,y);
+		if (isMovementAvailable(x,y)){
+			this.currentAdventurer.move(x,y);
 			//TODO actualisation de la vue
 		}
 	}

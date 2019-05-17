@@ -26,12 +26,12 @@ public class Adventurer {
 	 * @param newX int
 	 * @param newY int
 	 */
-	public void movement(int newX, int newY) {
+	public void move(int newX, int newY) {
 		int currX = this.getX();
 		int currY = this.getY();
 		grid.move(newX,newY,currX,currY,this);
 	}
-	
+
 	public boolean isPowerAvailable() {
 		// TODO - implement ileinterdite.Adventurer.isPowerAvailable
 		throw new UnsupportedOperationException();
