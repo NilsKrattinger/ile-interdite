@@ -36,8 +36,6 @@ public class DemoBoardGenarator {
 
                     case "SUNKEN":
                         cellState[i] = State.SUNKEN;
-                        System.out.println("sunken");
-
                         break;
 
                     case "NON_EXISTENT":

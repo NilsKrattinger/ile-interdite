@@ -7,8 +7,6 @@ public class TestEtatCase {
 
     public static void main(String[] args) {
         init();
-        //print();
-
     }
 
 
