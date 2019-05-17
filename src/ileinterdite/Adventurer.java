@@ -15,7 +15,6 @@ public class Adventurer {
 	 */
 	public State[][] getAccessibleCells() {
 		State[][] cellsState;
-		cellsState = new State[6][6];
 		cellsState = grid.getStateOfCells();
 		//TODO ADD Choix Tuile sur StatCells.
 
@@ -24,20 +23,15 @@ public class Adventurer {
 
 	/**
 	 * Deplace l'aventurier sur la nouvelle case et le supprime de son ancien emplacement
-	 * @param xNew int
-	 * @param yNew int
+	 * @param newX int
+	 * @param newY int
 	 */
-	public void movement(int xNew, int yNew) {
-		int x = this.getX();
-		int y = this.getY();
-		grid.move(xNew,yNew,x,y,this);
+	public void movement(int newX, int newY) {
+		int currX = this.getX();
+		int currY = this.getY();
+		grid.move(newX,newY,currX,currY,this);
 	}
-
-	public void getPosition() {
-		// TODO - implement ileinterdite.Adventurer.getPosition
-		throw new UnsupportedOperationException();
-	}
-
+	
 	public boolean isPowerAvailable() {
 		// TODO - implement ileinterdite.Adventurer.isPowerAvailable
 		throw new UnsupportedOperationException();
