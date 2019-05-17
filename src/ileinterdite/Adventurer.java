@@ -14,12 +14,12 @@ public class Adventurer {
 	 * @return State[][] avec un marque accesible ou non
 	 */
 	public State[][] getAccessibleCells() {
-		State[][] StatCells;
-		StatCells = new State[6][6];
-		StatCells = grid.getStatCells();
+		State[][] cellsState;
+		cellsState = new State[6][6];
+		cellsState = grid.getStateOfCells();
 		//TODO ADD Choix Tuile sur StatCells.
 
-		return StatCells;
+		return cellsState;
 	}
 
 	/**
