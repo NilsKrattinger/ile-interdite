@@ -34,7 +34,7 @@ public class TestEtatCase {
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {
                 System.out.println("Case " + "x : " +(i+1) + " y :" + (j+1) + " " +retrievedStates[j][i].toString() );
-
+                // TODO : Use Utils to log only if parameter is set to true
             }
         }
     }
