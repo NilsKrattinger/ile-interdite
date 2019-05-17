@@ -4,8 +4,8 @@ import java.util.Collection;
 
 public class Adventurer {
 
-	Grid grid;
-	Hand hand;
+	private Grid grid;
+	private Hand hand;
 	private int x;
 	private int y;
 
@@ -69,5 +69,21 @@ public class Adventurer {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public Grid getGrid() {
+		return grid;
+	}
+
+	public void setGrid(Grid grid) {
+		this.grid = grid;
+	}
+
+	public Hand getHand() {
+		return hand;
+	}
+
+	public void setHand(Hand hand) {
+		this.hand = hand;
 	}
 }

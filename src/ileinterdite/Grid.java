@@ -8,7 +8,7 @@ public class Grid {
 	Collection<Adventurer> pawn;
 	Collection<Treasure> treasures;
 
-	public Collection<State> getEtatCases() {
+	public Collection<State> getCellsState() {
 		// TODO - implement ileinterdite.Grid.getEtatCases
 		throw new UnsupportedOperationException();
 	}
@@ -31,7 +31,7 @@ public class Grid {
 	 * @param x
 	 * @param y
 	 */
-	public void getTuile(int x, int y) {
+	public Cell getCell(int x, int y) {
 		// TODO - implement ileinterdite.Grid.getTuile
 		throw new UnsupportedOperationException();
 	}
