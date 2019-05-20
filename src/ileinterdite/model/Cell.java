@@ -15,30 +15,36 @@ public class Cell {
 
 	}
 
-	public void setState(Utils.State state){
-		this.state = state;
-	}
-
 	/**
-	 * 
-	 * @param adv
+	 * Remove the adventurer from the cell
+	 * @param adv The adventurer to remove
 	 */
 	public void removeAdventurer(Adventurer adv) {
-		// TODO - implement ileinterdite.model.Cell.removeAdventurer
-		throw new UnsupportedOperationException();
+	    adventurers.remove(adv);
 	}
 
 	/**
-	 * 
-	 * @param adv
+	 * Add an adventurer to the cell
+	 * @param adv The adventurer to add
 	 */
 	public void addAdventurer(Adventurer adv) {
-		// TODO - implement ileinterdite.model.Cell.addAdventurer
-		throw new UnsupportedOperationException();
+	    adventurers.add(adv);
 	}
 
-	public Utils.State getState() {
-		return this.state;
-	}
+    /**
+     * Change the state of the cell
+     * @param state The new state to set
+     */
+    public void setState(Utils.State state){
+        this.state = state;
+    }
+
+    /**
+     * Get the state of the cell
+     * @return Utils.State
+     */
+    public Utils.State getState() {
+        return this.state;
+    }
 
 }
