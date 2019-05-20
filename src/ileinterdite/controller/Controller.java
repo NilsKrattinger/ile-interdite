@@ -40,14 +40,14 @@ public class Controller implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-	    System.out.println(arg.toString());
+
     }
 
     public static void main(String [] args) {
         // Instanciation de la fenêtre
-        AdventurerView vueAventurier = new AdventurerView("Manon", "Explorateur", Utils.Pawn.RED.getColor() );
+        AdventurerView adventurerView = new AdventurerView("Manon", "Explorateur", Utils.Pawn.RED.getColor() );
         Controller c = new Controller();
-        vueAventurier.addObserver(c);
-        vueAventurier.setVisible();
+        adventurerView.addObserver(c);
+        adventurerView.setVisible();
     }
 }

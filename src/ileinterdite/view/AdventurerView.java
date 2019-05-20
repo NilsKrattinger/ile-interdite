@@ -15,6 +15,7 @@ import static javax.swing.SwingConstants.CENTER;
 
 import javax.swing.border.MatteBorder;
 
+import ileinterdite.util.Message;
 import ileinterdite.util.Utils;
 
 
@@ -74,12 +75,12 @@ public class AdventurerView extends Observable {
         this.moveButton = new JButton("Bouger") ;
         moveButton.addActionListener(e -> {
             setChanged();
-            notifyObservers(Utils.Action.MOVE);
+            notifyObservers(new Message(Utils.Action.MOVE));
         });
         this.dryButton = new JButton( "Assecher");
         dryButton.addActionListener(e -> {
             setChanged();
-            notifyObservers(Utils.Action.DRY);
+            notifyObservers(new Message(Utils.Action.DRY));
         });
         this.validateCellButton = new JButton("Valider tuile");
         validateCellButton.addActionListener(e -> {
@@ -90,14 +91,14 @@ public class AdventurerView extends Observable {
             } else {
                 position.setBorder(null);
                 setChanged();
-                notifyObservers(pos);
+                notifyObservers(new Message(Utils.Action.VALIDATE_CELL, pos));
                 position.setText("");
             }
         });
         this.endTurnButton = new JButton("Terminer Tour");
         endTurnButton.addActionListener(e -> {
             setChanged();
-            notifyObservers(Utils.Action.END_TURN);
+            notifyObservers(new Message(Utils.Action.END_TURN));
         });
 
         this.buttonsPanel.add(moveButton);

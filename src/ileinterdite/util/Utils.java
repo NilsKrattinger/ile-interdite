@@ -23,6 +23,7 @@ public class Utils {
         DRY,
         GIVE_CARD,
         GET_TREASURE,
+        VALIDATE_CELL,
         END_TURN,
         CANCEL_ACTION
     }
