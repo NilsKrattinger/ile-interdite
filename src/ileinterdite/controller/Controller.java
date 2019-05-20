@@ -18,11 +18,49 @@ public class Controller implements Observer {
 	AdventurerView adventurerView;
 	Collection<Deck> decks;
 	Collection<DiscardPile> discardPiles;
+    Utils.State[][] cellStates;
+    Adventurer currentAdventurer;
 
 	public void beginTurn() {
 		// TODO - implement ileinterdite.controller.Controller.beginTurn
 		throw new UnsupportedOperationException();
 	}
+
+    /**
+     * Lance les actions pour le deplacement de l'aventurier.
+     * puis l'interaction avec l'interface
+     * @param adventurer
+     */
+    public void initMovement(Adventurer adventurer){
+        int x;
+        int y;
+        cellStates = new Utils.State[6][6];
+        cellStates = adventurer.getAccessibleCells();
+        //TODO declancher snteraction avec joueurs
+    }
+
+    /**
+     *	Renvoie un boolean si la case choisie par l'utilisateur est accesible
+     * @param x,y
+     * @return boolean
+     */
+    public boolean isMovementAvailable(int x, int y){
+        return cellStates[x][y] == Utils.State.ACCESSIBLE;
+    }
+    
+    /**
+     *
+     * @param x
+     * @param y
+     *
+     * deplacement de l'avanturier en X,Y et actualisation de la vue
+     */
+    public void movement(int x, int y){
+        if (isMovementAvailable(x,y)){
+            this.currentAdventurer.move(x,y);
+            //TODO actualisation de la vue
+        }
+    }
 
 	/**
 	 * 

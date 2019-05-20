@@ -13,24 +13,27 @@ public class Adventurer {
 	private int x;
 	private int y;
 
-	public Collection<Utils.State> getAvailableCells() {
-		// TODO - implement ileinterdite.model.adventurers.Adventurer.getAvailableCells
-		throw new UnsupportedOperationException();
+	/**
+	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
+	 * @return State[][] avec un marque accesible ou non
+	 */
+	public Utils.State[][] getAccessibleCells() {
+        Utils.State[][] cellsState;
+		cellsState = grid.getStateOfCells();
+		//TODO ADD Choix Tuile sur StatCells.
+
+		return cellsState;
 	}
 
 	/**
-	 * 
-	 * @param x
-	 * @param y
+	 * Deplace l'aventurier sur la nouvelle case et le supprime de son ancien emplacement
+	 * @param newX int
+	 * @param newY int
 	 */
-	public void movement(int x, int y) {
-		// TODO - implement ileinterdite.model.adventurers.Adventurer.movement
-		throw new UnsupportedOperationException();
-	}
-
-	public void getPosition() {
-		// TODO - implement ileinterdite.model.adventurers.Adventurer.getPosition
-		throw new UnsupportedOperationException();
+	public void move(int newX, int newY) {
+		int currX = this.getX();
+		int currY = this.getY();
+		grid.move(newX,newY,currX,currY,this);
 	}
 
 	public boolean isPowerAvailable() {
@@ -41,6 +44,18 @@ public class Adventurer {
 	public Collection<Utils.State> getDryableCells() {
 		// TODO - implement ileinterdite.model.adventurers.Adventurer.getDryableCells
 		throw new UnsupportedOperationException();
+	}
+
+
+
+	public int getX() {
+
+		return x;
+	}
+
+	public int getY() {
+
+		return y;
 	}
 
 }
