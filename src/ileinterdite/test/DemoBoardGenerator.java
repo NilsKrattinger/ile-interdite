@@ -1,21 +1,21 @@
 package ileinterdite.test;
 
-import ileinterdite.util.State;
+import ileinterdite.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class DemoBoardGenarator {
+public class DemoBoardGenerator {
     private static BufferedReader reader;
 
     /**
      * Genere une liste d'etat (enum) selon un .txt avec le non de l'etat par ligne.
      * @return State[]
      */
-    public static State[] boardBuilder(String filepath) {
-        State[] cellState = new State[36];
+    public static Utils.State[] boardBuilder(String filepath) {
+        Utils.State[] cellState = new Utils.State[36];
         String line;
 
 
@@ -27,19 +27,19 @@ public class DemoBoardGenarator {
                 line = reader.readLine();
                 switch (line) {
                     case "NORMAL":
-                        cellState[i] = State.NORMAL;
+                        cellState[i] = Utils.State.NORMAL;
                         break;
 
                     case "FLOODED":
-                        cellState[i] = State.FLOODED;
+                        cellState[i] = Utils.State.FLOODED;
                         break;
 
                     case "SUNKEN":
-                        cellState[i] = State.SUNKEN;
+                        cellState[i] = Utils.State.SUNKEN;
                         break;
 
                     case "NON_EXISTENT":
-                        cellState[i] = State.NON_EXISTENT;
+                        cellState[i] = Utils.State.NON_EXISTENT;
                         break;
                     default:
                         cellState[i] = null;

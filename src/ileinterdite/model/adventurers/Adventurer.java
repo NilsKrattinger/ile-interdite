@@ -2,7 +2,7 @@ package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
-import ileinterdite.util.State;
+import ileinterdite.util.Utils;
 
 import java.util.Collection;
 
@@ -17,8 +17,8 @@ public class Adventurer {
 	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
 	 * @return State[][] avec un marque accesible ou non
 	 */
-	public State[][] getAccessibleCells() {
-		State[][] cellsState;
+	public Utils.State[][] getAccessibleCells() {
+        Utils.State[][] cellsState;
 		cellsState = grid.getStateOfCells();
 		//TODO ADD Choix Tuile sur StatCells.
 
@@ -41,7 +41,7 @@ public class Adventurer {
 		throw new UnsupportedOperationException();
 	}
 
-	public Collection<State> getDryableCells() {
+	public Collection<Utils.State> getDryableCells() {
 		// TODO - implement ileinterdite.model.adventurers.Adventurer.getDryableCells
 		throw new UnsupportedOperationException();
 	}
