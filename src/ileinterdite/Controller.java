@@ -48,7 +48,7 @@ public class Controller implements Observer {
 	public void initDryable(Adventurer adventurer){
 		int x;
 		int y;
-		cellStates = new State[6][6];
+		cellStates = new State[Grid.HEIGTH][Grid.WIDTH];
 		cellStates = adventurer.getDryableCells();
 		//TODO declancher interaction avec joueurs
 	}
