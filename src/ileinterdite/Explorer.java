@@ -35,6 +35,10 @@ public class Explorer extends Adventurer {
 		}
 	}
 
+	/**
+	 * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est assechable ou non par l'explorateur
+	 * @param tab
+	 */
 	@Override
 	public void cellChoiceDrying(State[][] tab) {
 		for (int i=0; i<=5; i++) {

@@ -54,6 +54,10 @@ public class Adventurer {
 		}
 	}
 
+	/**
+	 * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est assechable ou non par l'aventurier
+	 * @param tab
+	 */
 	public void cellChoiceDrying(State[][] tab) {
 		for (int i=0; i<=5; i++) {
 			for (int j=0; j<=5; j++) {
