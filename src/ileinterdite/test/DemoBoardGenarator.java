@@ -1,6 +1,6 @@
 package ileinterdite.test;
 
-import ileinterdite.State;
+import ileinterdite.util.State;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

@@ -1,6 +1,8 @@
 package ileinterdite.test;
 
-import ileinterdite.*;
+import ileinterdite.model.Cell;
+import ileinterdite.model.Grid;
+import ileinterdite.util.State;
 
 public class TestEtatCase {
     private static Cell[][] board;
