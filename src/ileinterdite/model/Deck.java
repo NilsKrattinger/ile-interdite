@@ -1,8 +1,8 @@
-package ileinterdite;
+package ileinterdite.model;
 
 import java.util.*;
 
-public class DiscardPile {
+public class Deck {
 
 	Collection<Card> cards;
 

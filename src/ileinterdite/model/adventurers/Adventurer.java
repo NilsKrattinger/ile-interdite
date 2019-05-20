@@ -1,4 +1,8 @@
-package ileinterdite;
+package ileinterdite.model.adventurers;
+
+import ileinterdite.model.Grid;
+import ileinterdite.model.Hand;
+import ileinterdite.util.State;
 
 import java.util.Collection;
 
@@ -33,12 +37,12 @@ public class Adventurer {
 	}
 
 	public boolean isPowerAvailable() {
-		// TODO - implement ileinterdite.Adventurer.isPowerAvailable
+		// TODO - implement ileinterdite.model.adventurers.Adventurer.isPowerAvailable
 		throw new UnsupportedOperationException();
 	}
 
 	public Collection<State> getDryableCells() {
-		// TODO - implement ileinterdite.Adventurer.getDryableCells
+		// TODO - implement ileinterdite.model.adventurers.Adventurer.getDryableCells
 		throw new UnsupportedOperationException();
 	}
 

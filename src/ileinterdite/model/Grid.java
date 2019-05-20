@@ -1,4 +1,7 @@
-package ileinterdite;
+package ileinterdite.model;
+
+import ileinterdite.util.State;
+import ileinterdite.model.adventurers.Adventurer;
 
 import java.util.*;
 
@@ -9,7 +12,6 @@ public class Grid {
 	public final static int HEIGTH = 6;
 	private Treasure[] treasures;
 	Collection<Adventurer> pawns;
-
 
 	public Grid(Cell[][] cells, Collection<Adventurer> pawns, Treasure[] treasures) {
 		this.cells = cells;
@@ -71,7 +73,7 @@ public class Grid {
 	 * @param y
 	 */
 	public void dry(int x, int y) {
-		// TODO - implement ileinterdite.Grid.dry
+		// TODO - implement ileinterdite.model.Grid.dry
 		throw new UnsupportedOperationException();
 	}
 

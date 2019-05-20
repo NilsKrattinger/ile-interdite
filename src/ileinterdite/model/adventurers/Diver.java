@@ -1,4 +1,6 @@
-package ileinterdite;
+package ileinterdite.model.adventurers;
+
+import ileinterdite.util.State;
 
 import java.util.Collection;
 
@@ -10,12 +12,12 @@ public class Diver extends Adventurer {
 	 * @param y
 	 */
 	public void isCellReachable(int x, int y) {
-		// TODO - implement ileinterdite.Diver.isCellReachable
+		// TODO - implement ileinterdite.model.adventurers.Diver.isCellReachable
 		throw new UnsupportedOperationException();
 	}
 
 	public Collection<State> getAvailableCells() {
-		// TODO - implement ileinterdite.Diver.getAvailableCells
+		// TODO - implement ileinterdite.model.adventurers.Diver.getAvailableCells
 		throw new UnsupportedOperationException();
 	}
 

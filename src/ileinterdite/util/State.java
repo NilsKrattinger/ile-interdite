@@ -1,4 +1,4 @@
-package ileinterdite;
+package ileinterdite.util;
 
 public enum State {
 	NORMAL,
