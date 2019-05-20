@@ -21,27 +21,29 @@ public class Controller extends Observer {
 	Collection<DiscardPile> discardPiles;
 	State[][] cellStates;
 	Adventurer currentAdventurer;
+	private static final int nbActionsParTour = 3;
 
     /**
      * procédure de gestion d'un tour
      */
 	public void beginTurn() {
-        for (int i=3; i>=1; i--) {
+        for (int i=nbActionsParTour; i>=1; i--) {
 
-            // boucle d'attente
+			Action actionSelected;
+			// TODO - boucle d'attente
 
             switch (actionSelected){
                 case Action.MOVE:
-                        // méthode pour se déplacer
+                        // TODO - méthode pour se déplacer
                     break;
                 case Action.DRY:
-                        // méthode pour assécher
+                        // TODO - méthode pour assécher
                     break;
                 case Action.GIVE_CARD:
-                        // méthode pour donner une carte
+                        // TODO - méthode pour donner une carte
                     break;
                 case Action.GET_TREASURE:
-                         // méthode pour donner un trésor
+                         // TODO - méthode pour donner un trésor
                     break;
             }
         }
