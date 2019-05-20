@@ -34,4 +34,20 @@ public class Explorer extends Adventurer {
 			}
 		}
 	}
+
+	@Override
+	public void cellChoiceDrying(State[][] tab) {
+		for (int i=0; i<=5; i++) {
+			for (int j=0; j<=5; j++) {
+				State state = tab[i][j];
+				if (state == State.FLOODED
+						&& this.getX() >= i-1 && this.getX() <= i+1
+						&& this.getY() >= j-1 && this.getY() <= j+1) {
+					tab[i][j] = State.ACCESSIBLE;
+				} else {
+					tab[i][j] = State.INACCESSIBLE;
+				}
+			}
+		}
+	}
 }

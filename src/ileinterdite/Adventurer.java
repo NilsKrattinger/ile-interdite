@@ -54,6 +54,23 @@ public class Adventurer {
 		}
 	}
 
+	public void cellChoiceDrying(State[][] tab) {
+		for (int i=0; i<=5; i++) {
+			for (int j=0; j<=5; j++) {
+				State state = tab[i][j];
+				if ((state == State.FLOODED)
+						&& (this.getY() == j
+						&& (this.getX() >= i-1 || this.getX() <= i+1)
+						|| this.getX() == i
+						&& (this.getY() >= j-1 || this.getY() <= j+1))) {
+					tab[i][j] = State.ACCESSIBLE;
+				} else {
+					tab[i][j] = State.INACCESSIBLE;
+				}
+			}
+		}
+	}
+
 
 	public int getX() {
 		return x;
