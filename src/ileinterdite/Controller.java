@@ -10,7 +10,7 @@ import ileinterdite.view.GridView;
 
 import java.util.*;
 
-public class Controller extends Observer {
+public class Controller implements Observer {
 
 	Grid grid;
 	Collection<Adventurer> players;
@@ -45,12 +45,25 @@ public class Controller extends Observer {
 	 * puis l'interaction avec l'interface
 	 * @param adventurer
 	 */
+	public void initDryable(Adventurer adventurer){
+		int x;
+		int y;
+		cellStates = new State[6][6];
+		cellStates = adventurer.getDryableCells();
+		//TODO declancher interaction avec joueurs
+	}
+
+	/**
+	 * Lance les actions pour le deplacement de l'aventurier.
+	 * puis l'interaction avec l'interface
+	 * @param adventurer
+	 */
 	public void initMovement(Adventurer adventurer){
 		int x;
 		int y; 
 		cellStates = new State[6][6];
 		cellStates = adventurer.getAccessibleCells();
-		//TODO declancher snteraction avec joueurs
+		//TODO declancher interaction avec joueurs
 	}
 
 	/**
@@ -58,20 +71,30 @@ public class Controller extends Observer {
 	 * @param x,y
 	 * @return boolean
 	 */
-	public boolean isMovementAvailable(int x, int y){
+	public boolean isCellAvailable(int x, int y){
 		return cellStates[x][y] == State.ACCESSIBLE;
 	}
 
 	/**
-	 *
+	 *deplacement de l'avanturier en X,Y et actualisation de la vue
 	 * @param x
 	 * @param y
-	 *
-	 * deplacement de l'avanturier en X,Y et actualisation de la vue
 	 */
 	public void movement(int x, int y){
-		if (isMovementAvailable(x,y)){
+		if (isCellAvailable(x,y)){
 			this.currentAdventurer.move(x,y);
+			//TODO actualisation de la vue
+		}
+	}
+
+	/**
+	 * Asséchement de la grille en X,Y et actualisation de la vue
+	 * @param x
+	 * @param y
+	 */
+	public void dry(int x, int y){
+		if (isCellAvailable(x,y)){
+			this.getGrid().dry(x,y);
 			//TODO actualisation de la vue
 		}
 	}
@@ -80,4 +103,8 @@ public class Controller extends Observer {
     public void update(Observable o, Object arg) {
         
     }
+
+	public Grid getGrid() {
+		return grid;
+	}
 }

@@ -59,6 +59,17 @@ public class Grid {
 	}
 
 	/**
+	 * Asseche la tuile en X U
+	 * @param x X pos on grid
+	 * @param y Y pos on grid
+	 */
+	public void dry(int x, int y){
+		Cell tmpCell;
+		tmpCell= getCell(x, y);
+		tmpCell.setState(State.NORMAL);
+	}
+
+	/**
 	 * 
 	 * @param x
 	 * @param y
@@ -67,15 +78,7 @@ public class Grid {
 		return cells[x][y];
 	}
 
-	/**
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void dry(int x, int y) {
-		// TODO - implement ileinterdite.model.Grid.dry
-		throw new UnsupportedOperationException();
-	}
+
 
 
 }

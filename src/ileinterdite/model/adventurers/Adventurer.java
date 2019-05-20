@@ -15,12 +15,24 @@ public class Adventurer {
 
 	/**
 	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
-	 * @return State[][] avec un marque accesible ou non
+	 * @return State[][] avec une marque accesible ou non
 	 */
 	public State[][] getAccessibleCells() {
 		State[][] cellsState;
 		cellsState = grid.getStateOfCells();
-		//TODO ADD Choix Tuile sur StatCells.
+		//TODO ADD Choix Tuile Deplacment sur StatCells.
+
+		return cellsState;
+	}
+
+	/**
+	 * Methode qui retourne un tableau avec les case assechables par l'aventurier
+	 * @return State[][] avec une marque assechable ou non
+	 */
+	public State[][] getDryableCells() {
+		State[][] cellsState;
+		cellsState = grid.getStateOfCells();
+		//TODO ADD Choix Tuile Assechement sur StatCells.
 
 		return cellsState;
 	}
@@ -40,12 +52,6 @@ public class Adventurer {
 		// TODO - implement ileinterdite.model.adventurers.Adventurer.isPowerAvailable
 		throw new UnsupportedOperationException();
 	}
-
-	public Collection<State> getDryableCells() {
-		// TODO - implement ileinterdite.model.adventurers.Adventurer.getDryableCells
-		throw new UnsupportedOperationException();
-	}
-
 
 
 	public int getX() {
