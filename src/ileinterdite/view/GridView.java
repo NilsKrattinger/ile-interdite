@@ -1,7 +1,7 @@
 package ileinterdite.view;
 
-import ileinterdite.util.State;
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.State;
 
 import java.util.Collection;
 import java.util.Observable;

@@ -1,6 +1,5 @@
 package ileinterdite.model;
 
-import ileinterdite.util.State;
 import ileinterdite.model.adventurers.Adventurer;
 
 import java.util.*;

@@ -1,10 +1,10 @@
 package ileinterdite.util;
 
 public enum State {
-	NORMAL,
+    NORMAL,
     FLOODED,
-	SUNKEN,
-	NON_EXISTENT,
-	ACCESSIBLE,
-	INACCESSIBLE
+    SUNKEN,
+    NON_EXISTENT,
+    ACCESSIBLE,
+    INACCESSIBLE
 }

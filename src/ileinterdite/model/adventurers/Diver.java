@@ -1,7 +1,5 @@
 package ileinterdite.model.adventurers;
 
-import ileinterdite.util.State;
-
 import java.util.Collection;
 
 public class Diver extends Adventurer {

@@ -19,16 +19,16 @@ public class Controller {
 	Collection<DiscardPile> discardPiles;
 
 	public void beginTurn() {
-		// TODO - implement ileinterdite.controller.Controller.beginTurn
+		// TODO - implement ileinterdite.controller.Controller.reduceNbActions
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * 
+	 *
 	 * @param nb
 	 */
 	public void setNbActions(int nb) {
-		// TODO - implement ileinterdite.controller.Controller.setNbActions
+		// TODO - implement ileinterdite.Controller.setNbActions
 		throw new UnsupportedOperationException();
 	}
 

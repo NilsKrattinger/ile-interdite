@@ -4,6 +4,7 @@ import ileinterdite.model.Deck;
 import ileinterdite.model.DiscardPile;
 import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.Action;
 import ileinterdite.util.State;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
@@ -21,9 +22,29 @@ public class Controller extends Observer {
 	State[][] cellStates;
 	Adventurer currentAdventurer;
 
+    /**
+     * procédure de gestion d'un tour
+     */
 	public void beginTurn() {
-		// TODO - implement ileinterdite.Controller.beginTurn
-		throw new UnsupportedOperationException();
+        for (int i=3; i>=1; i--) {
+
+            // boucle d'attente
+
+            switch (actionSelected){
+                case Action.MOVE:
+                        // méthode pour se déplacer
+                    break;
+                case Action.DRY:
+                        // méthode pour assécher
+                    break;
+                case Action.GIVE_CARD:
+                        // méthode pour donner une carte
+                    break;
+                case Action.GET_TREASURE:
+                         // méthode pour donner un trésor
+                    break;
+            }
+        }
 	}
 
 	/**

@@ -2,7 +2,6 @@ package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
-import ileinterdite.util.State;
 
 import java.util.Collection;
 
