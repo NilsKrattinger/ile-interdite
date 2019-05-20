@@ -17,7 +17,7 @@ public class TestEtatCase {
         Utils.State[] cellState;
 
         board = new Cell[Grid.WIDTH][Grid.HEIGTH];
-        DemoBoardGenarator dbg = new DemoBoardGenarator();
+        DemoBoardGenerator dbg = new DemoBoardGenerator();
         cellState = dbg.boardBuilder("../../Case.txt");
         for (int j = 0; j < Grid.WIDTH; j++) {
             for (int i = 0; i < Grid.HEIGTH; i++) {
