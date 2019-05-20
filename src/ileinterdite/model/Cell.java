@@ -10,6 +10,15 @@ public class Cell {
 	Collection<Adventurer> adventurers;
 	private State state;
 
+	public Cell() {
+		this.state = State.NORMAL;
+
+	}
+
+	public void setState(State state){
+		this.state = state;
+	}
+
 	/**
 	 * 
 	 * @param adv
