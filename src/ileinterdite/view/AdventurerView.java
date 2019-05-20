@@ -20,69 +20,69 @@ import ileinterdite.util.Utils;
 
 public class AdventurerView extends Observable {
 
-    private final JPanel panelBoutons ;
-    private final JPanel panelCentre ;
+    private final JPanel buttonsPanel;
+    private final JPanel centeredPanel;
     private final JFrame window;
-    private final JPanel panelAventurier;
+    private final JPanel adventurerPanel;
     private final JPanel mainPanel;
-    private final JButton btnBouger  ;
-    private final JButton btnAssecher;
-    private final JButton btnValiderTuile;
-    private final JButton btnTerminerTour;
+    private final JButton moveButton;
+    private final JButton dryButton;
+    private final JButton validateCellButton;
+    private final JButton endTurnButton;
     private JTextField position;
 
-    public AdventurerView(String nomJoueur, String nomAventurier, Color couleur) {
+    public AdventurerView(String playerName, String adventurerName, Color color) {
 
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(350, 200);
         //le titre = nom du joueur 
-        window.setTitle(nomJoueur);
+        window.setTitle(playerName);
         mainPanel = new JPanel(new BorderLayout());
         this.window.add(mainPanel);
 
         mainPanel.setBackground(new Color(230, 230, 230));
-        mainPanel.setBorder(BorderFactory.createLineBorder(couleur, 2)) ;
+        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
 
         // =================================================================================
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
 
-        this.panelAventurier = new JPanel();
-        panelAventurier.setBackground(couleur);
-        panelAventurier.add(new JLabel(nomAventurier,SwingConstants.CENTER ));
-        mainPanel.add(panelAventurier, BorderLayout.NORTH);
+        this.adventurerPanel = new JPanel();
+        adventurerPanel.setBackground(color);
+        adventurerPanel.add(new JLabel(adventurerName,SwingConstants.CENTER ));
+        mainPanel.add(adventurerPanel, BorderLayout.NORTH);
 
         // =================================================================================
         // CENTRE : 1 ligne pour position courante
-        this.panelCentre = new JPanel(new GridLayout(2, 1));
-        this.panelCentre.setOpaque(false);
-        this.panelCentre.setBorder(new MatteBorder(0, 0, 2, 0, couleur));
-        mainPanel.add(this.panelCentre, BorderLayout.CENTER);
+        this.centeredPanel = new JPanel(new GridLayout(2, 1));
+        this.centeredPanel.setOpaque(false);
+        this.centeredPanel.setBorder(new MatteBorder(0, 0, 2, 0, color));
+        mainPanel.add(this.centeredPanel, BorderLayout.CENTER);
 
-        panelCentre.add(new JLabel ("Position", SwingConstants.CENTER));
+        centeredPanel.add(new JLabel ("Position", SwingConstants.CENTER));
         position = new  JTextField(30);
         position.setHorizontalAlignment(CENTER);
-        panelCentre.add(position);
+        centeredPanel.add(position);
 
 
         // =================================================================================
         // SUD : les boutons
-        this.panelBoutons = new JPanel(new GridLayout(2,2));
-        this.panelBoutons.setOpaque(false);
-        mainPanel.add(this.panelBoutons, BorderLayout.SOUTH);
+        this.buttonsPanel = new JPanel(new GridLayout(2,2));
+        this.buttonsPanel.setOpaque(false);
+        mainPanel.add(this.buttonsPanel, BorderLayout.SOUTH);
 
-        this.btnBouger = new JButton("Bouger") ;
-        btnBouger.addActionListener(e -> {
+        this.moveButton = new JButton("Bouger") ;
+        moveButton.addActionListener(e -> {
             setChanged();
             notifyObservers(Utils.Action.MOVE);
         });
-        this.btnAssecher = new JButton( "Assecher");
-        btnAssecher.addActionListener(e -> {
+        this.dryButton = new JButton( "Assecher");
+        dryButton.addActionListener(e -> {
             setChanged();
             notifyObservers(Utils.Action.DRY);
         });
-        this.btnValiderTuile = new JButton("Valider tuile");
-        btnValiderTuile.addActionListener(e -> {
+        this.validateCellButton = new JButton("Valider tuile");
+        validateCellButton.addActionListener(e -> {
             String pos = position.getText();
             if (pos.length() == 0) {
                 position.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -94,16 +94,16 @@ public class AdventurerView extends Observable {
                 position.setText("");
             }
         });
-        this.btnTerminerTour = new JButton("Terminer Tour");
-        btnTerminerTour.addActionListener(e -> {
+        this.endTurnButton = new JButton("Terminer Tour");
+        endTurnButton.addActionListener(e -> {
             setChanged();
             notifyObservers(Utils.Action.END_TURN);
         });
 
-        this.panelBoutons.add(btnBouger);
-        this.panelBoutons.add(btnAssecher);
-        this.panelBoutons.add(btnValiderTuile);
-        this.panelBoutons.add(btnTerminerTour);
+        this.buttonsPanel.add(moveButton);
+        this.buttonsPanel.add(dryButton);
+        this.buttonsPanel.add(validateCellButton);
+        this.buttonsPanel.add(endTurnButton);
     }
 
     public void setVisible() {
@@ -114,24 +114,24 @@ public class AdventurerView extends Observable {
         this.position.setText(pos);
     }
 
-    public JButton getBtnValiderTuile() {
-        return btnValiderTuile;
+    public JButton getValidateCellButton() {
+        return validateCellButton;
     }
 
     public String getPosition() {
         return position.getText();
     }
 
-    public JButton getBtnBouger() {
-        return btnBouger;
+    public JButton getMoveButton() {
+        return moveButton;
     }
 
-    public JButton getBtnAssecher() {
-        return btnAssecher;
+    public JButton getDryButton() {
+        return dryButton;
     }
 
-    public JButton getBtnTerminerTour() {
-        return btnTerminerTour;
+    public JButton getEndTurnButton() {
+        return endTurnButton;
     }
 }
 

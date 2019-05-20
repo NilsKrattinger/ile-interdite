@@ -35,57 +35,57 @@ public class Utils {
         ACCESSIBLE("Accessible"),
         INACCESSIBLE("Inaccessible");
 
-        String libelle ;
+        String label;
         
-        State(String libelle) {
-            this.libelle = libelle ;
+        State(String label) {
+            this.label = label ;
         }
 
         @Override
         public String toString() {
-            return this.libelle ;
+            return this.label;
         }
     }
 
-    public static enum Pion {
-        ROUGE("Rouge", new Color(193, 34, 44)),
-        VERT("Vert", new Color(0, 195, 0)),
-        BLEU("Bleu", new Color(55,194,198)),
+    public static enum Pawn {
+        RED("Rouge", new Color(193, 34, 44)),
+        GREEN("Vert", new Color(0, 195, 0)),
+        BLUE("Bleu", new Color(55,194,198)),
         ORANGE("Orange", new Color(235, 122, 34)),
-        VIOLET("Violet", new Color(204, 94, 255)),
-        JAUNE("Jaune", new Color(255, 255, 0)) ;    
+        PURPLE("Violet", new Color(204, 94, 255)),
+        YELLOW("Jaune", new Color(255, 255, 0)) ;
 
-        private final String libelle ;
-        private final Color couleur ;
+        private final String label;
+        private final Color color;
 
 
-        Pion (String libelle, Color couleur) {
-            this.libelle = libelle ;
-            this.couleur = couleur ;
+        Pawn(String label, Color color) {
+            this.label = label;
+            this.color = color;
         }
 
         @Override
         public String toString() {
-            return this.libelle ;
+            return this.label;
         }
 
-        public Color getCouleur() {
-            return this.couleur ;
+        public Color getColor() {
+            return this.color;
         }
 
-        static Pion getFromName(String name) {
-            if (ROUGE.name().equals(name)) return ROUGE ;
-            if (VERT.name().equals(name)) return VERT ;
-            if (BLEU.name().equals(name)) return BLEU ;
+        static Pawn getFromName(String name) {
+            if (RED.name().equals(name)) return RED;
+            if (GREEN.name().equals(name)) return GREEN;
+            if (BLUE.name().equals(name)) return BLUE;
             if (ORANGE.name().equals(name)) return ORANGE ;
-            if (VIOLET.name().equals(name)) return VIOLET ;
-            if (JAUNE.name().equals(name)) return JAUNE ;
-            return null ;
+            if (PURPLE.name().equals(name)) return PURPLE;
+            if (YELLOW.name().equals(name)) return YELLOW;
+            return null;
         }
     }
 
-    public static ArrayList<Adventurer> melangerAventuriers(ArrayList<Adventurer> arrayList) {
-        if (Parameters.ALEAS) {
+    public static ArrayList<Adventurer> shuffleAdventurers(ArrayList<Adventurer> arrayList) {
+        if (Parameters.RANDOM) {
             Collections.shuffle(arrayList);
         }
         return arrayList ;
@@ -96,18 +96,18 @@ public class Utils {
      * @param question texte à afficher
      * @return true si l'utilisateur répond oui, false sinon
      */
-    public static Boolean poserQuestion(String question) {
-        System.out.println("Divers.poserQuestion(" + question + ")");
-        int reponse = JOptionPane.showConfirmDialog (null, question, "", JOptionPane.YES_NO_OPTION) ;
-        System.out.println("\tréponse : " + (reponse == JOptionPane.YES_OPTION ? "Oui" : "Non"));
-        return reponse == JOptionPane.YES_OPTION;
+    public static Boolean askQuestion(String question) {
+        System.out.println("Divers.askQuestion(" + question + ")");
+        int answer = JOptionPane.showConfirmDialog (null, question, "", JOptionPane.YES_NO_OPTION) ;
+        System.out.println("\tréponse : " + (answer == JOptionPane.YES_OPTION ? "Oui" : "Non"));
+        return answer == JOptionPane.YES_OPTION;
     }    
     
     /**
      * Permet d'afficher un message d'information avec un bouton OK
      * @param message Message à afficher 
      */
-    public static void afficherInformation(String message) {
+    public static void showInformation(String message) {
         JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.OK_OPTION);
     }
 }

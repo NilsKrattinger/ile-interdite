@@ -45,7 +45,7 @@ public class Controller implements Observer {
 
     public static void main(String [] args) {
         // Instanciation de la fenêtre
-        AdventurerView vueAventurier = new AdventurerView("Manon", "Explorateur", Utils.Pion.ROUGE.getCouleur() );
+        AdventurerView vueAventurier = new AdventurerView("Manon", "Explorateur", Utils.Pawn.RED.getColor() );
         Controller c = new Controller();
         vueAventurier.addObserver(c);
         vueAventurier.setVisible();
