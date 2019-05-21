@@ -1,7 +1,7 @@
 package ileinterdite.model;
 
-import ileinterdite.util.State;
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.Utils;
 
 import java.util.*;
 
@@ -9,7 +9,7 @@ public class Grid {
 
 	private Cell[][] cells;
 	public final static int WIDTH = 6;
-	public final static int HEIGTH = 6;
+	public final static int HEIGHT = 6;
 	private Treasure[] treasures;
 	Collection<Adventurer> pawns;
 
@@ -23,10 +23,10 @@ public class Grid {
 	 * Methode qui renvoie un tableau un 6x6 contenant l'etat de chaque case.
 	 * @return State[][]
 	 */
-	public  State[][] getStateOfCells() {
-		State[][] cellsState;
-		cellsState = new State[Grid.WIDTH][Grid.HEIGTH];
-		for (int i = 0; i < Grid.HEIGTH ; i++) {
+	public Utils.State[][] getStateOfCells() {
+        Utils.State[][] cellsState;
+		cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
+		for (int i = 0; i < Grid.HEIGHT; i++) {
 			for (int j = 0; j < Grid.WIDTH ; j++) {
 				if (cells[i][j] != null){
 					cellsState[i][j] = cells[i][j].getState();
@@ -61,7 +61,7 @@ public class Grid {
 	 * @param y Y pos on grid
 	 */
 	public void dry(int x, int y){
-		cells[x][y].setState(State.NORMAL);
+		cells[x][y].setState(Utils.State.NORMAL);
 	}
 
 	/**
