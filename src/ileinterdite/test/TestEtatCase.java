@@ -2,6 +2,7 @@ package ileinterdite.test;
 
 import ileinterdite.model.Cell;
 import ileinterdite.model.Grid;
+import ileinterdite.util.Utils;
 
 public class TestEtatCase {
     private static Cell[][] board;
@@ -13,13 +14,13 @@ public class TestEtatCase {
 
     public static void init(){
 
-        State[] cellState;
+        Utils.State[] cellState;
 
-        board = new Cell[Grid.WIDTH][Grid.HEIGTH];
-        DemoBoardGenarator dbg = new DemoBoardGenarator();
+        board = new Cell[Grid.WIDTH][Grid.HEIGHT];
+        DemoBoardGenerator dbg = new DemoBoardGenerator();
         cellState = dbg.boardBuilder("../../Case.txt");
         for (int j = 0; j < Grid.WIDTH; j++) {
-            for (int i = 0; i < Grid.HEIGTH; i++) {
+            for (int i = 0; i < Grid.HEIGHT; i++) {
 
                 board[j][i] = new Cell();
                 board[j][i].setState(cellState[i + (j * Grid.WIDTH)]);
@@ -28,7 +29,7 @@ public class TestEtatCase {
 
         Grid grid= new Grid(board,null,null);
 
-        State[][] retrievedStates = grid.getStateOfCells();
+        Utils.State[][] retrievedStates = grid.getStateOfCells();
 
         for (int j = 0; j < 6; j++) {
             for (int i = 0; i < 6; i++) {

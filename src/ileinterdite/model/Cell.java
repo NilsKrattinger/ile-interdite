@@ -1,20 +1,21 @@
 package ileinterdite.model;
 
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.Utils;
 
 import java.util.*;
 
 public class Cell {
 
 	Collection<Adventurer> adventurers;
-	private State state;
+	private Utils.State state;
 
 	public Cell() {
-		this.state = State.NORMAL;
+		this.state = Utils.State.NORMAL;
 
 	}
 
-	public void setState(State state){
+	public void setState(Utils.State state){
 		this.state = state;
 	}
 
@@ -36,7 +37,7 @@ public class Cell {
 		throw new UnsupportedOperationException();
 	}
 
-	public State getState() {
+	public Utils.State getState() {
 		return this.state;
 	}
 

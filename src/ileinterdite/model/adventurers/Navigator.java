@@ -1,12 +1,11 @@
 package ileinterdite.model.adventurers;
 
-import java.util.Collection;
+import ileinterdite.util.Utils;
 
 public class Navigator extends Adventurer {
 
-	public Collection<State> getAvailableCells() {
-		// TODO - implement ileinterdite.model.adventurers.Navigator.getAvailableCells
-		throw new UnsupportedOperationException();
-	}
-
+    @Override
+    public void cellChoiceMoving(Utils.State[][] tab) {
+        super.cellChoiceMoving(tab);
+    }
 }

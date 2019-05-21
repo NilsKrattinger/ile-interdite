@@ -1,7 +1,7 @@
 package ileinterdite.view;
 
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.util.State;
+import ileinterdite.util.Utils;
 
 import java.util.Collection;
 import java.util.Observable;
@@ -17,7 +17,7 @@ public class GridView extends Observable {
 	 * 
 	 * @param tab
 	 */
-	public void showMovements(Collection<State> tab) {
+	public void showMovements(Collection<Utils.State> tab) {
 		// TODO - implement ileinterdite.view.GridView.showMovements
 		throw new UnsupportedOperationException();
 	}
@@ -37,7 +37,7 @@ public class GridView extends Observable {
 	 * 
 	 * @param tab
 	 */
-	public void showDryOptions(Collection<State> tab) {
+	public void showDryOptions(Collection<Utils.State> tab) {
 		// TODO - implement ileinterdite.view.GridView.showDryOptions
 		throw new UnsupportedOperationException();
 	}
