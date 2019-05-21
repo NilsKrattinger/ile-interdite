@@ -26,12 +26,12 @@ public class Grid {
 	public Utils.State[][] getStateOfCells() {
         Utils.State[][] cellsState;
 		cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
-		for (int i = 0; i < Grid.HEIGHT; i++) {
-			for (int j = 0; j < Grid.WIDTH ; j++) {
+		for (int j = 0; j < Grid.HEIGHT; j++) {
+			for (int i = 0; i < Grid.WIDTH ; i++) {
 				Cell cellTmp;
 				cellTmp = this.getCell(i,j);
 				if (cellTmp != null){
-					cellsState[i][j] = cellTmp.getState();
+					cellsState[j][i] = cellTmp.getState();
 				}
 			}
 
@@ -64,7 +64,7 @@ public class Grid {
 	 * @param y
 	 */
 	public Cell getCell(int x, int y) {
-		return cells[x][y];
+		return cells[y][x];
 	}
 
 	/**

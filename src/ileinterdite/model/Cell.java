@@ -3,16 +3,16 @@ package ileinterdite.model;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class Cell {
 
-	Collection<Adventurer> adventurers;
+	ArrayList<Adventurer> adventurers;
 	private Utils.State state;
 
 	public Cell() {
 		this.state = Utils.State.NORMAL;
-
+        this.adventurers = new ArrayList<>();
 	}
 
 	/**
@@ -30,6 +30,15 @@ public class Cell {
 	public void addAdventurer(Adventurer adv) {
 	    adventurers.add(adv);
 	}
+
+    /**
+     * Check if the adventurer is present on the cell
+     * @param adv Adventurer The adventurer to find
+     * @return boolean
+     */
+	public boolean isAdventurerOnCell(Adventurer adv) {
+	    return adventurers.contains(adv);
+    }
 
     /**
      * Change the state of the cell
