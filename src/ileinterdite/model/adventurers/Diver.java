@@ -1,24 +1,36 @@
 package ileinterdite.model.adventurers;
 
+import ileinterdite.model.Grid;
 import ileinterdite.util.Utils;
 
-import java.util.Collection;
-
 public class Diver extends Adventurer {
+    public void cellChoiceMoving(Utils.State[][] tab) {
+        treatBoard(this.getX(),this.getY(),tab);
+        for (int i=0; i < Grid.WIDTH; i++) {
+            for (int j=0; j < Grid.HEIGHT; j++) {
+                if (tab[i][j] != Utils.State.ACCESSIBLE) {
+                    tab[i][j] = Utils.State.INACCESSIBLE;
+                }
+            }
+        }
+    }
 
-	/**
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void isCellReachable(int x, int y) {
-		// TODO - implement ileinterdite.model.adventurers.Diver.isCellReachable
-		throw new UnsupportedOperationException();
-	}
+    public void treatBoard(int x, int y, Utils.State[][] tab) {
+        if (x >= 0 && x < Grid.WIDTH && y >= 0 && y < Grid.WIDTH) {
+            Utils.State state = tab[x][y];
+            if ((x != this.getX() || y != this.getY()) && state != Utils.State.SUNKEN) {
+                tab[x][y] = Utils.State.ACCESSIBLE;
+            } else {
+                tab[x][y] = Utils.State.INACCESSIBLE;
+            }
 
-	public Collection<Utils.State> getAvailableCells() {
-		// TODO - implement ileinterdite.model.adventurers.Diver.getAvailableCells
-		throw new UnsupportedOperationException();
-	}
+            if ((x == this.getX() && y == this.getY()) || state == Utils.State.FLOODED || state == Utils.State.SUNKEN) {
+                treatBoard(x - 1, y, tab);
+                treatBoard(x + 1, y, tab);
+                treatBoard(x, y - 1, tab);
+                treatBoard(x, y + 1, tab);
+            }
+        }
+    }
 
 }

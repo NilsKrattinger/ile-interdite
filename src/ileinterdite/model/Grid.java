@@ -9,7 +9,7 @@ public class Grid {
 
 	private Cell[][] cells;
 	public final static int WIDTH = 6;
-	public final static int HEIGTH = 6;
+	public final static int HEIGHT = 6;
 	private Treasure[] treasures;
 	Collection<Adventurer> pawns;
 
@@ -25,8 +25,8 @@ public class Grid {
 	 */
 	public Utils.State[][] getStateOfCells() {
         Utils.State[][] cellsState;
-		cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGTH];
-		for (int i = 0; i < Grid.HEIGTH ; i++) {
+		cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
+		for (int i = 0; i < Grid.HEIGHT; i++) {
 			for (int j = 0; j < Grid.WIDTH ; j++) {
 				Cell cellTmp;
 				cellTmp = this.getCell(i,j);
