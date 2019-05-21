@@ -3,7 +3,6 @@ package ileinterdite.model.adventurers;
 import ileinterdite.model.Grid;
 import ileinterdite.util.Utils;
 
-import java.util.Collection;
 
 public class Explorer extends Adventurer {
 
