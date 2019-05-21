@@ -32,7 +32,7 @@ public class Diver extends Adventurer {
 
 	public void treatBoard(int x, int y, State[][] tab) {
 		if (x >= 0 && x <= 5 && y >= 0 && y <= 5) {
-			State state = this.getGrid().getCell(x, y).getState();
+			State state = tab[x][y];
 			if ((x != this.getX() || y != this.getY()) && state != State.SUNKEN) {
 				tab[x][y] = State.ACCESSIBLE;
 			} else {

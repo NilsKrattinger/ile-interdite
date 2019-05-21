@@ -16,7 +16,7 @@ public class Pilot extends Adventurer {
 	 */
 	@Override
 	public void cellChoiceMoving(State[][] tab) {
-		if (this.isPowerAvailable()) {
+        if (this.isPowerAvailable()) {
             for (int i = 0; i <= 5; i++) {
                 for (int j = 0; j <= 5; j++) {
                     State state = tab[i][j];
