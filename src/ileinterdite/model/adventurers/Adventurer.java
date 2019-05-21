@@ -46,16 +46,53 @@ public class Adventurer {
 		throw new UnsupportedOperationException();
 	}
 
+    /**
+     * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par l'aventurier
+     * @param tab
+     */
+    public void cellChoiceMoving(Utils.State[][] tab) {
+        for (int i = 0; i < Grid.WIDTH; i++) {
+            for (int j = 0; j< Grid.HEIGHT; j++) {
+                Utils.State state = tab[i][j];
+                if ((state == Utils.State.FLOODED || state == Utils.State.NORMAL)
+                        && (this.getY() == j && (this.getX() == i-1
+                        || this.getX() == i+1) || this.getX() == i
+                        && (this.getY() == j-1 || this.getY() == j+1))) {
+                    tab[i][j] = Utils.State.ACCESSIBLE;
+                } else {
+                    tab[i][j] = Utils.State.INACCESSIBLE;
+                }
+            }
+        }
+    }
 
+    /**
+     * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est assechable ou non par l'aventurier
+     * @param tab
+     */
+    public void cellChoiceDrying(Utils.State[][] tab) {
+        for (int i = 0; i < Grid.WIDTH; i++) {
+            for (int j = 0; j < Grid.HEIGHT; j++) {
+                Utils.State state = tab[i][j];
+                if ((state == Utils.State.FLOODED)
+                        && (this.getY() == j
+                        && (this.getX() >= i-1 || this.getX() <= i+1)
+                        || this.getX() == i
+                        && (this.getY() >= j-1 || this.getY() <= j+1))) {
+                    tab[i][j] = Utils.State.ACCESSIBLE;
+                } else {
+                    tab[i][j] = Utils.State.INACCESSIBLE;
+                }
+            }
+        }
+    }
 
-	public int getX() {
+    public int getX() {
+        return x;
+    }
 
-		return x;
-	}
-
-	public int getY() {
-
-		return y;
-	}
+    public int getY() {
+        return y;
+    }
 
 }
