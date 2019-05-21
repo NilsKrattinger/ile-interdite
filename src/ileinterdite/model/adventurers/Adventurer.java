@@ -20,8 +20,7 @@ public class Adventurer {
 	public Utils.State[][] getAccessibleCells() {
         Utils.State[][] cellsState;
 		cellsState = grid.getStateOfCells();
-		//TODO ADD Choix Tuile sur StatCells.
-
+		cellChoiceMoving(cellsState);
 		return cellsState;
 	}
 
@@ -34,11 +33,6 @@ public class Adventurer {
 		int currX = this.getX();
 		int currY = this.getY();
 		grid.move(newX,newY,currX,currY,this);
-	}
-
-	public boolean isPowerAvailable() {
-		// TODO - implement ileinterdite.model.adventurers.Adventurer.isPowerAvailable
-		throw new UnsupportedOperationException();
 	}
 
 	public Collection<Utils.State> getDryableCells() {
