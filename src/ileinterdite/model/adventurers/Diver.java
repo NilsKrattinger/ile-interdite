@@ -16,7 +16,7 @@ public class Diver extends Adventurer {
     }
 
     public void treatBoard(int x, int y, Utils.State[][] tab) {
-        if (x >= 0 && x <= 5 && y >= 0 && y <= 5) {
+        if (x >= 0 && x < Grid.WIDTH && y >= 0 && y < Grid.WIDTH) {
             Utils.State state = tab[x][y];
             if ((x != this.getX() || y != this.getY()) && state != Utils.State.SUNKEN) {
                 tab[x][y] = Utils.State.ACCESSIBLE;
