@@ -21,13 +21,13 @@ public class Controller extends Observer {
 	Collection<DiscardPile> discardPiles;
 	State[][] cellStates;
 	Adventurer currentAdventurer;
-	private static final int nbActionsParTour = 3;
+	private static final int nbActionsPerTurn = 3;
 
     /**
      * procédure de gestion d'un tour
      */
 	public void beginTurn() {
-        for (int i=nbActionsParTour; i>=1; i--) {
+        for (int i=nbActionsPerTurn; i>0; i--) {
 
 			Action actionSelected;
 			// TODO - boucle d'attente
