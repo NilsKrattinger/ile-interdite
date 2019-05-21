@@ -1,8 +1,8 @@
-package ileinterdite;
+package ileinterdite.model;
 
 import java.util.*;
 
-public class Deck {
+public class Hand {
 
 	Collection<Card> cards;
 

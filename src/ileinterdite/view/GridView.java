@@ -1,11 +1,15 @@
-package ileinterdite;
+package ileinterdite.view;
+
+import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.Utils;
 
 import java.util.Collection;
+import java.util.Observable;
 
 public class GridView extends Observable {
 
 	public void showActions() {
-		// TODO - implement ileinterdite.GridView.showActions
+		// TODO - implement ileinterdite.view.GridView.showActions
 		throw new UnsupportedOperationException();
 	}
 
@@ -13,8 +17,8 @@ public class GridView extends Observable {
 	 * 
 	 * @param tab
 	 */
-	public void showMovements(Collection<State> tab) {
-		// TODO - implement ileinterdite.GridView.showMovements
+	public void showMovements(Collection<Utils.State> tab) {
+		// TODO - implement ileinterdite.view.GridView.showMovements
 		throw new UnsupportedOperationException();
 	}
 
@@ -25,7 +29,7 @@ public class GridView extends Observable {
 	 * @param adv
 	 */
 	public void updateAdvPosition(int x, int y, Adventurer adv) {
-		// TODO - implement ileinterdite.GridView.updateAdvPosition
+		// TODO - implement ileinterdite.view.GridView.updateAdvPosition
 		throw new UnsupportedOperationException();
 	}
 
@@ -33,8 +37,8 @@ public class GridView extends Observable {
 	 * 
 	 * @param tab
 	 */
-	public void showDryOptions(Collection<State> tab) {
-		// TODO - implement ileinterdite.GridView.showDryOptions
+	public void showDryOptions(Collection<Utils.State> tab) {
+		// TODO - implement ileinterdite.view.GridView.showDryOptions
 		throw new UnsupportedOperationException();
 	}
 
@@ -44,7 +48,7 @@ public class GridView extends Observable {
 	 * @param y
 	 */
 	public void updateDriedCells(int x, int y) {
-		// TODO - implement ileinterdite.GridView.updateDriedCells
+		// TODO - implement ileinterdite.view.GridView.updateDriedCells
 		throw new UnsupportedOperationException();
 	}
 
