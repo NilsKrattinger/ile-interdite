@@ -28,10 +28,8 @@ public class Grid {
 		cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
 		for (int i = 0; i < Grid.HEIGHT; i++) {
 			for (int j = 0; j < Grid.WIDTH ; j++) {
-				Cell cellTmp;
-				cellTmp = this.getCell(i,j);
-				if (cellTmp != null){
-					cellsState[i][j] = cellTmp.getState();
+				if (cells[i][j] != null){
+					cellsState[i][j] = cells[i][j].getState();
 				}
 			}
 
@@ -51,11 +49,19 @@ public class Grid {
 	 *            enleve l'aventurier de son ancienne pos et l'ajoute sur la nouvelle.
 	 */
 	public void move(int x, int y, int x_old, int y_old, Adventurer adv) {
-		Cell tmpCell;
-		tmpCell = getCell(x_old,y_old); //get the actual cell of the adventurer
-		tmpCell.removeAdventurer(adv);
-		tmpCell = getCell(x,y); //get the new cell of the adventurer
-		tmpCell.addAdventurer(adv);
+		//get the actual cell of the adventurer
+		cells[x_old][y_old].removeAdventurer(adv);
+		 //get the new cell of the adventurer
+		cells[x][y].addAdventurer(adv);
+	}
+
+	/**
+	 * Asseche la tuile en X U
+	 * @param x X pos on grid
+	 * @param y Y pos on grid
+	 */
+	public void dry(int x, int y){
+		cells[x][y].setState(Utils.State.NORMAL);
 	}
 
 	/**
@@ -63,19 +69,5 @@ public class Grid {
 	 * @param x
 	 * @param y
 	 */
-	public Cell getCell(int x, int y) {
-		return cells[x][y];
-	}
-
-	/**
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void dry(int x, int y) {
-		// TODO - implement ileinterdite.model.Grid.dry
-		throw new UnsupportedOperationException();
-	}
-
 
 }

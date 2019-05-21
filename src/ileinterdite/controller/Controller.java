@@ -62,11 +62,24 @@ public class Controller implements Observer {
     }
 
     /**
+     * Lance les actions pour le deplacement de l'aventurier.
+     * puis l'interaction avec l'interface
+     * @param adventurer
+     */
+    public void initDryable(Adventurer adventurer){
+        int x;
+        int y;
+        cellStates = new Utils.State[Grid.HEIGHT][Grid.WIDTH];
+        cellStates = adventurer.getDryableCells();
+        //TODO declancher interaction avec joueurs
+    }
+
+    /**
      *	Renvoie un boolean si la case choisie par l'utilisateur est accesible
      * @param x,y
      * @return boolean
      */
-    public boolean isMovementAvailable(int x, int y){
+    public boolean isCellAvailable(int x, int y){
         return cellStates[x][y] == Utils.State.ACCESSIBLE;
     }
     
@@ -78,8 +91,20 @@ public class Controller implements Observer {
      * deplacement de l'avanturier en X,Y et actualisation de la vue
      */
     public void movement(int x, int y){
-        if (isMovementAvailable(x,y)){
+        if (isCellAvailable(x,y)){
             this.currentAdventurer.move(x,y);
+            //TODO actualisation de la vue
+        }
+    }
+
+    /**
+     * Asséchement de la grille en X,Y et actualisation de la vue
+     * @param x
+     * @param y
+     */
+    public void dry(int x, int y){
+        if (isCellAvailable(x,y)){
+            this.getGrid().dry(x,y);
             //TODO actualisation de la vue
         }
     }
@@ -109,5 +134,9 @@ public class Controller implements Observer {
         Controller c = new Controller();
         adventurerView.addObserver(c);
         adventurerView.setVisible();
+    }
+
+    private Grid getGrid() {
+        return grid;
     }
 }
