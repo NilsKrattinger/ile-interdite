@@ -6,6 +6,7 @@ import ileinterdite.model.Grid;
 import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
+import ileinterdite.util.Utils.Action;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
 import ileinterdite.model.adventurers.Adventurer;
@@ -30,9 +31,30 @@ public class Controller implements Observer {
         adventurerView.setVisible();
     }
 
+    // Turn state
+    private Action selectedAction;
+    private static final int NB_ACTIONS_PER_TURN = 3;
+
 	public void beginTurn() {
-		// TODO - implement ileinterdite.controller.Controller.beginTurn
-		throw new UnsupportedOperationException();
+        for (int i = NB_ACTIONS_PER_TURN; i > 0; i--) {
+
+            // TODO - boucle d'attente
+
+            switch (selectedAction){
+                case MOVE:
+                    // TODO - méthode pour se déplacer
+                    break;
+                case DRY:
+                    // TODO - méthode pour assécher
+                    break;
+                case GIVE_CARD:
+                    // TODO - méthode pour donner une carte
+                    break;
+                case GET_TREASURE:
+                    // TODO - méthode pour donner un trésor
+                    break;
+            }
+        }
 	}
 
     /**
@@ -47,12 +69,25 @@ public class Controller implements Observer {
     }
 
     /**
-     *	Renvoie un boolean si la case choisie par l'utilisateur est accessible
+     * Lance les actions pour le deplacement de l'aventurier.
+     * puis l'interaction avec l'interface
+     * @param adventurer
+     */
+    public void initDryable(Adventurer adventurer){
+        int x;
+        int y;
+        cellStates = new Utils.State[Grid.HEIGHT][Grid.WIDTH];
+        cellStates = adventurer.getDryableCells();
+        //TODO declancher interaction avec joueurs
+    }
+
+    /**
+     *	Renvoie un boolean si la case choisie par l'utilisateur est accesible
      * @param x,y
      * @return boolean
      */
-    public boolean isMovementAvailable(int x, int y) {
-        return cellStates[x][y] == Utils.State.ACCESSIBLE;
+    public boolean isCellAvailable(int x, int y) {
+        return cellStates[y][x] == Utils.State.ACCESSIBLE;
     }
     
     /**
@@ -63,7 +98,7 @@ public class Controller implements Observer {
      * deplacement de l'avanturier en X,Y et actualisation de la vue
      */
     public void movement(int x, int y){
-        if (isMovementAvailable(x,y)){
+        if (isCellAvailable(x,y)){
             this.currentAdventurer.move(x,y);
             adventurerView.updateAdventurer(currentAdventurer);
         }
@@ -99,12 +134,24 @@ public class Controller implements Observer {
         }
     }
 
+    /**
+     * Asséchement de la grille en X,Y et actualisation de la vue
+     * @param x
+     * @param y
+     */
+    public void dry(int x, int y){
+        if (isCellAvailable(x,y)){
+            this.getGrid().dry(x,y);
+            //TODO actualisation de la vue
+        }
+    }
+
 	/**
-	 * 
+	 *
 	 * @param nb
 	 */
 	public void setNbActions(int nb) {
-		// TODO - implement ileinterdite.controller.Controller.setNbActions
+		// TODO - implement ileinterdite.Controller.setNbActions
 		throw new UnsupportedOperationException();
 	}
 
@@ -144,5 +191,9 @@ public class Controller implements Observer {
     public static void main(String [] args) {
         // Instanciation de la fenêtre
         Controller c = new Controller();
+    }
+
+    private Grid getGrid() {
+        return grid;
     }
 }

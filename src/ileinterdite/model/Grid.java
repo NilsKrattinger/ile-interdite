@@ -51,31 +51,23 @@ public class Grid {
 	 *            enleve l'aventurier de son ancienne pos et l'ajoute sur la nouvelle.
 	 */
 	public void move(int x, int y, int x_old, int y_old, Adventurer adv) {
-		Cell tmpCell;
-		tmpCell = getCell(x_old,y_old); //get the actual cell of the adventurer
-		tmpCell.removeAdventurer(adv);
-		tmpCell = getCell(x,y); //get the new cell of the adventurer
-		tmpCell.addAdventurer(adv);
+		//get the actual cell of the adventurer
+		cells[y_old][x_old].removeAdventurer(adv);
+		 //get the new cell of the adventurer
+		cells[y][x].addAdventurer(adv);
 	}
 
 	/**
-	 * 
-	 * @param x
-	 * @param y
+	 * Asseche la tuile en X U
+	 * @param x X pos on grid
+	 * @param y Y pos on grid
 	 */
 	public Cell getCell(int x, int y) {
-		return cells[y][x];
-	}
+        return cells[y][x];
+    }
 
-	/**
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void dry(int x, int y) {
-		// TODO - implement ileinterdite.model.Grid.dry
-		throw new UnsupportedOperationException();
+	public void dry(int x, int y){
+		cells[y][x].setState(Utils.State.NORMAL);
 	}
-
 
 }

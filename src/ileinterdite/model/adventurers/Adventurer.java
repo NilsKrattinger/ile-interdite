@@ -4,8 +4,6 @@ import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
 import ileinterdite.util.Utils;
 
-import java.util.Collection;
-
 public class Adventurer {
 
 	Grid grid;
@@ -24,12 +22,25 @@ public class Adventurer {
 
 	/**
 	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
-	 * @return State[][] avec un marque accesible ou non
+	 * @return State[][] avec une marque accesible ou non
 	 */
 	public Utils.State[][] getAccessibleCells() {
         Utils.State[][] cellsState;
 		cellsState = grid.getStateOfCells();
 		cellChoiceMoving(cellsState);
+
+		return cellsState;
+	}
+
+	/**
+	 * Methode qui retourne un tableau avec les case assechables par l'aventurier
+	 * @return State[][] avec une marque assechable ou non
+	 */
+	public Utils.State[][] getDryableCells() {
+        Utils.State[][] cellsState;
+		cellsState = grid.getStateOfCells();
+		//TODO ADD Choix Tuile Assechement sur StatCells.
+
 		return cellsState;
 	}
 
@@ -42,11 +53,6 @@ public class Adventurer {
 		int currX = this.getX();
 		int currY = this.getY();
 		grid.move(newX,newY,currX,currY,this);
-	}
-
-	public Collection<Utils.State> getDryableCells() {
-		// TODO - implement ileinterdite.model.adventurers.Adventurer.getDryableCells
-		throw new UnsupportedOperationException();
 	}
 
     /**
