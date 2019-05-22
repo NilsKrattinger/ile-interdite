@@ -26,10 +26,12 @@ public class Grid {
 	public Utils.State[][] getStateOfCells() {
         Utils.State[][] cellsState;
 		cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
-		for (int i = 0; i < Grid.HEIGHT; i++) {
-			for (int j = 0; j < Grid.WIDTH ; j++) {
-				if (cells[i][j] != null){
-					cellsState[i][j] = cells[i][j].getState();
+		for (int j = 0; j < Grid.HEIGHT; j++) {
+			for (int i = 0; i < Grid.WIDTH ; i++) {
+				Cell cellTmp;
+				cellTmp = this.getCell(i,j);
+				if (cellTmp != null){
+					cellsState[j][i] = cellTmp.getState();
 				}
 			}
 
@@ -50,9 +52,9 @@ public class Grid {
 	 */
 	public void move(int x, int y, int x_old, int y_old, Adventurer adv) {
 		//get the actual cell of the adventurer
-		cells[x_old][y_old].removeAdventurer(adv);
+		cells[y_old][x_old].removeAdventurer(adv);
 		 //get the new cell of the adventurer
-		cells[x][y].addAdventurer(adv);
+		cells[y][x].addAdventurer(adv);
 	}
 
 	/**
@@ -60,14 +62,12 @@ public class Grid {
 	 * @param x X pos on grid
 	 * @param y Y pos on grid
 	 */
-	public void dry(int x, int y){
-		cells[x][y].setState(Utils.State.NORMAL);
-	}
+	public Cell getCell(int x, int y) {
+        return cells[y][x];
+    }
 
-	/**
-	 * 
-	 * @param x
-	 * @param y
-	 */
+	public void dry(int x, int y){
+		cells[y][x].setState(Utils.State.NORMAL);
+	}
 
 }

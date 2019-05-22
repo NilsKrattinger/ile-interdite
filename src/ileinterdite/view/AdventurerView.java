@@ -15,7 +15,9 @@ import static javax.swing.SwingConstants.CENTER;
 
 import javax.swing.border.MatteBorder;
 
+import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Message;
+import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
 
 
@@ -105,6 +107,29 @@ public class AdventurerView extends Observable {
         this.buttonsPanel.add(dryButton);
         this.buttonsPanel.add(validateCellButton);
         this.buttonsPanel.add(endTurnButton);
+    }
+
+    /**
+     * Shows which cells are selectable
+     * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
+     */
+    public void showSelectableCells(Utils.State[][] states) {
+        System.out.println("Ces tuiles sont accessibles :");
+        for (int i = 0; i < states.length; i++) {
+            for (int j = 0; j < states[i].length; j++) {
+                System.out.print('(' + i + ',' + j + ") ");
+            }
+        }
+    }
+
+    /**
+     * Update the position of an adventurer
+     * @param adv The adventurer to update
+     */
+    public void updateAdventurer(Adventurer adv) {
+        if (Parameters.LOGS) {
+            System.out.println("Adventurer moved to (" + adv.getX() + ',' + adv.getY() + ")");
+        }
     }
 
     public void setVisible() {
