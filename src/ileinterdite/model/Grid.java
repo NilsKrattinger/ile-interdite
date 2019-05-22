@@ -11,9 +11,9 @@ public class Grid {
 	public final static int WIDTH = 6;
 	public final static int HEIGHT = 6;
 	private Treasure[] treasures;
-	Collection<Adventurer> pawns;
+	ArrayList<Adventurer> pawns;
 
-	public Grid(Cell[][] cells, Collection<Adventurer> pawns, Treasure[] treasures) {
+	public Grid(Cell[][] cells, ArrayList<Adventurer> pawns, Treasure[] treasures) {
 		this.cells = cells;
 		this.pawns = pawns;
 		this.treasures = treasures;

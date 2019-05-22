@@ -6,6 +6,10 @@ import ileinterdite.util.Utils;
 
 public class Explorer extends Adventurer {
 
+    public Explorer(Grid grid) {
+        super(grid);
+    }
+
     /**
      * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par l'explorateur
      * @param tab

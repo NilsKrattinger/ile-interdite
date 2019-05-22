@@ -1,5 +1,7 @@
 package ileinterdite.test;
 
+import ileinterdite.model.Cell;
+import ileinterdite.model.Grid;
 import ileinterdite.util.Utils;
 
 import java.io.BufferedReader;
@@ -14,7 +16,7 @@ public class DemoBoardGenerator {
      * Genere une liste d'etat (enum) selon un .txt avec le non de l'etat par ligne.
      * @return State[]
      */
-    public static Utils.State[] boardBuilder(String filepath) {
+    public static Cell[][] boardBuilder(String filepath) {
         Utils.State[] cellState = new Utils.State[36];
         String line;
 
@@ -49,8 +51,18 @@ public class DemoBoardGenerator {
 
         } catch (IOException e) {
             e.printStackTrace();
-         }
-        return cellState;
+        }
+
+        Cell[][] board = new Cell[6][6];
+
+        for (int j = 0; j < Grid.WIDTH; j++) {
+            for (int i = 0; i < Grid.HEIGHT; i++) {
+                board[j][i] = new Cell();
+                board[j][i].setState(cellState[i + (j * Grid.WIDTH)]);
+            }
+        }
+
+        return board;
     }
 
     private static void fileInit(String filepath) throws FileNotFoundException {

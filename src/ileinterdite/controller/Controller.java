@@ -3,49 +3,57 @@ package ileinterdite.controller;
 import ileinterdite.model.Deck;
 import ileinterdite.model.DiscardPile;
 import ileinterdite.model.Grid;
+import ileinterdite.model.adventurers.*;
+import ileinterdite.test.DemoBoardGenerator;
+import ileinterdite.util.Message;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
-import ileinterdite.model.adventurers.Adventurer;
 
 import java.util.*;
 
 public class Controller implements Observer {
 
 	Grid grid;
-	Collection<Adventurer> players;
-	GridView gridView;
-	AdventurerView adventurerView;
+    Utils.State[][] cellStates;
+
+	ArrayList<Adventurer> players;
+    Adventurer currentAdventurer;
+
 	Collection<Deck> decks;
 	Collection<DiscardPile> discardPiles;
-    Utils.State[][] cellStates;
-    Adventurer currentAdventurer;
+
+    GridView gridView;
+    AdventurerView adventurerView;
 
     // Turn state
     private Action selectedAction;
     private static final int NB_ACTIONS_PER_TURN = 3;
+    private int remainingActions;
+
+    public Controller(AdventurerView view, int nbPlayers) {
+        this.adventurerView = view;
+
+        Grid grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null, null);
+
+        players = new ArrayList<>();
+        players.add(new Diver(grid));
+        players.add(new Engineer(grid));
+        players.add(new Explorer(grid));
+        players.add(new Messager(grid));
+        players.add(new Navigator(grid));
+        players.add(new Pilot(grid));
+
+        Collections.shuffle(players);
+        while (players.size() > nbPlayers) {
+            players.remove(players.size() - 1);
+        }
+        currentAdventurer = players.get(0);
+    }
 
 	public void beginTurn() {
-        for (int i = NB_ACTIONS_PER_TURN; i > 0; i--) {
-
-            // TODO - boucle d'attente
-
-            switch (selectedAction){
-                case MOVE:
-                    // TODO - méthode pour se déplacer
-                    break;
-                case DRY:
-                    // TODO - méthode pour assécher
-                    break;
-                case GIVE_CARD:
-                    // TODO - méthode pour donner une carte
-                    break;
-                case GET_TREASURE:
-                    // TODO - méthode pour donner un trésor
-                    break;
-            }
-        }
+        setNbActions(NB_ACTIONS_PER_TURN);
 	}
 
     /**
@@ -109,31 +117,44 @@ public class Controller implements Observer {
         }
     }
 
+    public void nextAdventurer() {
+        players.add(players.remove(0));
+    }
+
 	/**
 	 *
 	 * @param nb
 	 */
 	public void setNbActions(int nb) {
-		// TODO - implement ileinterdite.Controller.setNbActions
-		throw new UnsupportedOperationException();
+        this.remainingActions = nb;
 	}
 
 	public void reduceNbActions() {
-		// TODO - implement ileinterdite.controller.Controller.reduceNbActions
-		throw new UnsupportedOperationException();
+		this.remainingActions--;
 	}
 
     @Override
     public void update(Observable o, Object arg) {
-
-    }
-
-    public static void main(String [] args) {
-        // Instanciation de la fenêtre
-        AdventurerView adventurerView = new AdventurerView("Manon", "Explorateur", Utils.Pawn.RED.getColor() );
-        Controller c = new Controller();
-        adventurerView.addObserver(c);
-        adventurerView.setVisible();
+        Message m = (Message) arg;
+        switch (m.action) {
+            case MOVE:
+                initMovement(currentAdventurer);
+                break;
+            case DRY:
+                initDryable(currentAdventurer);
+                break;
+            case GIVE_CARD:
+                break;
+            case GET_TREASURE:
+                break;
+            case VALIDATE_ACTION:
+                reduceNbActions();
+                break;
+            case END_TURN:
+                break;
+            case CANCEL_ACTION:
+                break;
+        }
     }
 
     private Grid getGrid() {

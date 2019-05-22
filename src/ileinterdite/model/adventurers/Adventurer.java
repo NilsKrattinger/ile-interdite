@@ -11,6 +11,12 @@ public class Adventurer {
 	private int x;
 	private int y;
 
+	public Adventurer(Grid grid) {
+	    this.x = 0;
+	    this.y = 0;
+	    this.grid = grid;
+    }
+
 	/**
 	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
 	 * @return State[][] avec une marque accesible ou non

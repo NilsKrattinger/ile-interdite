@@ -91,7 +91,7 @@ public class AdventurerView extends Observable {
             } else {
                 position.setBorder(null);
                 setChanged();
-                notifyObservers(new Message(Utils.Action.VALIDATE_CELL, pos));
+                notifyObservers(new Message(Utils.Action.VALIDATE_ACTION, pos));
                 position.setText("");
             }
         });

@@ -4,6 +4,10 @@ import ileinterdite.model.Grid;
 import ileinterdite.util.Utils;
 
 public class Diver extends Adventurer {
+    public Diver(Grid grid) {
+        super(grid);
+    }
+
     public void cellChoiceMoving(Utils.State[][] tab) {
         treatBoard(this.getX(),this.getY(),tab);
         for (int i=0; i < Grid.WIDTH; i++) {

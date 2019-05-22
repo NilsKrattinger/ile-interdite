@@ -6,6 +6,11 @@ import ileinterdite.util.Utils;
 public class Pilot extends Adventurer {
     private boolean powerAvailable;
 
+    public Pilot(Grid grid) {
+        super(grid);
+        this.powerAvailable = true;
+    }
+
     /**
      * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par le pilote
      * @param tab
