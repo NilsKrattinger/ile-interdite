@@ -15,17 +15,17 @@ import java.util.*;
 
 public class Controller implements Observer {
 
-	Grid grid;
-    Utils.State[][] cellStates;
+	private Grid grid;
+    private Utils.State[][] cellStates;
 
-	ArrayList<Adventurer> players;
-    Adventurer currentAdventurer;
+    private ArrayList<Adventurer> players;
+    private Adventurer currentAdventurer;
 
-	Collection<Deck> decks;
-	Collection<DiscardPile> discardPiles;
+    private Collection<Deck> decks;
+    private Collection<DiscardPile> discardPiles;
 
-    GridView gridView;
-    AdventurerView adventurerView;
+    private GridView gridView;
+    private AdventurerView adventurerView;
 
     // Turn state
     private Action selectedAction;
@@ -117,6 +117,31 @@ public class Controller implements Observer {
         }
     }
 
+    public void handleAction(String msg) {
+        String[] coords = msg.split("(?<=\\d).+(?=\\d)");
+        System.out.println(coords[0] + ' ' + coords[1]);
+        switch (selectedAction) {
+            case MOVE:
+                movement(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]));
+                break;
+            case DRY:
+                dry(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]));
+                break;
+            case GIVE_CARD:
+                break;
+            case GET_TREASURE:
+                break;
+        }
+    }
+
+    public void drawTreasureCards() {
+
+    }
+
+    public void drawFloodCards() {
+
+    }
+
     public void nextAdventurer() {
         players.add(players.remove(0));
     }
@@ -138,21 +163,32 @@ public class Controller implements Observer {
         Message m = (Message) arg;
         switch (m.action) {
             case MOVE:
+                selectedAction = Action.MOVE;
                 initMovement(currentAdventurer);
                 break;
             case DRY:
+                selectedAction = Action.DRY;
                 initDryable(currentAdventurer);
                 break;
             case GIVE_CARD:
+                selectedAction = Action.GIVE_CARD;
                 break;
             case GET_TREASURE:
+                selectedAction = Action.GET_TREASURE;
                 break;
             case VALIDATE_ACTION:
+                if (selectedAction != null) {
+                    handleAction(m.message);
+                }
+                selectedAction = null;
                 reduceNbActions();
                 break;
             case END_TURN:
+                selectedAction = null;
+                setNbActions(0);
                 break;
             case CANCEL_ACTION:
+                selectedAction = null;
                 break;
         }
     }
