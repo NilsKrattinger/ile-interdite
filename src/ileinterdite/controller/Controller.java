@@ -61,6 +61,9 @@ public class Controller implements Observer {
         Pawn currentPawn = currentAdventurer.getPawn();
         adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
         adventurerView.setText(currentAdventurer.getClass().getSimpleName(), currentAdventurer.getClass().getSimpleName());
+        if (Parameters.LOGS) {
+            System.out.println("New turn : Adventurer " + currentAdventurer.getClass().getSimpleName() + " at x=" + (currentAdventurer.getX() + 1) + " y=" + (currentAdventurer.getY() + 1));
+        }
     }
 
     private void logGrid() {
@@ -71,7 +74,7 @@ public class Controller implements Observer {
             for (int j = 0; j < states.length; j++) {
                 System.out.print(j + 1);
                 for (int i = 0; i < states[j].length; i++) {
-                    System.out.print(" " + states[i][j].toString().charAt(0) + states[i][j].toString().charAt(1));
+                    System.out.print(" " + states[j][i].toString().charAt(0) + states[j][i].toString().charAt(1));
                 }
                 System.out.println();
             }
