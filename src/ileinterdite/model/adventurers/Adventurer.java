@@ -100,10 +100,8 @@ public abstract class Adventurer {
             for (int i = 0; i < Grid.WIDTH; i++) {
                 Utils.State state = tab[j][i];
                 if ((state == Utils.State.FLOODED)
-                        && (this.getY() == j
-                        && (this.getX() >= i-1 || this.getX() <= i+1)
-                        || this.getX() == i
-                        && (this.getY() >= j-1 || this.getY() <= j+1))) {
+                        && ((this.getY() == j && (this.getX() >= i-1 && this.getX() <= i+1))
+                        || (this.getX() == i && (this.getY() >= j-1 && this.getY() <= j+1)))) {
                     tab[j][i] = Utils.State.ACCESSIBLE;
                 } else {
                     tab[j][i] = Utils.State.INACCESSIBLE;
