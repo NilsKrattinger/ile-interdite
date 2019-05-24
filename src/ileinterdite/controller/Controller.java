@@ -67,11 +67,11 @@ public class Controller implements Observer {
         if (Parameters.LOGS) {
             System.out.println("Grille actuelle :");
             Utils.State[][] states = grid.getStateOfCells();
-            System.out.println("  1 2 3 4 5 6");
+            System.out.println("  1  2  3  4  5  6");
             for (int j = 0; j < states.length; j++) {
                 System.out.print(j + 1);
                 for (int i = 0; i < states[j].length; i++) {
-                    System.out.print(' ' + Character.toString(states[i][j].toString().charAt(0)));
+                    System.out.print(" " + states[i][j].toString().charAt(0) + states[i][j].toString().charAt(1));
                 }
                 System.out.println();
             }
@@ -153,13 +153,12 @@ public class Controller implements Observer {
 
     public void handleAction(String msg) {
         String[] coords = msg.split("(?<=\\d).+(?=\\d)");
-        System.out.println(coords[0] + ' ' + coords[1]);
         switch (selectedAction) {
             case MOVE:
-                movement(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]));
+                movement(Integer.valueOf(coords[0]) - 1, Integer.valueOf(coords[1]) - 1);
                 break;
             case DRY:
-                dry(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]));
+                dry(Integer.valueOf(coords[0]) - 1, Integer.valueOf(coords[1]) - 1);
                 break;
             case GIVE_CARD:
                 break;

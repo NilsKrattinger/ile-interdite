@@ -32,7 +32,7 @@ public class Utils {
         NORMAL("Asséchée"),
         FLOODED("Inondée"),
         SUNKEN("Coulée"),
-        NON_EXISTENT(" "),
+        NON_EXISTENT("  "),
         ACCESSIBLE("Accessible"),
         INACCESSIBLE("Inaccessible");
 

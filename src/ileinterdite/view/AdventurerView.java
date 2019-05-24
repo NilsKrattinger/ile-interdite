@@ -127,8 +127,8 @@ public class AdventurerView extends Observable {
         System.out.println("Ces tuiles sont accessibles :");
         for (int j = 0; j < states.length; j++) {
             for (int i = 0; i < states[j].length; i++) {
-                if (states[j][i] == Utils.State.ACCESSIBLE) {
-                    System.out.print('(' + Integer.toString(i) + ',' + Integer.toString(j) + ") ");
+                if (states[i][j] == Utils.State.ACCESSIBLE) {
+                    System.out.print("(" + (i + 1) + "," + (j + 1) + ") ");
                 }
             }
         }
@@ -142,7 +142,7 @@ public class AdventurerView extends Observable {
      */
     public void updateAdventurer(Adventurer adv) {
         if (Parameters.LOGS) {
-            System.out.println("Adventurer moved to (" + adv.getX() + ',' + adv.getY() + ")");
+            System.out.println("Adventurer moved to (" + (adv.getX() + 1) + ',' + (adv.getY() + 1) + ")");
         }
     }
 
