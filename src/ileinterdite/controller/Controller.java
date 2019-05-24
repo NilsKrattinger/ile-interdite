@@ -85,7 +85,6 @@ public class Controller implements Observer {
      */
     public void initMovement(Adventurer adventurer) {
         logGrid();
-        cellStates = new Utils.State[6][6];
         cellStates = adventurer.getAccessibleCells();
         adventurerView.showSelectableCells(cellStates);
     }
@@ -97,7 +96,6 @@ public class Controller implements Observer {
      */
     public void initDryable(Adventurer adventurer) {
         logGrid();
-        cellStates = new Utils.State[Grid.HEIGHT][Grid.WIDTH];
         cellStates = adventurer.getDryableCells();
         adventurerView.showSelectableCells(cellStates);
     }

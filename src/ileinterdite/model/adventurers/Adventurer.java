@@ -41,8 +41,7 @@ public abstract class Adventurer {
 	 * @return State[][] avec une marque accesible ou non
 	 */
 	public Utils.State[][] getAccessibleCells() {
-        Utils.State[][] cellsState;
-		cellsState = grid.getStateOfCells();
+        Utils.State[][] cellsState = grid.getStateOfCells();
 		cellChoiceMoving(cellsState);
 
 		return cellsState;
@@ -53,8 +52,7 @@ public abstract class Adventurer {
 	 * @return State[][] avec une marque assechable ou non
 	 */
 	public Utils.State[][] getDryableCells() {
-        Utils.State[][] cellsState;
-		cellsState = grid.getStateOfCells();
+        Utils.State[][] cellsState = grid.getStateOfCells();
 		cellChoiceDrying(cellsState);
 
 		return cellsState;

@@ -22,8 +22,7 @@ public class Grid {
 	 * @return State[][]
 	 */
 	public Utils.State[][] getStateOfCells() {
-        Utils.State[][] cellsState;
-		cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
+        Utils.State[][] cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
 		for (int j = 0; j < Grid.HEIGHT; j++) {
 			for (int i = 0; i < Grid.WIDTH ; i++) {
 				Cell cellTmp;
