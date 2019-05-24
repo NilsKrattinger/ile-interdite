@@ -55,7 +55,7 @@ public abstract class Adventurer {
 	public Utils.State[][] getDryableCells() {
         Utils.State[][] cellsState;
 		cellsState = grid.getStateOfCells();
-		//TODO ADD Choix Tuile Assechement sur StatCells.
+		cellChoiceDrying(cellsState);
 
 		return cellsState;
 	}

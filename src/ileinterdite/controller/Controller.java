@@ -97,8 +97,6 @@ public class Controller implements Observer {
      */
     public void initDryable(Adventurer adventurer) {
         logGrid();
-        int x;
-        int y;
         cellStates = new Utils.State[Grid.HEIGHT][Grid.WIDTH];
         cellStates = adventurer.getDryableCells();
         adventurerView.showSelectableCells(cellStates);

@@ -148,7 +148,7 @@ public class AdventurerView extends Observable {
 
     public void updateDriedCell(int x, int y) {
         if (Parameters.LOGS) {
-            System.out.println("Cell at (" + x + ',' + y + ") is now dry.");
+            System.out.println("Cell at (" + (x + 1) + ',' + (y + 1) + ") is now dry.");
         }
     }
 
