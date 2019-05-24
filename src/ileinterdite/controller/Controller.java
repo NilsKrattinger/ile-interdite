@@ -129,7 +129,7 @@ public class Controller implements Observer {
     public void dry(int x, int y){
         if (isCellAvailable(x,y)){
             this.getGrid().dry(x,y);
-            //TODO actualisation de la vue
+            adventurerView.updateDriedCell(x, y);
         }
     }
 

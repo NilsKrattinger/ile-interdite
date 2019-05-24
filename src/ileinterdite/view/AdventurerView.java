@@ -146,6 +146,12 @@ public class AdventurerView extends Observable {
         }
     }
 
+    public void updateDriedCell(int x, int y) {
+        if (Parameters.LOGS) {
+            System.out.println("Cell at (" + x + ',' + y + ") is now dry.");
+        }
+    }
+
     public void setVisible() {
         this.window.setVisible(true);
     }
