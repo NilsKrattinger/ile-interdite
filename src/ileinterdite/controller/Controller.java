@@ -6,6 +6,7 @@ import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.*;
 import ileinterdite.test.DemoBoardGenerator;
 import ileinterdite.util.Message;
+import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
@@ -37,7 +38,7 @@ public class Controller implements Observer {
     public Controller(AdventurerView view, int nbPlayers) {
         this.adventurerView = view;
 
-        Grid grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null);
+        this.grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null);
 
         players = new ArrayList<>();
         players.add(new Diver(grid, 3, 4));
@@ -62,12 +63,28 @@ public class Controller implements Observer {
         adventurerView.setText(currentAdventurer.getClass().getSimpleName(), currentAdventurer.getClass().getSimpleName());
     }
 
+    private void logGrid() {
+        if (Parameters.LOGS) {
+            System.out.println("Grille actuelle :");
+            Utils.State[][] states = grid.getStateOfCells();
+            System.out.println("  1 2 3 4 5 6");
+            for (int j = 0; j < states.length; j++) {
+                System.out.print(j + 1);
+                for (int i = 0; i < states[j].length; i++) {
+                    System.out.print(' ' + Character.toString(states[i][j].toString().charAt(0)));
+                }
+                System.out.println();
+            }
+        }
+    }
+
     /**
      * Lance les actions pour le deplacement de l'aventurier.
      * puis l'interaction avec l'interface
      * @param adventurer
      */
     public void initMovement(Adventurer adventurer) {
+        logGrid();
         cellStates = new Utils.State[6][6];
         cellStates = adventurer.getAccessibleCells();
         adventurerView.showSelectableCells(cellStates);
@@ -78,7 +95,8 @@ public class Controller implements Observer {
      * puis l'interaction avec l'interface
      * @param adventurer
      */
-    public void initDryable(Adventurer adventurer){
+    public void initDryable(Adventurer adventurer) {
+        logGrid();
         int x;
         int y;
         cellStates = new Utils.State[Grid.HEIGHT][Grid.WIDTH];
