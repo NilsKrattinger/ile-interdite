@@ -3,8 +3,9 @@ package ileinterdite.model.adventurers;
 import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
 import ileinterdite.util.Utils;
+import ileinterdite.util.Utils.Pawn;
 
-public class Adventurer {
+public abstract class Adventurer {
 
 	Grid grid;
 	Hand hand;
@@ -16,15 +17,24 @@ public class Adventurer {
     }
 
     public Adventurer(Grid grid) {
-        this.x = 0;
-        this.y = 0;
-        this.grid = grid;
+        this(grid, 0, 0);
     }
 
 	public Adventurer(int x, int y) {
-	    this.x = x;
-	    this.y = y;
+	    this(null, x, y);
     }
+
+    public Adventurer(Grid grid, int x, int y) {
+        this.grid = grid;
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Gets the pawn of the current adventurer, for the bg color and text color
+     * @return
+     */
+    public abstract Pawn getPawn();
 
 	/**
 	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
@@ -59,6 +69,8 @@ public class Adventurer {
 		int currX = this.getX();
 		int currY = this.getY();
 		grid.move(newX,newY,currX,currY,this);
+		this.x = newX;
+		this.y = newY;
 	}
 
     /**

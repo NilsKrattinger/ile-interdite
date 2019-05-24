@@ -32,34 +32,31 @@ public class AdventurerView extends Observable {
     private final JButton dryButton;
     private final JButton validateCellButton;
     private final JButton endTurnButton;
+    private final JLabel advName;
     private JTextField position;
 
-    public AdventurerView(String playerName, String adventurerName, Color color) {
+    public AdventurerView() {
 
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(350, 200);
-        //le titre = nom du joueur 
-        window.setTitle(playerName);
         mainPanel = new JPanel(new BorderLayout());
         this.window.add(mainPanel);
 
         mainPanel.setBackground(new Color(230, 230, 230));
-        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
 
         // =================================================================================
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
 
         this.adventurerPanel = new JPanel();
-        adventurerPanel.setBackground(color);
-        adventurerPanel.add(new JLabel(adventurerName,SwingConstants.CENTER ));
+        advName = new JLabel("", SwingConstants.CENTER);
+        adventurerPanel.add(advName);
         mainPanel.add(adventurerPanel, BorderLayout.NORTH);
 
         // =================================================================================
         // CENTRE : 1 ligne pour position courante
         this.centeredPanel = new JPanel(new GridLayout(2, 1));
         this.centeredPanel.setOpaque(false);
-        this.centeredPanel.setBorder(new MatteBorder(0, 0, 2, 0, color));
         mainPanel.add(this.centeredPanel, BorderLayout.CENTER);
 
         centeredPanel.add(new JLabel ("Position", SwingConstants.CENTER));
@@ -109,17 +106,34 @@ public class AdventurerView extends Observable {
         this.buttonsPanel.add(endTurnButton);
     }
 
+    public void setColor(Color color, Color textColor) {
+        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
+        adventurerPanel.setBackground(color);
+        centeredPanel.setBorder(new MatteBorder(0, 0, 2, 0, color));
+        advName.setForeground(textColor);
+    }
+
+    public void setText(String playerName, String adventurerName) {
+        //le titre = nom du joueur
+        window.setTitle(playerName);
+        advName.setText(adventurerName);
+    }
+
     /**
      * Shows which cells are selectable
      * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
      */
     public void showSelectableCells(Utils.State[][] states) {
         System.out.println("Ces tuiles sont accessibles :");
-        for (int i = 0; i < states.length; i++) {
-            for (int j = 0; j < states[i].length; j++) {
-                System.out.print('(' + i + ',' + j + ") ");
+        for (int j = 0; j < states.length; j++) {
+            for (int i = 0; i < states[j].length; i++) {
+                if (states[j][i] == Utils.State.ACCESSIBLE) {
+                    System.out.print('(' + Integer.toString(i) + ',' + Integer.toString(j) + ") ");
+                }
             }
         }
+
+        System.out.println();
     }
 
     /**

@@ -9,6 +9,7 @@ import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
+import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
 
@@ -36,26 +37,30 @@ public class Controller implements Observer {
     public Controller(AdventurerView view, int nbPlayers) {
         this.adventurerView = view;
 
-        Grid grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null, null);
+        Grid grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null);
 
         players = new ArrayList<>();
-        players.add(new Diver(grid));
-        players.add(new Engineer(grid));
-        players.add(new Explorer(grid));
-        players.add(new Messager(grid));
-        players.add(new Navigator(grid));
-        players.add(new Pilot(grid));
+        players.add(new Diver(grid, 3, 4));
+        players.add(new Engineer(grid, 3, 4));
+        players.add(new Explorer(grid, 3, 4));
+        players.add(new Messager(grid, 3, 4));
+        players.add(new Navigator(grid, 3, 4));
+        players.add(new Pilot(grid, 3, 4));
 
         Collections.shuffle(players);
         while (players.size() > nbPlayers) {
             players.remove(players.size() - 1);
         }
-        currentAdventurer = players.get(0);
+        nextAdventurer();
     }
 
-	public void beginTurn() {
-        setNbActions(NB_ACTIONS_PER_TURN);
-	}
+    private void changeCurrentAdventurer() {
+        players.add(players.remove(0));
+        currentAdventurer = players.get(0);
+        Pawn currentPawn = currentAdventurer.getPawn();
+        adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
+        adventurerView.setText(currentAdventurer.getClass().getSimpleName(), currentAdventurer.getClass().getSimpleName());
+    }
 
     /**
      * Lance les actions pour le deplacement de l'aventurier.
@@ -78,7 +83,7 @@ public class Controller implements Observer {
         int y;
         cellStates = new Utils.State[Grid.HEIGHT][Grid.WIDTH];
         cellStates = adventurer.getDryableCells();
-        //TODO declancher interaction avec joueurs
+        adventurerView.showSelectableCells(cellStates);
     }
 
     /**
@@ -142,6 +147,12 @@ public class Controller implements Observer {
                 break;
             case GET_TREASURE:
                 break;
+            default:
+                setNbActions(remainingActions + 1);
+        }
+
+        if (remainingActions == 0) {
+            nextAdventurer();
         }
     }
 
@@ -154,7 +165,9 @@ public class Controller implements Observer {
     }
 
     public void nextAdventurer() {
-        players.add(players.remove(0));
+        changeCurrentAdventurer();
+        setNbActions(NB_ACTIONS_PER_TURN);
+        selectedAction = null;
     }
 
 	/**
@@ -162,7 +175,7 @@ public class Controller implements Observer {
 	 * @param nb
 	 */
 	public void setNbActions(int nb) {
-        this.remainingActions = nb;
+        this.remainingActions = Math.max(nb, NB_ACTIONS_PER_TURN);
 	}
 
 	public void reduceNbActions() {
@@ -189,14 +202,13 @@ public class Controller implements Observer {
                 break;
             case VALIDATE_ACTION:
                 if (selectedAction != null) {
+                    reduceNbActions();
                     handleAction(m.message);
                 }
                 selectedAction = null;
-                reduceNbActions();
                 break;
             case END_TURN:
-                selectedAction = null;
-                setNbActions(0);
+                nextAdventurer();
                 break;
             case CANCEL_ACTION:
                 selectedAction = null;

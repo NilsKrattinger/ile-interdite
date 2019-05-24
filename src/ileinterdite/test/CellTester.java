@@ -2,6 +2,7 @@ package ileinterdite.test;
 
 import ileinterdite.model.Cell;
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.Utils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -9,7 +10,7 @@ import org.testng.annotations.Test;
 public class CellTester {
     @Test
     public void testAdventurer() {
-        Adventurer adv = new Adventurer();
+        Adventurer adv = new Navigator();
         Cell cell = new Cell();
 
         Assert.assertFalse(cell.isAdventurerOnCell(adv));

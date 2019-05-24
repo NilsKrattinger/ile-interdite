@@ -2,8 +2,11 @@ package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
 import ileinterdite.util.Utils;
+import ileinterdite.util.Utils.Pawn;
 
 public class Pilot extends Adventurer {
+
+    public static final Pawn PAWN = Pawn.BLUE;
     private boolean powerAvailable = true;
 
     public Pilot() {
@@ -16,6 +19,15 @@ public class Pilot extends Adventurer {
 
     public Pilot(int x, int y) {
         super(x, y);
+    }
+
+    public Pilot(Grid grid, int x, int y) {
+        super(grid, x, y);
+    }
+
+    @Override
+    public Pawn getPawn() {
+        return PAWN;
     }
 
     /**
