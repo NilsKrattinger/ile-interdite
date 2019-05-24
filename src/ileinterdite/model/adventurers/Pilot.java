@@ -4,11 +4,18 @@ import ileinterdite.model.Grid;
 import ileinterdite.util.Utils;
 
 public class Pilot extends Adventurer {
-    private boolean powerAvailable;
+    private boolean powerAvailable = true;
+
+    public Pilot() {
+        super(0, 0);
+    }
 
     public Pilot(Grid grid) {
         super(grid);
-        this.powerAvailable = true;
+    }
+
+    public Pilot(int x, int y) {
+        super(x, y);
     }
 
     /**
@@ -18,13 +25,13 @@ public class Pilot extends Adventurer {
     @Override
     public void cellChoiceMoving(Utils.State[][] tab) {
         if (this.isPowerAvailable()) {
-            for (int i = 0; i < Grid.WIDTH; i++) {
-                for (int j = 0; j < Grid.HEIGHT; j++) {
-                    Utils.State state = tab[i][j];
+            for (int j = 0; j < Grid.HEIGHT; j++) {
+                for (int i = 0; i < Grid.WIDTH; i++) {
+                    Utils.State state = tab[j][i];
                     if (state == Utils.State.FLOODED || state == Utils.State.NORMAL) {
-                        tab[i][j] = Utils.State.ACCESSIBLE;
+                        tab[j][i] = Utils.State.ACCESSIBLE;
                     } else {
-                        tab[i][j] = Utils.State.INACCESSIBLE;
+                        tab[j][i] = Utils.State.INACCESSIBLE;
                     }
                 }
             }

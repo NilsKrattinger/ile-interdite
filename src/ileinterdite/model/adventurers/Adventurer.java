@@ -11,10 +11,19 @@ public class Adventurer {
 	private int x;
 	private int y;
 
-	public Adventurer(Grid grid) {
-	    this.x = 0;
-	    this.y = 0;
-	    this.grid = grid;
+	public Adventurer() {
+	    this(0, 0);
+    }
+
+    public Adventurer(Grid grid) {
+        this.x = 0;
+        this.y = 0;
+        this.grid = grid;
+    }
+
+	public Adventurer(int x, int y) {
+	    this.x = x;
+	    this.y = y;
     }
 
 	/**
@@ -24,7 +33,7 @@ public class Adventurer {
 	public Utils.State[][] getAccessibleCells() {
         Utils.State[][] cellsState;
 		cellsState = grid.getStateOfCells();
-		//TODO ADD Choix Tuile Deplacment sur StatCells.
+		cellChoiceMoving(cellsState);
 
 		return cellsState;
 	}
@@ -52,26 +61,21 @@ public class Adventurer {
 		grid.move(newX,newY,currX,currY,this);
 	}
 
-	public boolean isPowerAvailable() {
-		// TODO - implement ileinterdite.model.adventurers.Adventurer.isPowerAvailable
-		throw new UnsupportedOperationException();
-	}
-
     /**
      * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par l'aventurier
      * @param tab
      */
     public void cellChoiceMoving(Utils.State[][] tab) {
-        for (int i = 0; i < Grid.WIDTH; i++) {
-            for (int j = 0; j< Grid.HEIGHT; j++) {
-                Utils.State state = tab[i][j];
+        for (int j = 0; j < Grid.HEIGHT; j++) {
+            for (int i = 0; i < Grid.WIDTH; i++) {
+                Utils.State state = tab[j][i];
                 if ((state == Utils.State.FLOODED || state == Utils.State.NORMAL)
                         && (this.getY() == j && (this.getX() == i-1
                         || this.getX() == i+1) || this.getX() == i
                         && (this.getY() == j-1 || this.getY() == j+1))) {
-                    tab[i][j] = Utils.State.ACCESSIBLE;
+                    tab[j][i] = Utils.State.ACCESSIBLE;
                 } else {
-                    tab[i][j] = Utils.State.INACCESSIBLE;
+                    tab[j][i] = Utils.State.INACCESSIBLE;
                 }
             }
         }
@@ -82,17 +86,17 @@ public class Adventurer {
      * @param tab
      */
     public void cellChoiceDrying(Utils.State[][] tab) {
-        for (int i = 0; i < Grid.WIDTH; i++) {
-            for (int j = 0; j < Grid.HEIGHT; j++) {
-                Utils.State state = tab[i][j];
+        for (int j = 0; j < Grid.HEIGHT; j++) {
+            for (int i = 0; i < Grid.WIDTH; i++) {
+                Utils.State state = tab[j][i];
                 if ((state == Utils.State.FLOODED)
                         && (this.getY() == j
                         && (this.getX() >= i-1 || this.getX() <= i+1)
                         || this.getX() == i
                         && (this.getY() >= j-1 || this.getY() <= j+1))) {
-                    tab[i][j] = Utils.State.ACCESSIBLE;
+                    tab[j][i] = Utils.State.ACCESSIBLE;
                 } else {
-                    tab[i][j] = Utils.State.INACCESSIBLE;
+                    tab[j][i] = Utils.State.INACCESSIBLE;
                 }
             }
         }
@@ -106,4 +110,8 @@ public class Adventurer {
         return y;
     }
 
+    public void setGrid(Grid grid) {
+        this.grid = grid;
+        grid.move(x, y, 0, 0, this);
+    }
 }

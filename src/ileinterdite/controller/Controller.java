@@ -6,6 +6,7 @@ import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.*;
 import ileinterdite.test.DemoBoardGenerator;
 import ileinterdite.util.Message;
+import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
 import ileinterdite.view.AdventurerView;
@@ -61,12 +62,10 @@ public class Controller implements Observer {
      * puis l'interaction avec l'interface
      * @param adventurer
      */
-    public void initMovement(Adventurer adventurer){
-        int x;
-        int y;
+    public void initMovement(Adventurer adventurer) {
         cellStates = new Utils.State[6][6];
         cellStates = adventurer.getAccessibleCells();
-        //TODO declancher snteraction avec joueurs
+        adventurerView.showSelectableCells(cellStates);
     }
 
     /**
@@ -87,8 +86,8 @@ public class Controller implements Observer {
      * @param x,y
      * @return boolean
      */
-    public boolean isCellAvailable(int x, int y){
-        return cellStates[x][y] == Utils.State.ACCESSIBLE;
+    public boolean isCellAvailable(int x, int y) {
+        return cellStates[y][x] == Utils.State.ACCESSIBLE;
     }
     
     /**
@@ -101,8 +100,20 @@ public class Controller implements Observer {
     public void movement(int x, int y){
         if (isCellAvailable(x,y)){
             this.currentAdventurer.move(x,y);
-            //TODO actualisation de la vue
+            adventurerView.updateAdventurer(currentAdventurer);
         }
+    }
+
+    /**
+     * Split the message contents to retrieve the position
+     * @param m Message The message received from the view
+     * @return Tuple&lt;Integer, Integer&gt;
+     */
+    private Tuple<Integer, Integer> getPositionFromMessage(Message m) {
+        String[] coords = m.message.split("\\s");
+        int x = Integer.valueOf(coords[0]);
+        int y = Integer.valueOf(coords[1]);
+        return new Tuple<>(x, y);
     }
 
     /**

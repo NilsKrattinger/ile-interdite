@@ -3,43 +3,58 @@ package ileinterdite.model;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class Cell {
 
-	Collection<Adventurer> adventurers;
+	ArrayList<Adventurer> adventurers;
 	private Utils.State state;
 
 	public Cell() {
 		this.state = Utils.State.NORMAL;
-
-	}
-
-	public void setState(Utils.State state){
-		this.state = state;
+        this.adventurers = new ArrayList<>();
 	}
 
 	/**
-	 * 
-	 * @param adv
+	 * Remove the adventurer from the cell
+	 * @param adv The adventurer to remove
 	 */
 	public void removeAdventurer(Adventurer adv) {
-		// TODO - implement ileinterdite.model.Cell.removeAdventurer
-		throw new UnsupportedOperationException();
+	    adventurers.remove(adv);
 	}
 
 	/**
-	 * 
-	 * @param adv
+	 * Add an adventurer to the cell
+	 * @param adv The adventurer to add
 	 */
 	public void addAdventurer(Adventurer adv) {
-		// TODO - implement ileinterdite.model.Cell.addAdventurer
-		throw new UnsupportedOperationException();
+	    adventurers.add(adv);
 	}
 
-	public Utils.State getState() {
-		return this.state;
-	}
+    /**
+     * Check if the adventurer is present on the cell
+     * @param adv Adventurer The adventurer to find
+     * @return boolean
+     */
+	public boolean isAdventurerOnCell(Adventurer adv) {
+	    return adventurers.contains(adv);
+    }
+
+    /**
+     * Change the state of the cell
+     * @param state The new state to set
+     */
+    public void setState(Utils.State state){
+        this.state = state;
+    }
+
+    /**
+     * Get the state of the cell
+     * @return Utils.State
+     */
+    public Utils.State getState() {
+        return this.state;
+    }
 
 
 
