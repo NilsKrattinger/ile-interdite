@@ -11,11 +11,9 @@ public class Grid {
 	public final static int WIDTH = 6;
 	public final static int HEIGHT = 6;
 	private Treasure[] treasures;
-	Collection<Adventurer> pawns;
 
-	public Grid(Cell[][] cells, Collection<Adventurer> pawns, Treasure[] treasures) {
+	public Grid(Cell[][] cells, Treasure[] treasures) {
 		this.cells = cells;
-		this.pawns = pawns;
 		this.treasures = treasures;
 	}
 
@@ -24,8 +22,7 @@ public class Grid {
 	 * @return State[][]
 	 */
 	public Utils.State[][] getStateOfCells() {
-        Utils.State[][] cellsState;
-		cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
+        Utils.State[][] cellsState = new Utils.State[Grid.WIDTH][Grid.HEIGHT];
 		for (int j = 0; j < Grid.HEIGHT; j++) {
 			for (int i = 0; i < Grid.WIDTH ; i++) {
 				Cell cellTmp;

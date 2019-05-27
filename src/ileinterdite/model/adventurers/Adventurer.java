@@ -3,8 +3,9 @@ package ileinterdite.model.adventurers;
 import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
 import ileinterdite.util.Utils;
+import ileinterdite.util.Utils.Pawn;
 
-public class Adventurer {
+public abstract class Adventurer {
 
 	Grid grid;
 	Hand hand;
@@ -15,18 +16,32 @@ public class Adventurer {
 	    this(0, 0);
     }
 
-	public Adventurer(int x, int y) {
-	    this.x = x;
-	    this.y = y;
+    public Adventurer(Grid grid) {
+        this(grid, 0, 0);
     }
+
+	public Adventurer(int x, int y) {
+	    this(null, x, y);
+    }
+
+    public Adventurer(Grid grid, int x, int y) {
+        this.grid = grid;
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Gets the pawn of the current adventurer, for the bg color and text color
+     * @return
+     */
+    public abstract Pawn getPawn();
 
 	/**
 	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
 	 * @return State[][] avec une marque accesible ou non
 	 */
 	public Utils.State[][] getAccessibleCells() {
-        Utils.State[][] cellsState;
-		cellsState = grid.getStateOfCells();
+        Utils.State[][] cellsState = grid.getStateOfCells();
 		cellChoiceMoving(cellsState);
 
 		return cellsState;
@@ -37,9 +52,8 @@ public class Adventurer {
 	 * @return State[][] avec une marque assechable ou non
 	 */
 	public Utils.State[][] getDryableCells() {
-        Utils.State[][] cellsState;
-		cellsState = grid.getStateOfCells();
-		//TODO ADD Choix Tuile Assechement sur StatCells.
+        Utils.State[][] cellsState = grid.getStateOfCells();
+		cellChoiceDrying(cellsState);
 
 		return cellsState;
 	}
@@ -53,6 +67,8 @@ public class Adventurer {
 		int currX = this.getX();
 		int currY = this.getY();
 		grid.move(newX,newY,currX,currY,this);
+		this.x = newX;
+		this.y = newY;
 	}
 
     /**
@@ -84,10 +100,8 @@ public class Adventurer {
             for (int i = 0; i < Grid.WIDTH; i++) {
                 Utils.State state = tab[j][i];
                 if ((state == Utils.State.FLOODED)
-                        && (this.getY() == j
-                        && (this.getX() >= i-1 || this.getX() <= i+1)
-                        || this.getX() == i
-                        && (this.getY() >= j-1 || this.getY() <= j+1))) {
+                        && ((this.getY() == j && (this.getX() >= i-1 && this.getX() <= i+1))
+                        || (this.getX() == i && (this.getY() >= j-1 && this.getY() <= j+1)))) {
                     tab[j][i] = Utils.State.ACCESSIBLE;
                 } else {
                     tab[j][i] = Utils.State.INACCESSIBLE;

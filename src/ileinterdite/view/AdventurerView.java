@@ -15,13 +15,25 @@ import static javax.swing.SwingConstants.CENTER;
 
 import javax.swing.border.MatteBorder;
 
+import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Message;
 import ileinterdite.util.Parameters;
+import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 
 
 public class AdventurerView extends Observable {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
 
     private final JPanel buttonsPanel;
     private final JPanel centeredPanel;
@@ -32,34 +44,31 @@ public class AdventurerView extends Observable {
     private final JButton dryButton;
     private final JButton validateCellButton;
     private final JButton endTurnButton;
+    private final JLabel advName;
     private JTextField position;
 
-    public AdventurerView(String playerName, String adventurerName, Color color) {
+    public AdventurerView() {
 
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(350, 200);
-        //le titre = nom du joueur 
-        window.setTitle(playerName);
         mainPanel = new JPanel(new BorderLayout());
         this.window.add(mainPanel);
 
         mainPanel.setBackground(new Color(230, 230, 230));
-        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
 
         // =================================================================================
         // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
 
         this.adventurerPanel = new JPanel();
-        adventurerPanel.setBackground(color);
-        adventurerPanel.add(new JLabel(adventurerName,SwingConstants.CENTER ));
+        advName = new JLabel("", SwingConstants.CENTER);
+        adventurerPanel.add(advName);
         mainPanel.add(adventurerPanel, BorderLayout.NORTH);
 
         // =================================================================================
         // CENTRE : 1 ligne pour position courante
         this.centeredPanel = new JPanel(new GridLayout(2, 1));
         this.centeredPanel.setOpaque(false);
-        this.centeredPanel.setBorder(new MatteBorder(0, 0, 2, 0, color));
         mainPanel.add(this.centeredPanel, BorderLayout.CENTER);
 
         centeredPanel.add(new JLabel ("Position", SwingConstants.CENTER));
@@ -93,7 +102,7 @@ public class AdventurerView extends Observable {
             } else {
                 position.setBorder(null);
                 setChanged();
-                notifyObservers(new Message(Utils.Action.VALIDATE_CELL, pos));
+                notifyObservers(new Message(Utils.Action.VALIDATE_ACTION, pos));
                 position.setText("");
             }
         });
@@ -109,17 +118,51 @@ public class AdventurerView extends Observable {
         this.buttonsPanel.add(endTurnButton);
     }
 
+    public void setColor(Color color, Color textColor) {
+        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
+        adventurerPanel.setBackground(color);
+        centeredPanel.setBorder(new MatteBorder(0, 0, 2, 0, color));
+        advName.setForeground(textColor);
+    }
+
+    public void setText(String playerName, String adventurerName) {
+        //le titre = nom du joueur
+        window.setTitle(playerName);
+        advName.setText(adventurerName);
+    }
+
     /**
      * Shows which cells are selectable
      * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
      */
-    public void showSelectableCells(Utils.State[][] states) {
+    public void showSelectableCells(Utils.State[][] states, Grid grid, Tuple<Integer, Integer> adventurerCoordinates) {
+
+        System.out.println("Grille actuelle :");
+        System.out.println("  1  2  3  4  5  6");
+        for (int j = 0; j < states.length; j++) {
+            System.out.print(j + 1);
+            for (int i = 0; i < states[j].length; i++) {
+                Utils.State st = grid.getCell(i, j).getState();
+                String color = (states[j][i] == Utils.State.ACCESSIBLE) ? ANSI_GREEN : ((i == adventurerCoordinates.x && j == adventurerCoordinates.y) ? ANSI_YELLOW : ANSI_RED);
+                System.out.print(" " + color + st.toString().charAt(0) + st.toString().charAt(1) + ANSI_RESET);
+            }
+            System.out.println();
+        }
+
+        System.out.println("As = Asséchée, In = Inondée, Co = Coulée");
+        System.out.println(ANSI_RED + "Rouge = Inaccessible" + ANSI_RESET + " ; " + ANSI_GREEN + "Vert = Accessible" + ANSI_RESET + " ; " +
+                ANSI_YELLOW + "Jaune = position de l'aventurier" + ANSI_RESET);
+
         System.out.println("Ces tuiles sont accessibles :");
-        for (int i = 0; i < states.length; i++) {
-            for (int j = 0; j < states[i].length; j++) {
-                System.out.print('(' + i + ',' + j + ") ");
+        for (int j = 0; j < states.length; j++) {
+            for (int i = 0; i < states[j].length; i++) {
+                if (states[j][i] == Utils.State.ACCESSIBLE) {
+                    System.out.print("(" + (i + 1) + "," + (j + 1) + ") ");
+                }
             }
         }
+
+        System.out.println();
     }
 
     /**
@@ -128,7 +171,13 @@ public class AdventurerView extends Observable {
      */
     public void updateAdventurer(Adventurer adv) {
         if (Parameters.LOGS) {
-            System.out.println("Adventurer moved to (" + adv.getX() + ',' + adv.getY() + ")");
+            System.out.println("Adventurer moved to (" + (adv.getX() + 1) + ',' + (adv.getY() + 1) + ")");
+        }
+    }
+
+    public void updateDriedCell(int x, int y) {
+        if (Parameters.LOGS) {
+            System.out.println("Cell at (" + (x + 1) + ',' + (y + 1) + ") is now dry.");
         }
     }
 

@@ -2,15 +2,31 @@ package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
 import ileinterdite.util.Utils;
+import ileinterdite.util.Utils.Pawn;
 
 public class Diver extends Adventurer {
+
+    public static final Pawn PAWN = Pawn.BLACK;
 
     public Diver() {
         super();
     }
 
+    public Diver(Grid grid) {
+        super(grid);
+    }
+
     public Diver(int x, int y) {
         super(x, y);
+    }
+
+    public Diver(Grid grid, int x, int y) {
+        super(grid, x, y);
+    }
+
+    @Override
+    public Pawn getPawn() {
+        return PAWN;
     }
 
     public void cellChoiceMoving(Utils.State[][] tab) {

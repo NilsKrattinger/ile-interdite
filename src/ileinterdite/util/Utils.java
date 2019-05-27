@@ -23,7 +23,7 @@ public class Utils {
         DRY,
         GIVE_CARD,
         GET_TREASURE,
-        VALIDATE_CELL,
+        VALIDATE_ACTION,
         END_TURN,
         CANCEL_ACTION
     }
@@ -32,7 +32,7 @@ public class Utils {
         NORMAL("Asséchée"),
         FLOODED("Inondée"),
         SUNKEN("Coulée"),
-        NON_EXISTENT(""),
+        NON_EXISTENT("  "),
         ACCESSIBLE("Accessible"),
         INACCESSIBLE("Inaccessible");
 
@@ -48,21 +48,24 @@ public class Utils {
         }
     }
 
+
     public static enum Pawn {
-        RED("Rouge", new Color(193, 34, 44)),
-        GREEN("Vert", new Color(0, 195, 0)),
-        BLUE("Bleu", new Color(55,194,198)),
-        ORANGE("Orange", new Color(235, 122, 34)),
-        PURPLE("Violet", new Color(204, 94, 255)),
-        YELLOW("Jaune", new Color(255, 255, 0)) ;
+        RED("Rouge", new Color(209, 45, 42), Color.LIGHT_GRAY),
+        GREEN("Vert", new Color(65, 138, 71), Color.LIGHT_GRAY),
+        BLUE("Bleu", new Color(66, 100, 173), Color.LIGHT_GRAY),
+        WHITE("White", new Color(220, 215, 219), Color.BLACK),
+        BLACK("Black", new Color(9, 18, 22), Color.LIGHT_GRAY),
+        YELLOW("Jaune", new Color(255, 243, 83), Color.BLACK) ;
 
         private final String label;
         private final Color color;
+        private final Color textColor;
 
 
-        Pawn(String label, Color color) {
+        Pawn(String label, Color color, Color textColor) {
             this.label = label;
             this.color = color;
+            this.textColor = textColor;
         }
 
         @Override
@@ -74,12 +77,16 @@ public class Utils {
             return this.color;
         }
 
+        public Color getTextColor() {
+            return textColor;
+        }
+
         static Pawn getFromName(String name) {
             if (RED.name().equals(name)) return RED;
             if (GREEN.name().equals(name)) return GREEN;
             if (BLUE.name().equals(name)) return BLUE;
-            if (ORANGE.name().equals(name)) return ORANGE ;
-            if (PURPLE.name().equals(name)) return PURPLE;
+            if (WHITE.name().equals(name)) return WHITE;
+            if (BLACK.name().equals(name)) return BLACK;
             if (YELLOW.name().equals(name)) return YELLOW;
             return null;
         }

@@ -67,7 +67,7 @@ public class AdventurerTester {
         adventurers.add(diver);
         adventurers.add(engineer);
 
-        Grid grid = new Grid(getBeginCells(), adventurers, null);
+        Grid grid = new Grid(getBeginCells(), null);
         exp.setGrid(grid);
         pilot.setGrid(grid);
         diver.setGrid(grid);
@@ -78,7 +78,7 @@ public class AdventurerTester {
 
     @Test
     public void testDryAccess() {
-        Adventurer adv = new Adventurer(START_POS.x, START_POS.y);
+        Adventurer adv = new Navigator(START_POS.x, START_POS.y);
 
         State[][] state = getBeginState();
         adv.cellChoiceDrying(state);
@@ -97,7 +97,7 @@ public class AdventurerTester {
 
     @Test
     public void testMoveAccess() {
-        Adventurer adv = new Adventurer(START_POS.x, START_POS.y);
+        Adventurer adv = new Navigator(START_POS.x, START_POS.y);
 
         State[][] state = getBeginState();
         adv.cellChoiceMoving(state);

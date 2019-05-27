@@ -2,17 +2,32 @@ package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
 import ileinterdite.util.Utils;
+import ileinterdite.util.Utils.Pawn;
 
 public class Pilot extends Adventurer {
-    private boolean powerAvailable;
+
+    public static final Pawn PAWN = Pawn.BLUE;
+    private boolean powerAvailable = true;
 
     public Pilot() {
-        this(0, 0);
+        super(0, 0);
+    }
+
+    public Pilot(Grid grid) {
+        super(grid);
     }
 
     public Pilot(int x, int y) {
         super(x, y);
-        this.powerAvailable = true;
+    }
+
+    public Pilot(Grid grid, int x, int y) {
+        super(grid, x, y);
+    }
+
+    @Override
+    public Pawn getPawn() {
+        return PAWN;
     }
 
     /**
@@ -25,7 +40,7 @@ public class Pilot extends Adventurer {
             for (int j = 0; j < Grid.HEIGHT; j++) {
                 for (int i = 0; i < Grid.WIDTH; i++) {
                     Utils.State state = tab[j][i];
-                    if (state == Utils.State.FLOODED || state == Utils.State.NORMAL) {
+                    if ((state == Utils.State.FLOODED || state == Utils.State.NORMAL) && (i != getX() || j != getY())) {
                         tab[j][i] = Utils.State.ACCESSIBLE;
                     } else {
                         tab[j][i] = Utils.State.INACCESSIBLE;
