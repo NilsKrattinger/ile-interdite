@@ -14,6 +14,8 @@ import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Controller implements Observer {
 
@@ -107,14 +109,20 @@ public class Controller implements Observer {
 
     /**
      * Split the message contents to retrieve the position
-     * @param m Message The message received from the view
+     * @param msg Message The message received from the view
      * @return Tuple&lt;Integer, Integer&gt;
      */
-    private Tuple<Integer, Integer> getPositionFromMessage(Message m) {
-        String[] coords = m.message.split("\\s");
-        int x = Integer.valueOf(coords[0]);
-        int y = Integer.valueOf(coords[1]);
-        return new Tuple<>(x, y);
+    private Tuple<Integer, Integer> getPositionFromMessage(String msg) {
+        Pattern p = Pattern.compile("(?<=\\d).+(?=\\d)");
+        Matcher m = p.matcher(msg);
+        if (m.matches()) {
+            int x = Integer.valueOf(m.group(1));
+            int y = Integer.valueOf(m.group(2));
+            return new Tuple<>(x, y);
+        } else {
+            Utils.showInformation("Les coordonnées entrées sont incorrectes.");
+            return null;
+        }
     }
 
     /**
@@ -130,13 +138,17 @@ public class Controller implements Observer {
     }
 
     public void handleAction(String msg) {
-        String[] coords = msg.split("(?<=\\d).+(?=\\d)");
+        Tuple<Integer, Integer> coords = getPositionFromMessage(msg);
         switch (selectedAction) {
             case MOVE:
-                movement(Integer.valueOf(coords[0]) - 1, Integer.valueOf(coords[1]) - 1);
+                if (coords != null) {
+                    movement(coords.x - 1, coords.y - 1);
+                }
                 break;
             case DRY:
-                dry(Integer.valueOf(coords[0]) - 1, Integer.valueOf(coords[1]) - 1);
+                if (coords != null) {
+                    dry(coords.x - 1, coords.y - 1);
+                }
                 break;
             case GIVE_CARD:
                 break;
