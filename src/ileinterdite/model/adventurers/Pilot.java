@@ -69,6 +69,15 @@ public class Pilot extends Adventurer {
         super.move(newX, newY);
     }
 
+    /**
+     * rend le pouvoire utilisable
+     */
+    @Override
+    public void newTrun() {
+        super.newTrun();
+        setPowerAvailable(true);
+    }
+
     public boolean isPowerAvailable() {
         return this.powerAvailable;
     }
