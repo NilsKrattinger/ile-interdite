@@ -6,7 +6,6 @@ import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.*;
 import ileinterdite.test.DemoBoardGenerator;
 import ileinterdite.util.Message;
-import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
@@ -61,24 +60,6 @@ public class Controller implements Observer {
         Pawn currentPawn = currentAdventurer.getPawn();
         adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
         adventurerView.setText(currentAdventurer.getClass().getSimpleName(), currentAdventurer.getClass().getSimpleName());
-        if (Parameters.LOGS) {
-            System.out.println("New turn : Adventurer " + currentAdventurer.getClass().getSimpleName() + " at x=" + (currentAdventurer.getX() + 1) + " y=" + (currentAdventurer.getY() + 1));
-        }
-    }
-
-    private void logGrid() {
-        if (Parameters.LOGS) {
-            System.out.println("Grille actuelle :");
-            Utils.State[][] states = grid.getStateOfCells();
-            System.out.println("  1  2  3  4  5  6");
-            for (int j = 0; j < states.length; j++) {
-                System.out.print(j + 1);
-                for (int i = 0; i < states[j].length; i++) {
-                    System.out.print(" " + states[j][i].toString().charAt(0) + states[j][i].toString().charAt(1));
-                }
-                System.out.println();
-            }
-        }
     }
 
     /**
@@ -87,9 +68,8 @@ public class Controller implements Observer {
      * @param adventurer
      */
     public void initMovement(Adventurer adventurer) {
-        logGrid();
         cellStates = adventurer.getAccessibleCells();
-        adventurerView.showSelectableCells(cellStates);
+        adventurerView.showSelectableCells(cellStates, grid);
     }
 
     /**
@@ -98,9 +78,8 @@ public class Controller implements Observer {
      * @param adventurer
      */
     public void initDryable(Adventurer adventurer) {
-        logGrid();
         cellStates = adventurer.getDryableCells();
-        adventurerView.showSelectableCells(cellStates);
+        adventurerView.showSelectableCells(cellStates, grid);
     }
 
     /**

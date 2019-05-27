@@ -15,6 +15,7 @@ import static javax.swing.SwingConstants.CENTER;
 
 import javax.swing.border.MatteBorder;
 
+import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Message;
 import ileinterdite.util.Parameters;
@@ -22,6 +23,16 @@ import ileinterdite.util.Utils;
 
 
 public class AdventurerView extends Observable {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
 
     private final JPanel buttonsPanel;
     private final JPanel centeredPanel;
@@ -123,7 +134,22 @@ public class AdventurerView extends Observable {
      * Shows which cells are selectable
      * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
      */
-    public void showSelectableCells(Utils.State[][] states) {
+    public void showSelectableCells(Utils.State[][] states, Grid grid) {
+
+        System.out.println("Grille actuelle :");
+        System.out.println("  1  2  3  4  5  6");
+        for (int j = 0; j < states.length; j++) {
+            System.out.print(j + 1);
+            for (int i = 0; i < states[j].length; i++) {
+                Utils.State st = grid.getCell(i, j).getState();
+                System.out.print(" " + ((states[j][i] == Utils.State.ACCESSIBLE) ? ANSI_GREEN : ANSI_RED) + st.toString().charAt(0) + st.toString().charAt(1) + ANSI_RESET);
+            }
+            System.out.println();
+        }
+
+        System.out.println("As = Asséchée, In = Inondée, Co = Coulée");
+        System.out.println(ANSI_RED + "Rouge = Inaccessible" + ANSI_RESET + " ; " + ANSI_GREEN + "Vert = Accessible" + ANSI_RESET);
+
         System.out.println("Ces tuiles sont accessibles :");
         for (int j = 0; j < states.length; j++) {
             for (int i = 0; i < states[j].length; i++) {
