@@ -18,7 +18,7 @@ import ileinterdite.model.adventurers.Adventurer;
  */
 public class Utils {
 
-    public static enum Action {
+    public enum Action {
         MOVE,
         DRY,
         GIVE_CARD,
@@ -28,7 +28,7 @@ public class Utils {
         CANCEL_ACTION
     }
  
-    public static enum State {
+    public enum State {
         NORMAL("Asséchée"),
         FLOODED("Inondée"),
         SUNKEN("Coulée"),
@@ -49,7 +49,7 @@ public class Utils {
     }
 
 
-    public static enum Pawn {
+    public enum Pawn {
         RED("Rouge", new Color(209, 45, 42), Color.LIGHT_GRAY),
         GREEN("Vert", new Color(65, 138, 71), Color.LIGHT_GRAY),
         BLUE("Bleu", new Color(66, 100, 173), Color.LIGHT_GRAY),
