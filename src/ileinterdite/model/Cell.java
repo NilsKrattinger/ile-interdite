@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Cell {
 
-	ArrayList<Adventurer> adventurers;
+	private ArrayList<Adventurer> adventurers;
 	private Utils.State state;
 
 	public Cell() {
