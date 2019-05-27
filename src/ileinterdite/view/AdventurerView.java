@@ -19,6 +19,7 @@ import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Message;
 import ileinterdite.util.Parameters;
+import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 
 
@@ -134,7 +135,7 @@ public class AdventurerView extends Observable {
      * Shows which cells are selectable
      * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
      */
-    public void showSelectableCells(Utils.State[][] states, Grid grid) {
+    public void showSelectableCells(Utils.State[][] states, Grid grid, Tuple<Integer, Integer> adventurerCoordinates) {
 
         System.out.println("Grille actuelle :");
         System.out.println("  1  2  3  4  5  6");
@@ -142,13 +143,15 @@ public class AdventurerView extends Observable {
             System.out.print(j + 1);
             for (int i = 0; i < states[j].length; i++) {
                 Utils.State st = grid.getCell(i, j).getState();
-                System.out.print(" " + ((states[j][i] == Utils.State.ACCESSIBLE) ? ANSI_GREEN : ANSI_RED) + st.toString().charAt(0) + st.toString().charAt(1) + ANSI_RESET);
+                String color = (states[j][i] == Utils.State.ACCESSIBLE) ? ANSI_GREEN : ((i == adventurerCoordinates.x && j == adventurerCoordinates.y) ? ANSI_YELLOW : ANSI_RED);
+                System.out.print(" " + color + st.toString().charAt(0) + st.toString().charAt(1) + ANSI_RESET);
             }
             System.out.println();
         }
 
         System.out.println("As = Asséchée, In = Inondée, Co = Coulée");
-        System.out.println(ANSI_RED + "Rouge = Inaccessible" + ANSI_RESET + " ; " + ANSI_GREEN + "Vert = Accessible" + ANSI_RESET);
+        System.out.println(ANSI_RED + "Rouge = Inaccessible" + ANSI_RESET + " ; " + ANSI_GREEN + "Vert = Accessible" + ANSI_RESET + " ; " +
+                ANSI_YELLOW + "Jaune = position de l'aventurier" + ANSI_RESET);
 
         System.out.println("Ces tuiles sont accessibles :");
         for (int j = 0; j < states.length; j++) {

@@ -71,7 +71,7 @@ public class Controller implements Observer {
      */
     public void initMovement(Adventurer adventurer) {
         cellStates = adventurer.getAccessibleCells();
-        adventurerView.showSelectableCells(cellStates, grid);
+        adventurerView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
     }
 
     /**
@@ -81,7 +81,7 @@ public class Controller implements Observer {
      */
     public void initDryable(Adventurer adventurer) {
         cellStates = adventurer.getDryableCells();
-        adventurerView.showSelectableCells(cellStates, grid);
+        adventurerView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
     }
 
     /**
