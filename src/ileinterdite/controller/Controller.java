@@ -101,10 +101,18 @@ public class Controller implements Observer {
      * deplacement de l'avanturier en X,Y et actualisation de la vue
      */
     public void movement(int x, int y){
-        if (isCellAvailable(x,y)){
-            this.currentAdventurer.move(x,y);
-            adventurerView.updateAdventurer(currentAdventurer);
-        }
+        this.currentAdventurer.move(x,y);
+        adventurerView.updateAdventurer(currentAdventurer);
+    }
+
+    /**
+     * Asséchement de la grille en X,Y et actualisation de la vue
+     * @param x
+     * @param y
+     */
+    public void dry(int x, int y){
+        this.getGrid().dry(x,y);
+        adventurerView.updateDriedCell(x, y);
     }
 
     /**
@@ -113,9 +121,9 @@ public class Controller implements Observer {
      * @return Tuple&lt;Integer, Integer&gt;
      */
     private Tuple<Integer, Integer> getPositionFromMessage(String msg) {
-        Pattern p = Pattern.compile("(?<=\\d).+(?=\\d)");
+        Pattern p = Pattern.compile("(\\d).+(\\d)");
         Matcher m = p.matcher(msg);
-        if (m.matches()) {
+        if (m.find()) {
             int x = Integer.valueOf(m.group(1));
             int y = Integer.valueOf(m.group(2));
             return new Tuple<>(x, y);
@@ -125,15 +133,13 @@ public class Controller implements Observer {
         }
     }
 
-    /**
-     * Asséchement de la grille en X,Y et actualisation de la vue
-     * @param x
-     * @param y
-     */
-    public void dry(int x, int y){
-        if (isCellAvailable(x,y)){
-            this.getGrid().dry(x,y);
-            adventurerView.updateDriedCell(x, y);
+    private boolean validateCellAction(int x, int y) {
+        if (x >= 0 && y >= 0 && x < Grid.WIDTH && y < Grid.HEIGHT && isCellAvailable(x, y)) {
+            reduceNbActions();
+            return true;
+        } else {
+            Utils.showInformation("Les coordonnées sont invalides.");
+            return false;
         }
     }
 
@@ -142,20 +148,26 @@ public class Controller implements Observer {
         switch (selectedAction) {
             case MOVE:
                 if (coords != null) {
-                    movement(coords.x - 1, coords.y - 1);
+                    int x = coords.x - 1;
+                    int y = coords.y - 1;
+                    if (validateCellAction(x, y)) {
+                        movement(x, y);
+                    }
                 }
                 break;
             case DRY:
                 if (coords != null) {
-                    dry(coords.x - 1, coords.y - 1);
+                    int x = coords.x - 1;
+                    int y = coords.y - 1;
+                    if (validateCellAction(x, y)) {
+                        dry(x, y);
+                    }
                 }
                 break;
             case GIVE_CARD:
                 break;
             case GET_TREASURE:
                 break;
-            default:
-                setNbActions(remainingActions + 1);
         }
 
         if (remainingActions == 0) {
@@ -209,7 +221,6 @@ public class Controller implements Observer {
                 break;
             case VALIDATE_ACTION:
                 if (selectedAction != null) {
-                    reduceNbActions();
                     handleAction(m.message);
                 }
                 selectedAction = null;
