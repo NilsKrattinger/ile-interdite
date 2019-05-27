@@ -32,6 +32,7 @@ public class Pilot extends Adventurer {
 
     /**
      * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par le pilote
+     *
      * @param tab
      */
     @Override
@@ -50,6 +51,22 @@ public class Pilot extends Adventurer {
         } else {
             super.cellChoiceMoving(tab);
         }
+    }
+
+    /**
+     * Si la case n'est pas une case adjacente passe la disponibilité du pouvoir à faux.
+     * @param newX int
+     * @param newY int
+     */
+    @Override
+    public void move(int newX, int newY) {
+
+        if (!(this.getY() == newY && (this.getX() == newX - 1
+                || this.getX() == newX + 1) || this.getX() == newX
+                && (this.getY() == newY - 1 || this.getY() == newY + 1))) {
+            this.setPowerAvailable(false);
+        }
+        super.move(newX, newY);
     }
 
     public boolean isPowerAvailable() {
