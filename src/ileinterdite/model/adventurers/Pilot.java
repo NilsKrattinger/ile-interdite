@@ -40,7 +40,7 @@ public class Pilot extends Adventurer {
             for (int j = 0; j < Grid.HEIGHT; j++) {
                 for (int i = 0; i < Grid.WIDTH; i++) {
                     Utils.State state = tab[j][i];
-                    if (state == Utils.State.FLOODED || state == Utils.State.NORMAL) {
+                    if ((state == Utils.State.FLOODED || state == Utils.State.NORMAL) && (i != getX() || j != getY())) {
                         tab[j][i] = Utils.State.ACCESSIBLE;
                     } else {
                         tab[j][i] = Utils.State.INACCESSIBLE;
