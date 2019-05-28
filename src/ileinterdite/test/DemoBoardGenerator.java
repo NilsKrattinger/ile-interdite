@@ -18,6 +18,7 @@ public class DemoBoardGenerator {
      */
     public static Cell[][] boardBuilder(String filepath) {
         Utils.State[] cellState = new Utils.State[36];
+        String[] cellName = new String[36];
         String line;
 
 
@@ -47,6 +48,7 @@ public class DemoBoardGenerator {
                         cellState[i] = null;
                         break;
                 }
+                cellName[i] = reader.readLine();
             }
 
         } catch (IOException e) {
@@ -59,6 +61,7 @@ public class DemoBoardGenerator {
             for (int i = 0; i < Grid.HEIGHT; i++) {
                 board[j][i] = new Cell();
                 board[j][i].setState(cellState[i + (j * Grid.WIDTH)]);
+                board[j][i].setName(cellName[i + (j * Grid.WIDTH)]);
             }
         }
 
