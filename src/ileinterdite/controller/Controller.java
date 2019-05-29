@@ -245,4 +245,12 @@ public class Controller implements Observer {
     private Grid getGrid() {
         return grid;
     }
+
+    private void initBoad(){
+
+    }
+
+    private void buildCell(){ 
+
+    }
 }
