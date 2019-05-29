@@ -42,6 +42,8 @@ public class Controller implements Observer {
 
         if (Parameters.DEMOMAP) {
             this.grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null);
+        } else {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
         players = new ArrayList<>();
@@ -56,6 +58,9 @@ public class Controller implements Observer {
         while (players.size() > nbPlayers) {
             players.remove(players.size() - 1);
         }
+
+        //TODO Add the pawns placement on cell
+
         nextAdventurer();
     }
 
