@@ -16,7 +16,7 @@ public class DemoBoardGenerator {
      * Genere une liste d'etat (enum) selon un .txt avec le non de l'etat par ligne.
      * @return State[]
      */
-    public static Cell[][] boardBuilder(String filepath) {
+    /* public static Cell[][] boardBuilder(String filepath) {
         Utils.State[] cellState = new Utils.State[36];
         String[] cellName = new String[36];
         String line;
@@ -67,7 +67,7 @@ public class DemoBoardGenerator {
 
         return board;
     }
-
+*/
     private static void fileInit(String filepath) throws FileNotFoundException {
 
             reader = new BufferedReader(new FileReader(filepath));

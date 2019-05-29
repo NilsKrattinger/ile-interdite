@@ -16,6 +16,12 @@ public class Cell {
         this.adventurers = new ArrayList<>();
 	}
 
+	public Cell(String name) {
+		this.state = Utils.State.NORMAL;
+		this.setName(name);
+		this.adventurers = new ArrayList<>();
+	}
+
 	/**
 	 * Remove the adventurer from the cell
 	 * @param adv The adventurer to remove
@@ -40,6 +46,10 @@ public class Cell {
 	public boolean isAdventurerOnCell(Adventurer adv) {
 	    return adventurers.contains(adv);
     }
+
+    public void spawnAdventurer(int x, int y){
+
+	}
 
     /**
      * Change the state of the cell

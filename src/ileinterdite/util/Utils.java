@@ -6,6 +6,9 @@
 package ileinterdite.util;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JOptionPane;
@@ -17,6 +20,12 @@ import ileinterdite.model.adventurers.Adventurer;
  * @author Eric
  */
 public class Utils {
+
+    public enum CellType {
+        SIMPLE,
+        SPAWN,
+        TREASURE
+    }
 
     public enum Action {
         MOVE,
@@ -117,5 +126,17 @@ public class Utils {
      */
     public static void showInformation(String message) {
         JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.OK_OPTION);
+    }
+
+    /**
+     * Permet d'initialiser un buffer avec le fichier passer et paametres et retoun un buffer
+     * @param filepath
+     * @throws FileNotFoundException
+     */
+    public static BufferedReader bufferInit(String filepath) throws FileNotFoundException {
+
+        return new BufferedReader(new FileReader(filepath));
+
+
     }
 }

@@ -1,8 +1,6 @@
 package ileinterdite.controller;
 
-import ileinterdite.model.Deck;
-import ileinterdite.model.DiscardPile;
-import ileinterdite.model.Grid;
+import ileinterdite.model.*;
 import ileinterdite.model.adventurers.*;
 import ileinterdite.test.DemoBoardGenerator;
 import ileinterdite.util.Message;
@@ -13,7 +11,6 @@ import ileinterdite.util.Utils.Action;
 import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,12 +36,7 @@ public class Controller implements Observer {
 
     public Controller(AdventurerView view, int nbPlayers) {
         this.adventurerView = view;
-
-        if (Parameters.DEMOMAP) {
-            this.grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null);
-        } else {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+        this.grid = new Grid(this.buildBoard(), null);
 
         players = new ArrayList<>();
         players.add(new Diver(grid, 3, 4));
@@ -248,9 +240,26 @@ public class Controller implements Observer {
 
     private void initBoad(){
 
+        Cell[][] cells = this.buildBoard();
+        for (int j = 0; j < Grid.HEIGHT; j++) {
+            for (int i = 0; i < Grid.WIDTH; i++) {
+                cells[j][i].spawnAdventurer(j,i);
+
+
+
+            }
+        }
+
+
     }
 
-    private void buildCell(){ 
-
+    private Cell[][] buildBoard(){
+        Cell[][] board = new Cell[Grid.HEIGHT][Grid.WIDTH];
+        if (Parameters.DEMOMAP) {
+            board = DemoBoardGenerator.boardBuilder("res/DEMOMAP.txt");
+        } else {
+            board = null; //TODO ADD GENERATION OF CELL
+        }
+	  return  board;
     }
 }
