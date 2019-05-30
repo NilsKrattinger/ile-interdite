@@ -2,12 +2,15 @@ package ileinterdite.factory;
 
 import ileinterdite.model.Cell;
 import ileinterdite.model.Grid;
+import ileinterdite.model.Treasure;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 public class BoardFactory {
     private static final int[] EMPTYCELLINDEX = {0, 1, 4, 5, 6, 11, 24, 29, 30, 31, 34, 35};
@@ -20,9 +23,10 @@ public class BoardFactory {
      *  les aventurier
      * @return
      */
-    public static Cell[][] boardFactory(String filepath) {
+    public static Object[] boardFactory(String filepath) {
+        Object[] buildedStuff = new Object[3];
         ArrayList<Cell> boardCellList = new ArrayList<>();
-        Adventurer[] adventurers = new Adventurer[6];
+        ArrayList<Adventurer> adventurers;
         Cell[] buildedCells;
 
         Cell emptyCell = new Cell();
@@ -36,12 +40,19 @@ public class BoardFactory {
 
         buildedCells = CellsFactory.cellsFactory(filepath,adventurers,null);
         boardCellList.addAll(Arrays.asList(buildedCells));
+        Collections.shuffle(boardCellList);
         // On place les cases "vide"
         for (int i : EMPTYCELLINDEX) {
             boardCellList.add(i, emptyCell);
         }
 
-        return BoardFactory.convertToArray(boardCellList);
+        buildedStuff[0] = adventurers;
+        buildedStuff[1] = BoardFactory.convertToArray(boardCellList);
+        Treasure[] treasures = new Treasure[1];
+        treasures[0] = new Treasure();
+        buildedStuff[2] = treasures; //TODO add treasures
+
+        return buildedStuff;
     }
 
     /**

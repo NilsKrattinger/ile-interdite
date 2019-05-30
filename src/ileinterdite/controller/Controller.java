@@ -1,12 +1,8 @@
 package ileinterdite.controller;
 
-import ileinterdite.factory.AdventurersFactory;
 import ileinterdite.factory.BoardFactory;
-import ileinterdite.model.Cell;
-import ileinterdite.model.Deck;
-import ileinterdite.model.DiscardPile;
-import ileinterdite.model.Grid;
-import ileinterdite.model.adventurers.*;
+import ileinterdite.model.*;
+import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
@@ -15,7 +11,6 @@ import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,12 +35,13 @@ public class Controller implements Observer {
     private int remainingActions;
 
 
-
     public Controller(AdventurerView view, int nbPlayers) {
+        Object[] buildedStuff;
+        buildedStuff = BoardFactory.boardFactory("res/DEMOMAP.txt");
         this.adventurerView = view;
-        this.grid = new Grid(BoardFactory.boardFactory("res/DEMOMAP.txt"), null);
-        players = (AdventurersFactory.adventurerFactory();
-        players = randomPLayer(players,nbPlayers);
+        this.players = (ArrayList<Adventurer>) buildedStuff[0];
+        this.grid = new Grid((Cell[][])buildedStuff[1],null);
+        players = randomPLayer(players, nbPlayers);
 
         this.initBoad();
 
@@ -239,31 +235,25 @@ public class Controller implements Observer {
 
     private void initBoad() {
 
-        for (Adventurer adventurer:players){
-        adventurer.setGrid(this.grid);
+        for (Adventurer adventurer : players) {
+            adventurer.setGrid(this.grid);
 
         }
-
-
         Cell[][] cells = this.getGrid().getCells();
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
-                cells[j][i].spawnAdventurer(j, i);
+                if(players.contains(cells[j][i].getAdventurerSpawn())) {
+                    cells[j][i].spawnAdventurer(j, i);
+                }
             }
         }
     }
 
-    private Adventurer[] randomPLayer(Adventurer[] player, int nbPlayers){
-        ArrayList<Adventurer> playerList= new ArrayList<>(Arrays.asList(player));
-        Collections.shuffle(playerList);
-        while (playerList.size() > nbPlayers) {
-            playerList.remove(playerList.size() - 1);
+    private ArrayList<Adventurer> randomPLayer(ArrayList<Adventurer> players, int nbPlayers) {
+        Collections.shuffle(players);
+        while (players.size() > nbPlayers) {
+            players.remove(players.size() - 1);
         }
-        player = new Adventurer[nbPlayers];
-        for (int i = 0; i < playerList.size(); i++) {
-            player[i] = playerList.get(i);
-
-        }
-        return player;
+        return players;
     }
 }

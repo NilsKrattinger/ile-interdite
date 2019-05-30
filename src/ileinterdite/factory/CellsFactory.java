@@ -9,12 +9,13 @@ import ileinterdite.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CellsFactory {
     private static BufferedReader reader;
 
 
-    public static Cell[] cellsFactory(String filepath, Adventurer[] adventurers, Treasure[] treasures) {
+    public static Cell[] cellsFactory(String filepath, ArrayList<Adventurer> adventurers, Treasure[] treasures) {
         Cell[] cells = new Cell[24];
         Utils.CellType[] CellType = new Utils.CellType[24];
         String[][] cellAtributs = new String[24][3];
@@ -35,7 +36,7 @@ public class CellsFactory {
         for (int i = 0; i < 24; i++) {
             switch (cellAtributs[i][0]) {
                 case "SPAWN":
-                    cells[i] = new SpawnCell(adventurers[i], cellAtributs[i][1]);
+                    cells[i] = new SpawnCell(adventurers.get(i), cellAtributs[i][1]);
                     break;
                 case "TREASURE":
                     cells[i] = new TreasureCell(treasures[i % 4], cellAtributs[i][1]);

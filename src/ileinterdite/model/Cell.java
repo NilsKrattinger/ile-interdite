@@ -75,4 +75,8 @@ public class Cell {
     	return this.name;
 	}
 
+	public Adventurer getAdventurerSpawn(){
+    	return null;
+	}
+
 }

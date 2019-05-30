@@ -5,18 +5,19 @@ import ileinterdite.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AdventurersFactory {
 
-    public static Adventurer[] adventurerFactory() {
+    public static ArrayList<Adventurer> adventurerFactory() {
 
-        Adventurer[] adventurers = new Adventurer[6];
-        adventurers[0] = new Diver();
-        adventurers[1] = new Engineer();
-        adventurers[2] = new Explorer();
-        adventurers[3] = new Messager();
-        adventurers[4] = new Navigator();
-        adventurers[5] = new Pilot();
+        ArrayList<Adventurer> adventurers = new ArrayList<>();
+       adventurers.add(new Diver());
+        adventurers.add(new Engineer());
+        adventurers.add(new Explorer());
+        adventurers.add(new Messager());
+        adventurers.add(new Navigator());
+        adventurers.add(new Pilot());
         return adventurers;
     }
 
