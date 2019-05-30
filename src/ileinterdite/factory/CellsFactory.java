@@ -25,7 +25,7 @@ public class CellsFactory {
             for (int i = 0; i < 24; i++) { //TODO gerner tout avec des string ca evite les double case verfi si enum toujours utiles après
                 cellAtributs[i][0] = reader.readLine();
                 cellAtributs[i][1] = reader.readLine();
-                cellAtributs[i][3] = reader.readLine();
+                cellAtributs[i][2] = reader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,7 +38,7 @@ public class CellsFactory {
                     cells[i] = new SpawnCell(adventurers[i], cellAtributs[i][1]);
                     break;
                 case "TREASURE":
-                    cells[i] = new TreasureCell(treasures[i % 6], cellAtributs[i][1]);
+                    cells[i] = new TreasureCell(treasures[i % 4], cellAtributs[i][1]);
                     break;
                 case "SIMPLE":
                     cells[i] = new Cell(cellAtributs[i][1]);

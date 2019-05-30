@@ -1,23 +1,28 @@
 package ileinterdite.controller;
 
-import ileinterdite.model.*;
+import ileinterdite.factory.AdventurersFactory;
+import ileinterdite.factory.BoardFactory;
+import ileinterdite.model.Cell;
+import ileinterdite.model.Deck;
+import ileinterdite.model.DiscardPile;
+import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.*;
-import ileinterdite.test.DemoBoardGenerator;
 import ileinterdite.util.Message;
-import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
 import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
+
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Controller implements Observer {
 
-	private Grid grid;
+    private Grid grid;
     private Utils.State[][] cellStates;
 
     private ArrayList<Adventurer> players;
@@ -34,22 +39,15 @@ public class Controller implements Observer {
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
 
+
+
     public Controller(AdventurerView view, int nbPlayers) {
         this.adventurerView = view;
-        this.grid = new Grid(this.buildBoard(), null);
+        this.grid = new Grid(BoardFactory.boardFactory("res/DEMOMAP.txt"), null);
+        players = (AdventurersFactory.adventurerFactory();
+        players = randomPLayer(players,nbPlayers);
 
-        players = new ArrayList<>();
-        players.add(new Diver(grid, 3, 4));
-        players.add(new Engineer(grid, 3, 4));
-        players.add(new Explorer(grid, 3, 4));
-        players.add(new Messager(grid, 3, 4));
-        players.add(new Navigator(grid, 3, 4));
-        players.add(new Pilot(grid, 3, 4));
-
-        Collections.shuffle(players);
-        while (players.size() > nbPlayers) {
-            players.remove(players.size() - 1);
-        }
+        this.initBoad();
 
         //TODO Add the pawns placement on cell
 
@@ -67,6 +65,7 @@ public class Controller implements Observer {
     /**
      * Lance les actions pour le deplacement de l'aventurier.
      * puis l'interaction avec l'interface
+     *
      * @param adventurer
      */
     public void initMovement(Adventurer adventurer) {
@@ -77,6 +76,7 @@ public class Controller implements Observer {
     /**
      * Lance les actions pour le deplacement de l'aventurier.
      * puis l'interaction avec l'interface
+     *
      * @param adventurer
      */
     public void initDryable(Adventurer adventurer) {
@@ -85,38 +85,38 @@ public class Controller implements Observer {
     }
 
     /**
-     *	Renvoie un boolean si la case choisie par l'utilisateur est accesible
+     * Renvoie un boolean si la case choisie par l'utilisateur est accesible
+     *
      * @param x,y
      * @return boolean
      */
     public boolean isCellAvailable(int x, int y) {
         return cellStates[y][x] == Utils.State.ACCESSIBLE;
     }
-    
+
     /**
-     *
      * @param x
-     * @param y
-     *
-     * deplacement de l'avanturier en X,Y et actualisation de la vue
+     * @param y deplacement de l'avanturier en X,Y et actualisation de la vue
      */
-    public void movement(int x, int y){
-        this.currentAdventurer.move(x,y);
+    public void movement(int x, int y) {
+        this.currentAdventurer.move(x, y);
         adventurerView.updateAdventurer(currentAdventurer);
     }
 
     /**
      * Asséchement de la grille en X,Y et actualisation de la vue
+     *
      * @param x
      * @param y
      */
-    public void dry(int x, int y){
-        this.getGrid().dry(x,y);
+    public void dry(int x, int y) {
+        this.getGrid().dry(x, y);
         adventurerView.updateDriedCell(x, y);
     }
 
     /**
      * Split the message contents to retrieve the position
+     *
      * @param msg Message The message received from the view
      * @return Tuple&lt;Integer, Integer&gt;
      */
@@ -189,17 +189,16 @@ public class Controller implements Observer {
         selectedAction = null;
     }
 
-	/**
-	 *
-	 * @param nb
-	 */
-	public void setNbActions(int nb) {
+    /**
+     * @param nb
+     */
+    public void setNbActions(int nb) {
         this.remainingActions = Math.max(nb, NB_ACTIONS_PER_TURN);
-	}
+    }
 
-	public void reduceNbActions() {
-		this.remainingActions--;
-	}
+    public void reduceNbActions() {
+        this.remainingActions--;
+    }
 
     @Override
     public void update(Observable o, Object arg) {
@@ -238,28 +237,33 @@ public class Controller implements Observer {
         return grid;
     }
 
-    private void initBoad(){
+    private void initBoad() {
 
-        Cell[][] cells = this.buildBoard();
+        for (Adventurer adventurer:players){
+        adventurer.setGrid(this.grid);
+
+        }
+
+
+        Cell[][] cells = this.getGrid().getCells();
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
-                cells[j][i].spawnAdventurer(j,i);
-
-
-
+                cells[j][i].spawnAdventurer(j, i);
             }
         }
-
-
     }
 
-    private Cell[][] buildBoard(){
-        Cell[][] board = new Cell[Grid.HEIGHT][Grid.WIDTH];
-        if (Parameters.DEMOMAP) {
-            board = DemoBoardGenerator.boardBuilder("res/DEMOMAP.txt");
-        } else {
-            board = null; //TODO ADD GENERATION OF CELL
+    private Adventurer[] randomPLayer(Adventurer[] player, int nbPlayers){
+        ArrayList<Adventurer> playerList= new ArrayList<>(Arrays.asList(player));
+        Collections.shuffle(playerList);
+        while (playerList.size() > nbPlayers) {
+            playerList.remove(playerList.size() - 1);
         }
-	  return  board;
+        player = new Adventurer[nbPlayers];
+        for (int i = 0; i < playerList.size(); i++) {
+            player[i] = playerList.get(i);
+
+        }
+        return player;
     }
 }

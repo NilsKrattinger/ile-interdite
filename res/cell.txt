@@ -1,0 +1,71 @@
+SPAWN
+La Porte de Fer
+Pion.VIOLET
+SPAWN
+La Porte de Bronze
+Pion.ROUGE
+SPAWN
+La Porte de Cuivre
+Pion.VERT
+SPAWN
+La Porte d’Argent
+Pion.ORANGE
+SPAWN
+La Porte d’Or
+Pion.JAUNE
+SPAWN
+Heliport
+Pion.BLEU
+SIMPLE
+Les Falaises de l’Oubli
+
+SIMPLE
+Le Palais de Corail
+
+SIMPLE
+Le Pont des Abimes
+
+SIMPLE
+Les Dunes de l’Illusion
+
+SIMPLE
+La Caverne des Ombres
+
+SIMPLE
+Le Jardin des Hurlements
+
+SIMPLE
+La Foret Pourpre
+
+SIMPLE
+Le Lagon Perdu
+
+SIMPLE
+Le Marais Brumeux
+
+SIMPLE
+Observatoire
+
+SIMPLE
+Le Rocher Fantome
+
+SIMPLE
+La Caverne du Brasier
+
+SIMPLE
+Le Temple du Soleil
+
+SIMPLE
+Le Temple de La Lune
+
+SIMPLE
+Le Palais des Marees
+
+SIMPLE
+Le Val du Crepuscule
+
+SIMPLE
+La Tour du Guet
+
+SIMPLE
+Le Jardin des Murmures
