@@ -9,7 +9,6 @@ import ileinterdite.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
 public class BoardFactory {
@@ -19,8 +18,9 @@ public class BoardFactory {
 
     /**
      * initialise le plateau de jeu et créée :
-     *  les tuilles
-     *  les aventurier
+     * les tuilles
+     * les aventurier
+     *
      * @return
      */
     public static Object[] boardFactory(String filepath) {
@@ -34,11 +34,11 @@ public class BoardFactory {
 
         adventurers = AdventurersFactory.adventurerFactory();
 
-        if(!Parameters.DEMOMAP){
+        if (!Parameters.DEMOMAP) {
             filepath = DEFAULTCELLFILE;
         }
 
-        buildedCells = CellsFactory.cellsFactory(filepath,adventurers,null);
+        buildedCells = CellsFactory.cellsFactory(filepath, adventurers, null);
         boardCellList.addAll(Arrays.asList(buildedCells));
         Collections.shuffle(boardCellList);
         // On place les cases "vide"
@@ -58,6 +58,7 @@ public class BoardFactory {
     /**
      * Convertie une liste de Cell de taille 36 en
      * tableau 6 x 6 de cell
+     *
      * @param boardCellList Cell list
      * @return cell array
      */

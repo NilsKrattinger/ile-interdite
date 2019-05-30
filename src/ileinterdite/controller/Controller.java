@@ -1,5 +1,4 @@
 package ileinterdite.controller;
-
 import ileinterdite.factory.BoardFactory;
 import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
@@ -10,7 +9,6 @@ import ileinterdite.util.Utils.Action;
 import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -234,10 +232,8 @@ public class Controller implements Observer {
     }
 
     private void initBoad() {
-
         for (Adventurer adventurer : players) {
             adventurer.setGrid(this.grid);
-
         }
         Cell[][] cells = this.getGrid().getCells();
         for (int j = 0; j < Grid.HEIGHT; j++) {
