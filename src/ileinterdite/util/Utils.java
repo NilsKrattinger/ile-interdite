@@ -21,12 +21,6 @@ import ileinterdite.model.adventurers.Adventurer;
  */
 public class Utils {
 
-    public enum CellType {
-        SIMPLE,
-        SPAWN,
-        TREASURE
-    }
-
     public enum Action {
         MOVE,
         DRY,
@@ -62,8 +56,8 @@ public class Utils {
         RED("Rouge", new Color(209, 45, 42), Color.LIGHT_GRAY),
         GREEN("Vert", new Color(65, 138, 71), Color.LIGHT_GRAY),
         BLUE("Bleu", new Color(66, 100, 173), Color.LIGHT_GRAY),
-        WHITE("White", new Color(220, 215, 219), Color.BLACK),
-        BLACK("Black", new Color(9, 18, 22), Color.LIGHT_GRAY),
+        WHITE("Blanc", new Color(220, 215, 219), Color.BLACK),
+        BLACK("Noir", new Color(9, 18, 22), Color.LIGHT_GRAY),
         YELLOW("Jaune", new Color(255, 243, 83), Color.BLACK) ;
 
         private final String label;

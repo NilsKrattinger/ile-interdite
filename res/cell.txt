@@ -1,21 +1,21 @@
 SPAWN
 La Porte de Fer
-Pion.VIOLET
+Violet
 SPAWN
 La Porte de Bronze
-Pion.ROUGE
+ROUGE
 SPAWN
 La Porte de Cuivre
-Pion.VERT
+VERT
 SPAWN
 La Porte d’Argent
-Pion.ORANGE
+ORANGE
 SPAWN
 La Porte d’Or
-Pion.JAUNE
+JAUNE
 SPAWN
 Heliport
-Pion.BLEU
+BLEU
 SIMPLE
 Les Falaises de l’Oubli
 

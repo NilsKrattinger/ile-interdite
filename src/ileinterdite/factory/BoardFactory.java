@@ -36,6 +36,8 @@ public class BoardFactory {
 
         if (!Parameters.DEMOMAP) {
             filepath = DEFAULTCELLFILE;
+        } else {
+
         }
 
         buildedCells = CellsFactory.cellsFactory(filepath, adventurers, null);
@@ -69,5 +71,4 @@ public class BoardFactory {
         }
         return boardCellArray;
     }
-
 }
