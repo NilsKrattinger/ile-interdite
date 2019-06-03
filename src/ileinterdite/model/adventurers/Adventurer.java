@@ -110,6 +110,10 @@ public abstract class Adventurer {
         }
     }
 
+    public void newTrun(){
+
+    }
+
     public int getX() {
         return x;
     }

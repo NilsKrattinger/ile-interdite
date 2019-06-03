@@ -185,6 +185,7 @@ public class Controller implements Observer {
 
     public void nextAdventurer() {
         changeCurrentAdventurer();
+        currentAdventurer.newTurn();
         setNbActions(NB_ACTIONS_PER_TURN);
         selectedAction = null;
     }
