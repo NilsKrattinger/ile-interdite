@@ -8,7 +8,6 @@ public class SpawnCell extends Cell {
     public SpawnCell(Adventurer adventurer, String name) {
         super(name);
         this.adventurerSpawn = adventurer;
-
     }
 
     @Override
@@ -19,6 +18,6 @@ public class SpawnCell extends Cell {
     @Override
     public void spawnAdventurer(int x, int y) {
         super.spawnAdventurer(x,y);
-        this.adventurerSpawn.move(x , y);
+        this.adventurerSpawn.move(x, y);
     }
 }

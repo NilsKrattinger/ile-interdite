@@ -47,10 +47,7 @@ public class Cell {
 	    return adventurers.contains(adv);
     }
 
-    public void spawnAdventurer(int x, int y){
-
-
-	}
+    public void spawnAdventurer(int x, int y){}
 
     /**
      * Change the state of the cell

@@ -23,25 +23,26 @@ public class BoardFactory {
      *
      * @return
      */
-    public static Object[] boardFactory(String filepath) {
-        Object[] buildedStuff = new Object[3];
+    public static Object[] boardFactory() {
+        Object[] builtStuff = new Object[3];
         ArrayList<Cell> boardCellList = new ArrayList<>();
         ArrayList<Adventurer> adventurers;
-        Cell[] buildedCells;
+        Cell[] builtCells;
 
         Cell emptyCell = new Cell();
         emptyCell.setState(Utils.State.NON_EXISTENT);
 
         adventurers = AdventurersFactory.adventurerFactory();
 
+        String filepath;
         if (!Parameters.DEMOMAP) {
             filepath = DEFAULTCELLFILE;
         } else {
             filepath = "res/DEMOMAP.txt";
         }
 
-        buildedCells = CellsFactory.cellsFactory(filepath, adventurers, null);
-        boardCellList.addAll(Arrays.asList(buildedCells));
+        builtCells = CellsFactory.cellsFactory(filepath, adventurers, null);
+        boardCellList.addAll(Arrays.asList(builtCells));
 
         if (!Parameters.DEMOMAP) {
             Collections.shuffle(boardCellList);
@@ -51,13 +52,13 @@ public class BoardFactory {
             boardCellList.add(i, emptyCell);
         }
 
-        buildedStuff[0] = adventurers;
-        buildedStuff[1] = BoardFactory.convertToArray(boardCellList);
+        builtStuff[0] = adventurers;
+        builtStuff[1] = BoardFactory.convertToArray(boardCellList);
         Treasure[] treasures = new Treasure[1];
         treasures[0] = new Treasure();
-        buildedStuff[2] = treasures; //TODO add treasures
+        builtStuff[2] = treasures; //TODO add treasures
 
-        return buildedStuff;
+        return builtStuff;
     }
 
     /**

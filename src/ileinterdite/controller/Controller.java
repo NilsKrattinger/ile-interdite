@@ -36,15 +36,13 @@ public class Controller implements Observer {
 
     public Controller(AdventurerView view, int nbPlayers) {
         Object[] buildedStuff;
-        buildedStuff = BoardFactory.boardFactory("res/DEMOMAP.txt");
+        buildedStuff = BoardFactory.boardFactory();
         this.adventurerView = view;
         this.players = (ArrayList<Adventurer>) buildedStuff[0];
         this.grid = new Grid((Cell[][])buildedStuff[1],null);
-        if (!Parameters.DEMOMAP){
-        players = randomPLayer(players, nbPlayers);
-        }
+        players = randomPlayer(players, nbPlayers);
 
-        this.initBoad();
+        this.initBoard();
 
         //TODO Add the pawns placement on cell
 
@@ -234,7 +232,7 @@ public class Controller implements Observer {
         return grid;
     }
 
-    private void initBoad() {
+    private void initBoard() {
         for (Adventurer adventurer : players) {
             adventurer.setGrid(this.grid);
         }
@@ -248,7 +246,7 @@ public class Controller implements Observer {
         }
     }
 
-    private ArrayList<Adventurer> randomPLayer(ArrayList<Adventurer> players, int nbPlayers) {
+    private ArrayList<Adventurer> randomPlayer(ArrayList<Adventurer> players, int nbPlayers) {
         Collections.shuffle(players);
         while (players.size() > nbPlayers) {
             players.remove(players.size() - 1);

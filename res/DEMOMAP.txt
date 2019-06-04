@@ -28,7 +28,7 @@ Le Palais de Corail
 NORMAL
 SPAWN
 La Porte d'Argent
-ORANGE
+BLANC
 NORMAL
 SIMPLE
 Les Dunes De L'illusion
