@@ -37,6 +37,8 @@ public class Controller implements Observer {
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
 
+    private boolean powerEngineer = false;
+
     public Controller(AdventurerView view, GridView gview, int nbPlayers) {
         this.adventurerView = view;
         this.gridView = gview;
@@ -144,7 +146,6 @@ public class Controller implements Observer {
 
     private boolean validateCellAction(int x, int y) {
         if (x >= 0 && y >= 0 && x < Grid.WIDTH && y < Grid.HEIGHT && isCellAvailable(x, y)) {
-            reduceNbActions();
             return true;
         } else {
             Utils.showInformation("Les coordonnées sont invalides.");
@@ -161,6 +162,8 @@ public class Controller implements Observer {
                     int y = coords.y - 1;
                     if (validateCellAction(x, y)) {
                         movement(x, y);
+                        reduceNbActions();
+                        powerEngineer = false;
                     }
                 }
                 break;
@@ -170,6 +173,14 @@ public class Controller implements Observer {
                     int y = coords.y - 1;
                     if (validateCellAction(x, y)) {
                         dry(x, y);
+                        if (!powerEngineer) {
+                            reduceNbActions();
+                            if (currentAdventurer instanceof Engineer) {
+                                powerEngineer = true;
+                            }
+                        } else {
+                            powerEngineer = false;
+                        }
                     }
                 }
                 break;
@@ -177,10 +188,6 @@ public class Controller implements Observer {
                 break;
             case GET_TREASURE:
                 break;
-        }
-
-        if (remainingActions == 0) {
-            nextAdventurer();
         }
     }
 
@@ -240,6 +247,10 @@ public class Controller implements Observer {
             case CANCEL_ACTION:
                 selectedAction = null;
                 break;
+        }
+
+        if (remainingActions == 0 && (!powerEngineer || selectedAction != Action.DRY && selectedAction != null)) {
+            nextAdventurer();
         }
     }
 
