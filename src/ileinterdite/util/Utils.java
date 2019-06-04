@@ -6,6 +6,9 @@
 package ileinterdite.util;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JOptionPane;
@@ -53,8 +56,8 @@ public class Utils {
         RED("Rouge", new Color(209, 45, 42), Color.LIGHT_GRAY),
         GREEN("Vert", new Color(65, 138, 71), Color.LIGHT_GRAY),
         BLUE("Bleu", new Color(66, 100, 173), Color.LIGHT_GRAY),
-        WHITE("White", new Color(220, 215, 219), Color.BLACK),
-        BLACK("Black", new Color(9, 18, 22), Color.LIGHT_GRAY),
+        WHITE("Blanc", new Color(220, 215, 219), Color.BLACK),
+        BLACK("Noir", new Color(9, 18, 22), Color.LIGHT_GRAY),
         YELLOW("Jaune", new Color(255, 243, 83), Color.BLACK) ;
 
         private final String label;
@@ -117,5 +120,17 @@ public class Utils {
      */
     public static void showInformation(String message) {
         JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.OK_OPTION);
+    }
+
+    /**
+     * Permet d'initialiser un buffer avec le fichier passer et paametres et retoun un buffer
+     * @param filepath
+     * @throws FileNotFoundException
+     */
+    public static BufferedReader bufferInit(String filepath) throws FileNotFoundException {
+
+        return new BufferedReader(new FileReader(filepath));
+
+
     }
 }

@@ -16,6 +16,12 @@ public class Cell {
         this.adventurers = new ArrayList<>();
 	}
 
+	public Cell(String name) {
+		this.state = Utils.State.NORMAL;
+		this.setName(name);
+		this.adventurers = new ArrayList<>();
+	}
+
 	/**
 	 * Remove the adventurer from the cell
 	 * @param adv The adventurer to remove
@@ -41,6 +47,8 @@ public class Cell {
 	    return adventurers.contains(adv);
     }
 
+    public void spawnAdventurer(int x, int y){}
+
     /**
      * Change the state of the cell
      * @param state The new state to set
@@ -63,6 +71,10 @@ public class Cell {
 
 	public String getName(){
     	return this.name;
+	}
+
+	public Adventurer getAdventurerSpawn(){
+    	return null;
 	}
 
 }

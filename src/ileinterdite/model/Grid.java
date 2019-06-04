@@ -63,6 +63,10 @@ public class Grid {
         return cells[y][x];
     }
 
+	public Cell[][] getCells() {
+		return cells;
+	}
+
 	public void dry(int x, int y){
 		cells[y][x].setState(Utils.State.NORMAL);
 	}

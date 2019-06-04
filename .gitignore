@@ -52,6 +52,9 @@ out/
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
+#zsh
+.attach_pid*
+
 # JIRA plugin
 atlassian-ide-plugin.xml
 
