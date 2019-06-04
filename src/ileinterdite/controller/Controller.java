@@ -3,6 +3,7 @@ import ileinterdite.factory.BoardFactory;
 import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Message;
+import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
@@ -39,7 +40,9 @@ public class Controller implements Observer {
         this.adventurerView = view;
         this.players = (ArrayList<Adventurer>) buildedStuff[0];
         this.grid = new Grid((Cell[][])buildedStuff[1],null);
+        if (!Parameters.DEMOMAP){
         players = randomPLayer(players, nbPlayers);
+        }
 
         this.initBoad();
 
@@ -239,7 +242,7 @@ public class Controller implements Observer {
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
                 if(players.contains(cells[j][i].getAdventurerSpawn())) {
-                    cells[j][i].spawnAdventurer(j, i);
+                    cells[j][i].spawnAdventurer(i, j);
                 }
             }
         }

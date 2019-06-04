@@ -37,12 +37,15 @@ public class BoardFactory {
         if (!Parameters.DEMOMAP) {
             filepath = DEFAULTCELLFILE;
         } else {
-
+            filepath = "res/DEMOMAP.txt";
         }
 
         buildedCells = CellsFactory.cellsFactory(filepath, adventurers, null);
         boardCellList.addAll(Arrays.asList(buildedCells));
-        Collections.shuffle(boardCellList);
+
+        if (!Parameters.DEMOMAP) {
+            Collections.shuffle(boardCellList);
+        }
         // On place les cases "vide"
         for (int i : EMPTYCELLINDEX) {
             boardCellList.add(i, emptyCell);

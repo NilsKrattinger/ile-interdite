@@ -5,6 +5,7 @@ import ileinterdite.model.SpawnCell;
 import ileinterdite.model.Treasure;
 import ileinterdite.model.TreasureCell;
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
 
 import java.io.BufferedReader;
@@ -17,7 +18,8 @@ public class CellsFactory {
 
     public static Cell[] cellsFactory(String filepath, ArrayList<Adventurer> adventurers, Treasure[] treasures) {
         Cell[] cells = new Cell[24];
-        String[][] cellAtributs = new String[24][3];
+        Utils.State cellState = null;
+        String[][] cellAtributs = new String[24][34];
 
         String line;
         try {
@@ -26,6 +28,7 @@ public class CellsFactory {
                 cellAtributs[i][0] = reader.readLine();
                 cellAtributs[i][1] = reader.readLine();
                 cellAtributs[i][2] = reader.readLine();
+                cellAtributs[i][3] = reader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,7 +44,7 @@ public class CellsFactory {
                         adventurer = adventurers.get(j);
                         j++;
                     }
-                    cells[i] = new SpawnCell(adventurers.get(i), cellAtributs[i][1]);
+                    cells[i] = new SpawnCell(adventurer, cellAtributs[i][1]);
                     break;
                 case "TREASURE":
                     cells[i] = new TreasureCell(treasures[i - 4], cellAtributs[i][1]);
@@ -53,6 +56,22 @@ public class CellsFactory {
                     //TODO Implementer Erreur
             }
 
+            if (!Parameters.DEMOMAP) {
+                switch (cellAtributs[i][3]) {
+                    case "NORMAL":
+                        cellState = Utils.State.NORMAL;
+                        break;
+
+                    case "SUNKEN":
+                        cellState = Utils.State.SUNKEN;
+                        break;
+
+                    case "FLOODED":
+                        cellState = Utils.State.FLOODED;
+                        break;
+                }
+                cells[i].setState(cellState);
+            }
         }
         return cells;
     }

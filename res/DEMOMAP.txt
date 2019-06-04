@@ -1,73 +1,97 @@
-NON_EXISTENT
-null
-NON_EXISTENT
-null
-NORMAL
+SIMPLE
 Le Pont Des Abimes
-FLOODED
+
+NORMAL
+SPAWN
 La Porte De Bronze
-NON_EXISTENT
-null
-NON_EXISTENT
-null
-NON_EXISTENT
-null
-NORMAL
+Rouge
+FLOODED
+SIMPLE
 La Caverne Des Ombres
+
 NORMAL
+SPAWN
 La Porte de Fer
+NOIR
 NORMAL
+SPAWN
 La Porte D'or
+Jaune
 NORMAL
+SIMPLE
 Les Falaises de L'oubli
-NON_EXISTENT
-null
+
 NORMAL
+SIMPLE
 Le Palais de Corail
+
 NORMAL
+SPAWN
 La Porte d'Argent
-SUNKEN
+ORANGE
+NORMAL
+SIMPLE
 Les Dunes De L'illusion
-NORMAL
+
+SUNKEN
+SPAWN
 Heliport
+BLEU
 NORMAL
+SPAWN
 La Porte De Cuivre
+VERT
 NORMAL
+SIMPLE
 Le Jardin Des Hurlements
+
 NORMAL
+SIMPLE
 La Foret Pourpre
-FLOODED
+
+NORMAL
+SIMPLE
 Le Lagon Perdu
-SUNKEN
+
+FLOODED
+SIMPLE
 Le Marais Brumeux
-FLOODED
+
+SUNKEN
+SIMPLE
 Observatoire
-SUNKEN
+
+FLOODED
+SIMPLE
 Le Rocher Fantome
-FLOODED
-La Caverne Du Brasier
-NON_EXISTENT
-null
-NORMAL
-Le Temple Du Soleil
+
 SUNKEN
-Le Temple De La Lune
-NORMAL
-Le Palais des Marees
-NORMAL
-Le Val Du Crepuscule
-NON_EXISTENT
-null
-NON_EXISTENT
-null
-NON_EXISTENT
-null
-NORMAL
-La Tour Du Guet
+SIMPLE
+La Caverne Du Brasier
+
 FLOODED
+SIMPLE
+Le Temple Du Soleil
+
+NORMAL
+SIMPLE
+Le Temple De La Lune
+
+SUNKEN
+SIMPLE
+Le Palais des Marees
+
+NORMAL
+SIMPLE
+Le Val Du Crepuscule
+
+NORMAL
+SIMPLE
+La Tour Du Guet
+
+NORMAL
+SIMPLE
 Le Jardin Des Murmures
-NON_EXISTENT
-null
-NON_EXISTENT
-null
+
+FLOODED
 

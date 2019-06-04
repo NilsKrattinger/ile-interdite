@@ -49,6 +49,7 @@ public class Cell {
 
     public void spawnAdventurer(int x, int y){
 
+
 	}
 
     /**
