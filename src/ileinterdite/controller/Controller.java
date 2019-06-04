@@ -180,10 +180,6 @@ public class Controller implements Observer {
             case GET_TREASURE:
                 break;
         }
-
-        if (remainingActions == 0) {
-            nextAdventurer();
-        }
     }
 
     public void drawTreasureCards() {
@@ -243,6 +239,10 @@ public class Controller implements Observer {
             case CANCEL_ACTION:
                 selectedAction = null;
                 break;
+        }
+
+        if (remainingActions == 0 && (!powerEngineer || selectedAction != Action.DRY && selectedAction != null)) {
+            nextAdventurer();
         }
     }
 
