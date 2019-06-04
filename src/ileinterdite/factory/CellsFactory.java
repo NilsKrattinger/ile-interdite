@@ -55,22 +55,20 @@ public class CellsFactory {
                     //TODO Implementer Erreur
             }
 
-            if (!Parameters.DEMOMAP) {
-                switch (cellAttributes[i][3]) {
-                    case "NORMAL":
-                        cellState = Utils.State.NORMAL;
-                        break;
+            switch (cellAttributes[i][3]) {
+                case "NORMAL":
+                    cellState = Utils.State.NORMAL;
+                    break;
 
-                    case "SUNKEN":
-                        cellState = Utils.State.SUNKEN;
-                        break;
+                case "SUNKEN":
+                    cellState = Utils.State.SUNKEN;
+                    break;
 
-                    case "FLOODED":
-                        cellState = Utils.State.FLOODED;
-                        break;
-                }
-                cells[i].setState(cellState);
+                case "FLOODED":
+                    cellState = Utils.State.FLOODED;
+                    break;
             }
+            cells[i].setState(cellState);
         }
         return cells;
     }

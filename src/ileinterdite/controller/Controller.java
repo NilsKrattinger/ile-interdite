@@ -35,11 +35,11 @@ public class Controller implements Observer {
 
 
     public Controller(AdventurerView view, int nbPlayers) {
-        Object[] buildedStuff;
-        buildedStuff = BoardFactory.boardFactory();
+        Object[] builtStuff;
+        builtStuff = BoardFactory.boardFactory();
         this.adventurerView = view;
-        this.players = (ArrayList<Adventurer>) buildedStuff[0];
-        this.grid = new Grid((Cell[][])buildedStuff[1],null);
+        this.players = (ArrayList<Adventurer>) builtStuff[0];
+        this.grid = new Grid((Cell[][])builtStuff[1],null);
         players = randomPlayer(players, nbPlayers);
 
         this.initBoard();
