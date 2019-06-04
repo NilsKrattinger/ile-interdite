@@ -110,7 +110,7 @@ public abstract class Adventurer {
         }
     }
 
-    public void newTrun(){
+    public void newTurn(){
 
     }
 
