@@ -36,6 +36,8 @@ public class Controller implements Observer {
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
 
+    private boolean powerIngineer = false;
+
     public Controller(AdventurerView view, int nbPlayers) {
         this.adventurerView = view;
 
@@ -135,7 +137,6 @@ public class Controller implements Observer {
 
     private boolean validateCellAction(int x, int y) {
         if (x >= 0 && y >= 0 && x < Grid.WIDTH && y < Grid.HEIGHT && isCellAvailable(x, y)) {
-            reduceNbActions();
             return true;
         } else {
             Utils.showInformation("Les coordonnées sont invalides.");
@@ -152,6 +153,8 @@ public class Controller implements Observer {
                     int y = coords.y - 1;
                     if (validateCellAction(x, y)) {
                         movement(x, y);
+                        reduceNbActions();
+                        powerIngineer = false;
                     }
                 }
                 break;
@@ -161,6 +164,14 @@ public class Controller implements Observer {
                     int y = coords.y - 1;
                     if (validateCellAction(x, y)) {
                         dry(x, y);
+                        if (!powerIngineer) {
+                            reduceNbActions();
+                            if (currentAdventurer instanceof Engineer) {
+                                powerIngineer = true;
+                            }
+                        } else {
+                            powerIngineer = false;
+                        }
                     }
                 }
                 break;

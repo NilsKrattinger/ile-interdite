@@ -73,8 +73,8 @@ public class Pilot extends Adventurer {
      * rend le pouvoire utilisable
      */
     @Override
-    public void newTrun() {
-        super.newTrun();
+    public void newTurn() {
+        super.newTurn();
         setPowerAvailable(true);
     }
 
