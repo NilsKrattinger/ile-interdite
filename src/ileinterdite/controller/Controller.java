@@ -6,6 +6,7 @@ import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.*;
 import ileinterdite.test.DemoBoardGenerator;
 import ileinterdite.util.Message;
+import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
@@ -39,7 +40,11 @@ public class Controller implements Observer {
     public Controller(AdventurerView view, int nbPlayers) {
         this.adventurerView = view;
 
-        this.grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null);
+        if (Parameters.DEMOMAP) {
+            this.grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null);
+        } else {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
 
         players = new ArrayList<>();
         players.add(new Diver(grid, 3, 4));
@@ -53,6 +58,9 @@ public class Controller implements Observer {
         while (players.size() > nbPlayers) {
             players.remove(players.size() - 1);
         }
+
+        //TODO Add the pawns placement on cell
+
         nextAdventurer();
     }
 

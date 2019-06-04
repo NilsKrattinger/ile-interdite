@@ -9,6 +9,7 @@ public class Cell {
 
 	private ArrayList<Adventurer> adventurers;
 	private Utils.State state;
+	private String name;
 
 	public Cell() {
 		this.state = Utils.State.NORMAL;
@@ -56,6 +57,12 @@ public class Cell {
         return this.state;
     }
 
+	public void setName(String name){
+    	this.name = name;
+	}
 
+	public String getName(){
+    	return this.name;
+	}
 
 }
