@@ -1,38 +1,73 @@
 NON_EXISTENT
+null
 NON_EXISTENT
+null
 NORMAL
+Le Pont Des Abimes
 FLOODED
+La Porte De Bronze
 NON_EXISTENT
+null
 NON_EXISTENT
+null
 NON_EXISTENT
+null
 NORMAL
+La Caverne Des Ombres
 NORMAL
+La Porte de Fer
 NORMAL
+La Porte D'or
 NORMAL
+Les Falaises de L'oubli
 NON_EXISTENT
+null
 NORMAL
+Le Palais de Corail
 NORMAL
+La Porte d'Argent
 SUNKEN
+Les Dunes De L'illusion
 NORMAL
+Heliport
 NORMAL
+La Porte De Cuivre
 NORMAL
+Le Jardin Des Hurlements
 NORMAL
+La Foret Pourpre
 FLOODED
+Le Lagon Perdu
 SUNKEN
+Le Marais Brumeux
 FLOODED
+Observatoire
 SUNKEN
+Le Rocher Fantome
 FLOODED
+La Caverne Du Brasier
 NON_EXISTENT
+null
 NORMAL
+Le Temple Du Soleil
 SUNKEN
+Le Temple De La Lune
 NORMAL
+Le Palais des Marees
 NORMAL
+Le Val Du Crepuscule
 NON_EXISTENT
+null
 NON_EXISTENT
+null
 NON_EXISTENT
+null
 NORMAL
+La Tour Du Guet
 FLOODED
+Le Jardin Des Murmures
 NON_EXISTENT
+null
 NON_EXISTENT
-
+null
 
