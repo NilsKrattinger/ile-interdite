@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class Controller implements Observer {
 
-	private Grid grid;
+    private Grid grid;
     private Utils.State[][] cellStates;
 
     private ArrayList<Adventurer> players;
@@ -36,8 +36,9 @@ public class Controller implements Observer {
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
 
-    public Controller(AdventurerView view, int nbPlayers) {
+    public Controller(AdventurerView view, GridView gview, int nbPlayers) {
         this.adventurerView = view;
+        this.gridView = gview;
 
         this.grid = new Grid(DemoBoardGenerator.boardBuilder("res/Case.txt"), null);
 
@@ -71,7 +72,7 @@ public class Controller implements Observer {
      */
     public void initMovement(Adventurer adventurer) {
         cellStates = adventurer.getAccessibleCells();
-        adventurerView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
+        gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
     }
 
     /**
@@ -81,7 +82,7 @@ public class Controller implements Observer {
      */
     public void initDryable(Adventurer adventurer) {
         cellStates = adventurer.getDryableCells();
-        adventurerView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
+        gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
     }
 
     /**
@@ -92,7 +93,7 @@ public class Controller implements Observer {
     public boolean isCellAvailable(int x, int y) {
         return cellStates[y][x] == Utils.State.ACCESSIBLE;
     }
-    
+
     /**
      *
      * @param x
@@ -102,7 +103,7 @@ public class Controller implements Observer {
      */
     public void movement(int x, int y){
         this.currentAdventurer.move(x,y);
-        adventurerView.updateAdventurer(currentAdventurer);
+        gridView.updateAdventurer(currentAdventurer);
     }
 
     /**
@@ -112,7 +113,7 @@ public class Controller implements Observer {
      */
     public void dry(int x, int y){
         this.getGrid().dry(x,y);
-        adventurerView.updateDriedCell(x, y);
+        gridView.updateDriedCell(x, y);
     }
 
     /**
@@ -185,22 +186,21 @@ public class Controller implements Observer {
 
     public void nextAdventurer() {
         changeCurrentAdventurer();
-        currentAdventurer.newTurn();
         setNbActions(NB_ACTIONS_PER_TURN);
         selectedAction = null;
     }
 
-	/**
-	 *
-	 * @param nb
-	 */
-	public void setNbActions(int nb) {
+    /**
+     *
+     * @param nb
+     */
+    public void setNbActions(int nb) {
         this.remainingActions = Math.max(nb, NB_ACTIONS_PER_TURN);
-	}
+    }
 
-	public void reduceNbActions() {
-		this.remainingActions--;
-	}
+    public void reduceNbActions() {
+        this.remainingActions--;
+    }
 
     @Override
     public void update(Observable o, Object arg) {

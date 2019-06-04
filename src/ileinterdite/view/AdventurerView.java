@@ -24,17 +24,6 @@ import ileinterdite.util.Utils;
 
 
 public class AdventurerView extends Observable {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-
-
     private final JPanel buttonsPanel;
     private final JPanel centeredPanel;
     private final JFrame window;
@@ -131,56 +120,6 @@ public class AdventurerView extends Observable {
         advName.setText(adventurerName);
     }
 
-    /**
-     * Shows which cells are selectable
-     * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
-     */
-    public void showSelectableCells(Utils.State[][] states, Grid grid, Tuple<Integer, Integer> adventurerCoordinates) {
-
-        System.out.println("Grille actuelle :");
-        System.out.println("  1  2  3  4  5  6");
-        for (int j = 0; j < states.length; j++) {
-            System.out.print(j + 1);
-            for (int i = 0; i < states[j].length; i++) {
-                Utils.State st = grid.getCell(i, j).getState();
-                String color = (states[j][i] == Utils.State.ACCESSIBLE) ? ANSI_GREEN : ((i == adventurerCoordinates.x && j == adventurerCoordinates.y) ? ANSI_YELLOW : ANSI_RED);
-                System.out.print(" " + color + st.toString().charAt(0) + st.toString().charAt(1) + ANSI_RESET);
-            }
-            System.out.println();
-        }
-
-        System.out.println("As = Asséchée, In = Inondée, Co = Coulée");
-        System.out.println(ANSI_RED + "Rouge = Inaccessible" + ANSI_RESET + " ; " + ANSI_GREEN + "Vert = Accessible" + ANSI_RESET + " ; " +
-                ANSI_YELLOW + "Jaune = position de l'aventurier" + ANSI_RESET);
-
-        System.out.println("Ces tuiles sont accessibles :");
-        for (int j = 0; j < states.length; j++) {
-            for (int i = 0; i < states[j].length; i++) {
-                if (states[j][i] == Utils.State.ACCESSIBLE) {
-                    System.out.print("(" + (i + 1) + "," + (j + 1) + ") ");
-                }
-            }
-        }
-
-        System.out.println();
-    }
-
-    /**
-     * Update the position of an adventurer
-     * @param adv The adventurer to update
-     */
-    public void updateAdventurer(Adventurer adv) {
-        if (Parameters.LOGS) {
-            System.out.println("Adventurer moved to (" + (adv.getX() + 1) + ',' + (adv.getY() + 1) + ")");
-        }
-    }
-
-    public void updateDriedCell(int x, int y) {
-        if (Parameters.LOGS) {
-            System.out.println("Cell at (" + (x + 1) + ',' + (y + 1) + ") is now dry.");
-        }
-    }
-
     public void setVisible() {
         this.window.setVisible(true);
     }
@@ -209,6 +148,3 @@ public class AdventurerView extends Observable {
         return endTurnButton;
     }
 }
-
- 
-
