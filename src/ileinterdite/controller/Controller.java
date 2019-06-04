@@ -36,7 +36,7 @@ public class Controller implements Observer {
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
 
-    private boolean powerIngineer = false;
+    private boolean powerEngineer = false;
 
     public Controller(AdventurerView view, int nbPlayers) {
         this.adventurerView = view;
@@ -154,7 +154,7 @@ public class Controller implements Observer {
                     if (validateCellAction(x, y)) {
                         movement(x, y);
                         reduceNbActions();
-                        powerIngineer = false;
+                        powerEngineer = false;
                     }
                 }
                 break;
@@ -164,13 +164,13 @@ public class Controller implements Observer {
                     int y = coords.y - 1;
                     if (validateCellAction(x, y)) {
                         dry(x, y);
-                        if (!powerIngineer) {
+                        if (!powerEngineer) {
                             reduceNbActions();
                             if (currentAdventurer instanceof Engineer) {
-                                powerIngineer = true;
+                                powerEngineer = true;
                             }
                         } else {
-                            powerIngineer = false;
+                            powerEngineer = false;
                         }
                     }
                 }
