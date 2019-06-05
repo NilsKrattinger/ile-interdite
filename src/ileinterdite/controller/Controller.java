@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Controller implements Observer {
+    private ControllerMainMenu controllerMainMenu;
 
     private Grid grid;
     private Utils.State[][] cellStates;
@@ -36,14 +37,16 @@ public class Controller implements Observer {
 
     private boolean powerEngineer = false;
 
-    public Controller(AdventurerView view, GridView gview, int nbPlayers) {
+    public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview, int nbPlayers) {
+        this.controllerMainMenu = cm;
+
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
         this.adventurerView = view;
             this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][])builtStuff[1],null);
-        players = randomPlayer(players, nbPlayers);
+        this.definePLayer(players);
 
         this.initBoard();
 
@@ -57,7 +60,7 @@ public class Controller implements Observer {
         currentAdventurer = players.get(0);
         Pawn currentPawn = currentAdventurer.getPawn();
         adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
-        adventurerView.setText(currentAdventurer.getClass().getSimpleName(), currentAdventurer.getClass().getSimpleName());
+        adventurerView.setText(currentAdventurer.getName(), currentAdventurer.getClass().getSimpleName());
     }
 
     /**
@@ -266,4 +269,16 @@ public class Controller implements Observer {
         }
         return players;
     }
+
+    public ArrayList<Adventurer> definePLayer(ArrayList<Adventurer> players){
+        
+        ArrayList<String> playersName = controllerMainMenu.getPlayersName();
+
+        players = randomPlayer(players, playersName.size());
+        for (int i = 0; i < playersName.size(); i++) {
+            players.get(i).setName(playersName.get(i));
+        }
+        return players;
+    }
+
 }
