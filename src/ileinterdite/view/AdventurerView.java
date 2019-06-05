@@ -3,23 +3,16 @@ package ileinterdite.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.Observable;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+
 import static javax.swing.SwingConstants.CENTER;
 
 import javax.swing.border.MatteBorder;
 
-import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Message;
-import ileinterdite.util.Parameters;
-import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 
 
@@ -118,6 +111,33 @@ public class AdventurerView extends Observable {
         //le titre = nom du joueur
         window.setTitle(playerName);
         advName.setText(adventurerName + " (" + playerName + ")" );
+    }
+
+    public void showAdventurers(ArrayList<Adventurer> adventurers) {
+        JFrame advChoice = new JFrame("Choix aventurier à déplacer");
+        advChoice.setSize(300, 150);
+
+        JPanel main = new JPanel();
+        main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
+
+        final JComboBox<String> advList = new JComboBox<>();
+        for (Adventurer a : adventurers) {
+            advList.addItem(a.getClass().getSimpleName() + " (" + a.getName() + ")");
+        }
+        main.add(advList);
+
+        JButton validate = new JButton("Valider");
+        validate.addActionListener(e -> {
+            Message m = new Message(Utils.Action.CHOOSE_ADVENTURER, advList.getSelectedItem().toString());
+
+            setChanged();
+            notifyObservers(m);
+            advChoice.setVisible(false);
+        });
+        main.add(validate);
+
+        advChoice.add(main);
+        advChoice.setVisible(true);
     }
 
     public void setVisible() {

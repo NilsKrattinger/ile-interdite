@@ -3,6 +3,7 @@ import ileinterdite.factory.BoardFactory;
 import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
+import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.Message;
 import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
@@ -212,8 +213,12 @@ public class Controller implements Observer {
         Message m = (Message) arg;
         switch (m.action) {
             case MOVE:
-                selectedAction = Action.MOVE;
-                initMovement(currentAdventurer);
+                if (currentAdventurer instanceof Navigator) {
+                    adventurerView.showAdventurers(players);
+                } else {
+                    selectedAction = Action.MOVE;
+                    initMovement(currentAdventurer);
+                }
                 break;
             case DRY:
                 selectedAction = Action.DRY;

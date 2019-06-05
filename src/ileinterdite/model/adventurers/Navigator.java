@@ -1,7 +1,6 @@
 package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
-import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
 
 public class Navigator extends Adventurer {
@@ -27,10 +26,5 @@ public class Navigator extends Adventurer {
     @Override
     public Pawn getPawn() {
         return PAWN;
-    }
-
-    @Override
-    public void cellChoiceMoving(Utils.State[][] tab) {
-        super.cellChoiceMoving(tab);
     }
 }
