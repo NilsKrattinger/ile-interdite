@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Controller implements Observer {
+    private ControllerMainMenu controllerMainMenu;
 
     private Grid grid;
     private Utils.State[][] cellStates;
@@ -43,7 +44,7 @@ public class Controller implements Observer {
             this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][])builtStuff[1],null);
-        players = randomPlayer(players, nbPlayers);
+        this.definePLayer(players);
 
         this.initBoard();
 
@@ -266,4 +267,16 @@ public class Controller implements Observer {
         }
         return players;
     }
+
+    public ArrayList<Adventurer> definePLayer(ArrayList<Adventurer> players){
+        
+        ArrayList<String> playersName = controllerMainMenu.getPlayersName();
+
+        players = randomPlayer(players, playersName.size());
+        for (int i = 0; i < playersName.size(); i++) {
+            players.get(i).setName(playersName.get(i));
+        }
+        return players;
+    }
+
 }
