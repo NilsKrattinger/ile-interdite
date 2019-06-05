@@ -1,5 +1,7 @@
 package ileinterdite.view;
 
+import ileinterdite.util.Utils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,7 +22,7 @@ public class MainMenuView extends Observable {
     public MainMenuView() {
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(350, 200);
+        window.setSize(350, 250);
         JPanel mainPanel = new JPanel(new BorderLayout());
         this.window.add(mainPanel);
 
@@ -54,14 +56,23 @@ public class MainMenuView extends Observable {
 
         JButton validateButton = new JButton("Démarrer la partie");
         validateButton.addActionListener(actionEvent -> {
+            boolean canStart = true;
+
             ArrayList<String> playerNames = new ArrayList<>();
             for (JTextField field : playerNameFields) {
-                playerNames.add(field.getText());
+                String playerName = field.getText();
+                playerNames.add(playerName);
+
+                if (playerName.isEmpty()) { canStart = false; }
             }
 
-            setChanged();
-            notifyObservers(playerNames);
-            window.setVisible(false);
+            if (canStart) {
+                setChanged();
+                notifyObservers(playerNames);
+                window.setVisible(false);
+            } else {
+                Utils.showInformation("Les noms de joueurs ne peuvent pas être vides !");
+            }
         });
         mainPanel.add(validateButton, BorderLayout.SOUTH);
     }
