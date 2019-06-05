@@ -5,7 +5,6 @@ import ileinterdite.model.SpawnCell;
 import ileinterdite.model.Treasure;
 import ileinterdite.model.TreasureCell;
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
 
 import java.io.BufferedReader;
@@ -56,16 +55,15 @@ public class CellsFactory {
             }
 
             switch (cellAttributes[i][3]) {
-                case "NORMAL":
-                    cellState = Utils.State.NORMAL;
-                    break;
-
                 case "SUNKEN":
                     cellState = Utils.State.SUNKEN;
                     break;
 
                 case "FLOODED":
                     cellState = Utils.State.FLOODED;
+                    break;
+                default:
+                    cellState = Utils.State.NORMAL;
                     break;
             }
             cells[i].setState(cellState);
