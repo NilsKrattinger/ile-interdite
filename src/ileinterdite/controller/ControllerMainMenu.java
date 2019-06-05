@@ -24,5 +24,8 @@ public class ControllerMainMenu implements Observer {
         Controller c = new Controller(this, adventurerView, gridView, 4);
         adventurerView.addObserver(c);
         adventurerView.setVisible();
+
+        gridView.addObserver(c);
+        gridView.setVisible();
     }
 }

@@ -1,12 +1,15 @@
 package ileinterdite.view;
 
+import ileinterdite.components.CellComponent;
+import ileinterdite.model.Cell;
 import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 
-import java.util.Collection;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Observable;
 
 public class GridView extends Observable {
@@ -20,48 +23,39 @@ public class GridView extends Observable {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
-    public void showActions() {
-        // TODO - implement ileinterdite.view.GridView.showActions
-        throw new UnsupportedOperationException();
+    private static JFrame window;
+    private static JPanel gridPanel;
+    private static CellComponent[][] cellComponents;
+
+    public GridView() {
+        window = new JFrame("Grid");
+        window.setSize(500, 500);
+
+        gridPanel = new JPanel(new GridBagLayout());
+        window.add(gridPanel);
     }
 
-    /**
-     *
-     * @param tab
-     */
-    public void showMovements(Collection<Utils.State> tab) {
-        // TODO - implement ileinterdite.view.GridView.showMovements
-        throw new UnsupportedOperationException();
+    public void setVisible() {
+        window.setVisible(true);
     }
 
-    /**
-     *
-     * @param x
-     * @param y
-     * @param adv
-     */
-    public void updateAdvPosition(int x, int y, Adventurer adv) {
-        // TODO - implement ileinterdite.view.GridView.updateAdvPosition
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     *
-     * @param tab
-     */
-    public void showDryOptions(Collection<Utils.State> tab) {
-        // TODO - implement ileinterdite.view.GridView.showDryOptions
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     *
-     * @param x
-     * @param y
-     */
-    public void updateDriedCells(int x, int y) {
-        // TODO - implement ileinterdite.view.GridView.updateDriedCells
-        throw new UnsupportedOperationException();
+    public void showGrid(Cell[][] cells) {
+        cellComponents = new CellComponent[cells.length][cells.length];
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 2;
+        c.weighty = 2;
+        c.fill = GridBagConstraints.BOTH;
+        for (int j = 0; j < cells.length; j++) {
+            for (int i = 0; i < cells[j].length; i++) {
+                c.gridx = i;
+                c.gridy = j;
+                Cell cell = cells[j][i];
+                CellComponent comp = new CellComponent(cell.getName(), cell.getState());
+                gridPanel.add(comp, c);
+                cellComponents[j][i] = comp;
+            }
+        }
+        gridPanel.updateUI();
     }
 
     /**
@@ -108,10 +102,8 @@ public class GridView extends Observable {
         }
     }
 
-    public void updateDriedCell(int x, int y) {
-        if (Parameters.LOGS) {
-            System.out.println("Cell at (" + (x + 1) + ',' + (y + 1) + ") is now dry.");
-        }
+    public void updateCell(int x, int y, Utils.State state) {
+        cellComponents[y][x].setState(state);
     }
 
 }

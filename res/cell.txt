@@ -1,5 +1,5 @@
 SPAWN
-La Porte de Fer
+La Porte De Fer
 Violet
 
 SPAWN
@@ -7,15 +7,15 @@ La Porte de Bronze
 ROUGE
 
 SPAWN
-La Porte de Cuivre
+La Porte De Cuivre
 VERT
 
 SPAWN
-La Porte d’Argent
+La Porte d'Argent
 ORANGE
 
 SPAWN
-La Porte d’Or
+La Porte d'Or
 JAUNE
 
 SPAWN
@@ -23,27 +23,27 @@ Heliport
 BLEU
 
 SIMPLE
-Les Falaises de l’Oubli
+Les Falaises De L'Oubli
 
 
 SIMPLE
-Le Palais de Corail
+Le Palais De Corail
 
 
 SIMPLE
-Le Pont des Abimes
+Le Pont Des Abimes
 
 
 SIMPLE
-Les Dunes de l’Illusion
+Les Dunes De L'Illusion
 
 
 SIMPLE
-La Caverne des Ombres
+La Caverne Des Ombres
 
 
 SIMPLE
-Le Jardin des Hurlements
+Le Jardin Des Hurlements
 
 
 SIMPLE
@@ -67,30 +67,30 @@ Le Rocher Fantome
 
 
 SIMPLE
-La Caverne du Brasier
+La Caverne Du Brasier
 
 
 SIMPLE
-Le Temple du Soleil
+Le Temple Du Soleil
 
 
 SIMPLE
-Le Temple de La Lune
+Le Temple De La Lune
 
 
 SIMPLE
-Le Palais des Marees
+Le Palais Des Marees
 
 
 SIMPLE
-Le Val du Crepuscule
+Le Val Du Crepuscule
 
 
 SIMPLE
-La Tour du Guet
+La Tour Du Guet
 
 
 SIMPLE
-Le Jardin des Murmures
+Le Jardin Des Murmures
 
 

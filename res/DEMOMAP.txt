@@ -11,19 +11,19 @@ La Caverne Des Ombres
 
 NORMAL
 SPAWN
-La Porte de Fer
+La Porte De Fer
 NOIR
 NORMAL
 SPAWN
-La Porte D'or
+La Porte d'Or
 Jaune
 NORMAL
 SIMPLE
-Les Falaises de L'oubli
+Les Falaises de L'Oubli
 
 NORMAL
 SIMPLE
-Le Palais de Corail
+Le Palais De Corail
 
 NORMAL
 SPAWN
@@ -31,7 +31,7 @@ La Porte d'Argent
 BLANC
 NORMAL
 SIMPLE
-Les Dunes De L'illusion
+Les Dunes De L'Illusion
 
 SUNKEN
 SPAWN
@@ -79,7 +79,7 @@ Le Temple De La Lune
 
 SUNKEN
 SIMPLE
-Le Palais des Marees
+Le Palais Des Marees
 
 NORMAL
 SIMPLE

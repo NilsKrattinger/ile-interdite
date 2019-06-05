@@ -50,6 +50,7 @@ public class Controller implements Observer {
         this.definePLayer(players);
 
         this.initBoard();
+        this.gridView.showGrid(this.grid.getCells());
 
         //TODO Add the pawns placement on cell
 
@@ -115,7 +116,7 @@ public class Controller implements Observer {
      */
     public void dry(int x, int y){
         this.getGrid().dry(x,y);
-        gridView.updateDriedCell(x, y);
+        gridView.updateCell(x, y, Utils.State.NORMAL);
     }
 
     /**
@@ -283,6 +284,7 @@ public class Controller implements Observer {
         for (Adventurer adventurer : players) {
             adventurer.setGrid(this.grid);
         }
+
         Cell[][] cells = this.getGrid().getCells();
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
