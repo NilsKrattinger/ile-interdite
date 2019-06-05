@@ -5,7 +5,6 @@ import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.Message;
-import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
@@ -24,6 +23,7 @@ public class Controller implements Observer {
 
     private ArrayList<Adventurer> players;
     private Adventurer currentAdventurer;
+    private Adventurer navigatorChoice;
 
     private Collection<Deck> decks;
     private Collection<DiscardPile> discardPiles;
@@ -101,8 +101,9 @@ public class Controller implements Observer {
      * @param y deplacement de l'avanturier en X,Y et actualisation de la vue
      */
     public void movement(int x, int y){
-        this.currentAdventurer.move(x,y);
-        gridView.updateAdventurer(currentAdventurer);
+        Adventurer adv = (this.navigatorChoice == null) ? this.currentAdventurer : this.navigatorChoice;
+        adv.move(x,y);
+        gridView.updateAdventurer(adv);
     }
 
     /**
@@ -208,10 +209,33 @@ public class Controller implements Observer {
         this.remainingActions--;
     }
 
+    /**
+     * Get the adventurer with the given class name.
+     * @return Null if not found
+     */
+    private Adventurer findAdventurerByClassName(String name) {
+        Adventurer adv;
+        int i = 0;
+        do {
+            adv = players.get(i);
+            i++;
+        } while (i < players.size() && !name.equalsIgnoreCase(adv.getClassName()));
+
+        return (name.equalsIgnoreCase(adv.getClassName())) ? adv : null;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         Message m = (Message) arg;
         switch (m.action) {
+            case NAVIGATOR_CHOICE:
+                selectedAction = Action.MOVE;
+                // The message contains a string with the format "ClassName (PlayerName)"
+                navigatorChoice = findAdventurerByClassName(m.message.substring(0, m.message.indexOf(' ')));
+                if (navigatorChoice != null) {
+                    initMovement(navigatorChoice);
+                }
+                break;
             case MOVE:
                 if (currentAdventurer instanceof Navigator) {
                     adventurerView.showAdventurers(players);
@@ -233,6 +257,7 @@ public class Controller implements Observer {
             case VALIDATE_ACTION:
                 if (selectedAction != null) {
                     handleAction(m.message);
+                    navigatorChoice = null;
                 }
                 selectedAction = null;
                 break;

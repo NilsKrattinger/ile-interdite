@@ -128,7 +128,7 @@ public class AdventurerView extends Observable {
 
         JButton validate = new JButton("Valider");
         validate.addActionListener(e -> {
-            Message m = new Message(Utils.Action.CHOOSE_ADVENTURER, advList.getSelectedItem().toString());
+            Message m = new Message(Utils.Action.NAVIGATOR_CHOICE, advList.getSelectedItem().toString());
 
             setChanged();
             notifyObservers(m);
