@@ -37,7 +37,9 @@ public class Controller implements Observer {
 
     private boolean powerEngineer = false;
 
-    public Controller(AdventurerView view, GridView gview, int nbPlayers) {
+    public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview, int nbPlayers) {
+        this.controllerMainMenu = cm;
+
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
         this.adventurerView = view;
@@ -58,7 +60,7 @@ public class Controller implements Observer {
         currentAdventurer = players.get(0);
         Pawn currentPawn = currentAdventurer.getPawn();
         adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
-        adventurerView.setText(currentAdventurer.getClass().getName(), currentAdventurer.getClass().getSimpleName());
+        adventurerView.setText(currentAdventurer.getName(), currentAdventurer.getClass().getSimpleName());
     }
 
     /**

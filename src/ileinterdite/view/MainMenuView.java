@@ -30,20 +30,14 @@ public class MainMenuView extends Observable {
         nbPlayersTextField.setEnabled(false);
 
         JButton minus = new JButton("-");
-        minus.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                nbPlayersTextField.setText(Integer.toString(Math.max(MIN_PLAYERS, Integer.valueOf(nbPlayersTextField.getText()) - 1)));
-                updatePlayerNames();
-            }
+        minus.addActionListener(actionEvent -> {
+            nbPlayersTextField.setText(Integer.toString(Math.max(MIN_PLAYERS, Integer.valueOf(nbPlayersTextField.getText()) - 1)));
+            updatePlayerNames();
         });
         JButton plus = new JButton("+");
-        plus.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                nbPlayersTextField.setText(Integer.toString(Math.min(MAX_PLAYERS, Integer.valueOf(nbPlayersTextField.getText()) + 1)));
-                updatePlayerNames();
-            }
+        plus.addActionListener(actionEvent -> {
+            nbPlayersTextField.setText(Integer.toString(Math.min(MAX_PLAYERS, Integer.valueOf(nbPlayersTextField.getText()) + 1)));
+            updatePlayerNames();
         });
 
         nbPlayersPanel.add(minus);
@@ -59,17 +53,15 @@ public class MainMenuView extends Observable {
         updatePlayerNames();
 
         JButton validateButton = new JButton("Démarrer la partie");
-        validateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                ArrayList<String> playerNames = new ArrayList<>();
-                for (JTextField field : playerNameFields) {
-                    playerNames.add(field.getText());
-                }
-
-                setChanged();
-                notifyObservers(playerNames);
+        validateButton.addActionListener(actionEvent -> {
+            ArrayList<String> playerNames = new ArrayList<>();
+            for (JTextField field : playerNameFields) {
+                playerNames.add(field.getText());
             }
+
+            setChanged();
+            notifyObservers(playerNames);
+            window.setVisible(false);
         });
         mainPanel.add(validateButton, BorderLayout.SOUTH);
     }
@@ -104,10 +96,5 @@ public class MainMenuView extends Observable {
 
     public void setVisible() {
         this.window.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        MainMenuView v = new MainMenuView();
-        v.setVisible();
     }
 }
