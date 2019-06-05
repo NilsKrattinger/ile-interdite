@@ -4,7 +4,6 @@ import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.util.Message;
-import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
@@ -33,6 +32,9 @@ public class Controller implements Observer {
     private Action selectedAction;
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
+
+    //Rising scale
+    private int risingScale = 1;
 
     private boolean powerEngineer = false;
 
@@ -265,5 +267,29 @@ public class Controller implements Observer {
             players.remove(players.size() - 1);
         }
         return players;
+    }
+
+    private void increaseRisingScale() {
+        setRisingScale(getRisingScale() + 1);
+    }
+
+    private int getFloodedCardToPick() {
+        if (getRisingScale() <= 2) {
+            return 2;
+        } else if (getRisingScale() <= 5) {
+            return 3;
+        } else if (getRisingScale() <= 7) {
+            return 4;
+        } else if (getRisingScale() <= 9) {
+            return 5;
+        }
+    }
+
+    public int getRisingScale() {
+        return risingScale;
+    }
+
+    public void setRisingScale(int risingScale) {
+        this.risingScale = risingScale;
     }
 }
