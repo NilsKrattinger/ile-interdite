@@ -1,4 +1,4 @@
-package ileinterdite.test;
+/*package ileinterdite.test;
 
 import ileinterdite.model.Cell;
 import ileinterdite.model.adventurers.Adventurer;
@@ -27,3 +27,4 @@ public class CellTester {
         Assert.assertEquals(Utils.State.SUNKEN, cell.getState());
     }
 }
+*/
