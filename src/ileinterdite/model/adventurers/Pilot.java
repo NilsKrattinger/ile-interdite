@@ -7,6 +7,8 @@ import ileinterdite.util.Utils.Pawn;
 public class Pilot extends Adventurer {
 
     public static final Pawn PAWN = Pawn.BLUE;
+    public static final String CLASS_NAME = "Pilote";
+
     private boolean powerAvailable = true;
 
     public Pilot() {
@@ -76,6 +78,11 @@ public class Pilot extends Adventurer {
     public void newTurn() {
         super.newTurn();
         setPowerAvailable(true);
+    }
+
+    @Override
+    public String getClassName() {
+        return CLASS_NAME;
     }
 
     public boolean isPowerAvailable() {

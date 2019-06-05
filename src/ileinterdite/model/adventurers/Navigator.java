@@ -6,6 +6,7 @@ import ileinterdite.util.Utils.Pawn;
 public class Navigator extends Adventurer {
 
     public static final Pawn PAWN = Pawn.YELLOW;
+    public static final String CLASS_NAME = "Navigateur";
 
     public Navigator() {
         super();
@@ -26,5 +27,10 @@ public class Navigator extends Adventurer {
     @Override
     public Pawn getPawn() {
         return PAWN;
+    }
+
+    @Override
+    public String getClassName() {
+        return CLASS_NAME;
     }
 }

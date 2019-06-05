@@ -122,7 +122,7 @@ public class AdventurerView extends Observable {
 
         final JComboBox<String> advList = new JComboBox<>();
         for (Adventurer a : adventurers) {
-            advList.addItem(a.getClass().getSimpleName() + " (" + a.getName() + ")");
+            advList.addItem(a.getClassName() + " (" + a.getName() + ")");
         }
         main.add(advList);
 
