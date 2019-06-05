@@ -58,7 +58,7 @@ public class Controller implements Observer {
         currentAdventurer = players.get(0);
         Pawn currentPawn = currentAdventurer.getPawn();
         adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
-        adventurerView.setText(currentAdventurer.getClass().getSimpleName(), currentAdventurer.getClass().getSimpleName());
+        adventurerView.setText(currentAdventurer.getClass().getName(), currentAdventurer.getClass().getSimpleName());
     }
 
     /**

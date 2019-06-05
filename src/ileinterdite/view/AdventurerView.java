@@ -117,7 +117,7 @@ public class AdventurerView extends Observable {
     public void setText(String playerName, String adventurerName) {
         //le titre = nom du joueur
         window.setTitle(playerName);
-        advName.setText(adventurerName);
+        advName.setText(adventurerName + "(" + playerName + ")" );
     }
 
     public void setVisible() {
