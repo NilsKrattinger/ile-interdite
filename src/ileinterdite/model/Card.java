@@ -2,7 +2,13 @@ package ileinterdite.model;
 
 public class Card {
 
-	Grid board;
+	private String cellName;
+	private Grid board;
 
+
+	public Card(String cellName, Grid board) {
+		this.cellName = cellName;
+		this.board = board;
+	}
 
 }
