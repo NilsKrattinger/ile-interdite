@@ -48,6 +48,7 @@ public class Controller implements Observer {
         this.grid = new Grid((Cell[][])builtStuff[1],null);
         this.definePLayer(players);
 
+
         this.initBoard();
 
         //TODO Add the pawns placement on cell
