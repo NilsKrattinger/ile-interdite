@@ -7,6 +7,7 @@ import ileinterdite.util.Utils.Pawn;
 public class Diver extends Adventurer {
 
     public static final Pawn PAWN = Pawn.BLACK;
+    public static final String CLASS_NAME = "Plongeur";
 
     public Diver() {
         super();
@@ -57,6 +58,11 @@ public class Diver extends Adventurer {
                 treatBoard(x, y + 1, tab);
             }
         }
+    }
+
+    @Override
+    public String getClassName() {
+        return CLASS_NAME;
     }
 
 }
