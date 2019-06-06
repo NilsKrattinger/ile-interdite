@@ -52,7 +52,7 @@ public class Controller implements IObserver<Message> {
             this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][])builtStuff[1],null);
-        this.definePLayer(players);
+        this.definePlayer(players);
 
         this.initBoard();
         this.gridView.showGrid(this.grid.getCells());
@@ -308,7 +308,7 @@ public class Controller implements IObserver<Message> {
         return players;
     }
 
-    public ArrayList<Adventurer> definePLayer(ArrayList<Adventurer> players){
+    public ArrayList<Adventurer> definePlayer(ArrayList<Adventurer> players){
         
         ArrayList<String> playersName = controllerMainMenu.getPlayersName();
 
@@ -318,5 +318,4 @@ public class Controller implements IObserver<Message> {
         }
         return players;
     }
-
 }
