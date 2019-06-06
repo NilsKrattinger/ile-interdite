@@ -2,6 +2,7 @@ package ileinterdite.controller;
 
 import ileinterdite.factory.BoardFactory;
 import ileinterdite.factory.DeckFactory;
+import ileinterdite.factory.DiscardPileFactory;
 import ileinterdite.model.Cell;
 import ileinterdite.model.Deck;
 import ileinterdite.model.DiscardPile;
@@ -289,9 +290,14 @@ public class Controller implements Observer {
      */
     private void initCard(Grid grid) {
         Deck deckTmp;
+        DiscardPile discardPileTmp;
         this.decks = new HashMap<>();
         deckTmp = DeckFactory.deckFacoty(Utils.CardType.Flood,grid);
         decks.put(deckTmp.getCardType(),deckTmp);
+
+        this.discardPiles = new HashMap<>();
+        discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Flood);
+        discardPiles.put(discardPileTmp.getCardType(),discardPileTmp);
 
 
         //TODO IMPLEMENT TREASURE CARD
