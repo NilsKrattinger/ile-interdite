@@ -1,14 +1,15 @@
 package ileinterdite.components;
 
-import ileinterdite.util.*;
+import ileinterdite.util.IObservable;
+import ileinterdite.util.IObserver;
+import ileinterdite.util.Tuple;
+import ileinterdite.util.Utils;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -33,17 +34,17 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
         this.cellState = state;
         if (path != null) {
             path = path.replaceAll("[\\s']", "");
-            try {
-                path = "res/images/tuiles/" + path;
-                image = ImageIO.read(new File(path + ".png"));
-                floodedImage = ImageIO.read(new File(path + "_Inonde.png"));
+            path = "tuiles/" + path;
+            image = Utils.loadImage(path + ".png");
+            if (image != null) {
                 translucentImage = Utils.deepCopy(image);
-                translucentFloodedImage = Utils.deepCopy(floodedImage);
                 Utils.setOpacity(translucentImage, 100);
+            }
+
+            floodedImage = Utils.loadImage(path + "_Inonde.png");
+            if (floodedImage != null) {
+                translucentFloodedImage = Utils.deepCopy(floodedImage);
                 Utils.setOpacity(translucentFloodedImage, 100);
-            } catch (IOException ex) {
-                System.out.println(path);
-                ex.printStackTrace();
             }
         }
 

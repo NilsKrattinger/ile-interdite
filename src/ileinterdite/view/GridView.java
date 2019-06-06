@@ -7,6 +7,7 @@ import ileinterdite.util.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, Integer>> {
@@ -37,13 +38,17 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
         c.weightx = 2;
         c.weighty = 2;
         c.fill = GridBagConstraints.BOTH;
+
         for (int j = 0; j < cells.length; j++) {
             for (int i = 0; i < cells[j].length; i++) {
+                Cell cell = cells[j][i];
+
+                CellComponent comp = new CellComponent(cell.getName(), cell.getState(), i + 1, j + 1);
+
                 c.gridx = i;
                 c.gridy = j;
-                Cell cell = cells[j][i];
-                CellComponent comp = new CellComponent(cell.getName(), cell.getState(), i + 1, j + 1);
                 gridPanel.add(comp, c);
+
                 comp.addObserver(this);
                 cellComponents[j][i] = comp;
             }

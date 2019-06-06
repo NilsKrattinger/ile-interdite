@@ -7,14 +7,13 @@ package ileinterdite.util;
 
 import ileinterdite.model.adventurers.Adventurer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -135,6 +134,25 @@ public class Utils {
 
         return new BufferedReader(new FileReader(filepath));
 
+    }
+
+    /**
+     * Loads an image from path
+     * @param path The path where the image is located, without the res/images/ at the beginning of the path
+     * @return A BufferedImage containing the loaded image
+     */
+    public static BufferedImage loadImage(String path) {
+        path = "res/images/" + path;
+        try {
+            return ImageIO.read(new File(path));
+        } catch (IOException ex) {
+            if (Parameters.LOGS) {
+                System.err.println("File " + path + " could not be opened. More information below.");
+                ex.printStackTrace();
+            }
+        }
+        
+        return null;
     }
 
     /**
