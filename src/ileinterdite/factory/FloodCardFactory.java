@@ -10,7 +10,7 @@ import java.util.Stack;
 
 public class FloodCardFactory {
 
-    public Stack<Card> floodCardFactory(Grid grid) {
+    public static Stack<Card> floodCardFactory(Grid grid) {
         Cell[][] cells = new Cell[Grid.HEIGHT][Grid.WIDTH];
         Stack<Card> cards = new Stack<>();
 
