@@ -137,6 +137,9 @@ public class Utils {
 
     }
 
+    /**
+     * Copies a BufferedImage and returns the copy
+     */
     public static BufferedImage deepCopy(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -144,6 +147,11 @@ public class Utils {
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
+    /**
+     * Changes the opacity of an image
+     * @param img The image to change
+     * @param opacity The opacity to set, from 0 (0%) to 255 (100%)
+     */
     public static void setOpacity(BufferedImage img, int opacity) {
         WritableRaster raster = img.getRaster();
         for (int i = 0; i < raster.getWidth(); i++) {
