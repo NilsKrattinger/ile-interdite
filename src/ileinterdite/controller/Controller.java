@@ -1,21 +1,26 @@
 package ileinterdite.controller;
+
 import ileinterdite.factory.BoardFactory;
-import ileinterdite.model.*;
+import ileinterdite.model.Cell;
+import ileinterdite.model.Deck;
+import ileinterdite.model.DiscardPile;
+import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
-import ileinterdite.util.Message;
-import ileinterdite.util.Tuple;
-import ileinterdite.util.Utils;
+import ileinterdite.util.*;
 import ileinterdite.util.Utils.Action;
 import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Controller implements Observer {
+public class Controller implements IObserver<Message> {
     private ControllerMainMenu controllerMainMenu;
 
     private Grid grid;
@@ -226,9 +231,9 @@ public class Controller implements Observer {
         return (name.equalsIgnoreCase(adv.getClassName())) ? adv : null;
     }
 
+
     @Override
-    public void update(Observable o, Object arg) {
-        Message m = (Message) arg;
+    public void update(IObservable<Message> o, Message m) {
         switch (m.action) {
             case NAVIGATOR_CHOICE:
                 selectedAction = Action.MOVE;

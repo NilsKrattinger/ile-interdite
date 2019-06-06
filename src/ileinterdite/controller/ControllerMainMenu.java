@@ -1,23 +1,23 @@
 package ileinterdite.controller;
 
+import ileinterdite.util.IObservable;
+import ileinterdite.util.IObserver;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-public class ControllerMainMenu implements Observer {
+public class ControllerMainMenu implements IObserver<ArrayList<String>> {
 
-    ArrayList<String> playerName = new ArrayList<>();
+    private ArrayList<String> playerName = new ArrayList<>();
 
     public ArrayList<String> getPlayersName() {
         return playerName;
     }
 
     @Override
-    public void update(Observable observable, Object o) {
-        playerName = (ArrayList<String>) o;
+    public void update(IObservable<ArrayList<String>> o, ArrayList<String> message) {
+        playerName = message;
 
         AdventurerView adventurerView = new AdventurerView();
         GridView gridView = new GridView();

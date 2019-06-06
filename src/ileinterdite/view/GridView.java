@@ -2,32 +2,24 @@ package ileinterdite.view;
 
 import ileinterdite.components.CellComponent;
 import ileinterdite.model.Cell;
-import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.util.Parameters;
-import ileinterdite.util.Tuple;
-import ileinterdite.util.Utils;
+import ileinterdite.util.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GridView extends Observable {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+public class GridView implements IObservable<Message> {
+    // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
+    private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
-    private static JFrame window;
-    private static JPanel gridPanel;
-    private static CellComponent[][] cellComponents;
+    private JFrame window;
+    private JPanel gridPanel;
+    private CellComponent[][] cellComponents;
 
     public GridView() {
+        observers = new CopyOnWriteArrayList<>();
+
         window = new JFrame("Grid");
         window.setSize(500, 500);
 
@@ -106,4 +98,21 @@ public class GridView extends Observable {
         cellComponents[y][x].setState(state);
     }
 
+
+    @Override
+    public void addObserver(IObserver<Message> o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(IObserver<Message> o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notifyObservers(Message message) {
+        for (IObserver<Message> o : observers) {
+            o.update(this, message);
+        }
+    }
 }

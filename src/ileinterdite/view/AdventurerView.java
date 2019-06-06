@@ -1,22 +1,24 @@
 package ileinterdite.view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.Observable;
-import javax.swing.*;
-
-import static javax.swing.SwingConstants.CENTER;
-
-import javax.swing.border.MatteBorder;
-
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.IObservable;
+import ileinterdite.util.IObserver;
 import ileinterdite.util.Message;
 import ileinterdite.util.Utils;
 
+import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class AdventurerView extends Observable {
+import static javax.swing.SwingConstants.CENTER;
+
+
+public class AdventurerView implements IObservable<Message> {
+    // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
+    private final CopyOnWriteArrayList<IObserver<Message>> observers;
+
     private final JPanel buttonsPanel;
     private final JPanel centeredPanel;
     private final JFrame window;
@@ -30,6 +32,7 @@ public class AdventurerView extends Observable {
     private JTextField position;
 
     public AdventurerView() {
+        observers = new CopyOnWriteArrayList<>();
 
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,12 +70,10 @@ public class AdventurerView extends Observable {
 
         this.moveButton = new JButton("Bouger") ;
         moveButton.addActionListener(e -> {
-            setChanged();
             notifyObservers(new Message(Utils.Action.MOVE));
         });
         this.dryButton = new JButton( "Assecher");
         dryButton.addActionListener(e -> {
-            setChanged();
             notifyObservers(new Message(Utils.Action.DRY));
         });
         this.validateCellButton = new JButton("Valider tuile");
@@ -83,14 +84,12 @@ public class AdventurerView extends Observable {
                 position.grabFocus();
             } else {
                 position.setBorder(null);
-                setChanged();
                 notifyObservers(new Message(Utils.Action.VALIDATE_ACTION, pos));
                 position.setText("");
             }
         });
         this.endTurnButton = new JButton("Terminer Tour");
         endTurnButton.addActionListener(e -> {
-            setChanged();
             notifyObservers(new Message(Utils.Action.END_TURN));
         });
 
@@ -130,7 +129,6 @@ public class AdventurerView extends Observable {
         validate.addActionListener(e -> {
             Message m = new Message(Utils.Action.NAVIGATOR_CHOICE, advList.getSelectedItem().toString());
 
-            setChanged();
             notifyObservers(m);
             advChoice.setVisible(false);
         });
@@ -166,5 +164,22 @@ public class AdventurerView extends Observable {
 
     public JButton getEndTurnButton() {
         return endTurnButton;
+    }
+
+    @Override
+    public void addObserver(IObserver<Message> o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(IObserver<Message> o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notifyObservers(Message message) {
+        for (IObserver<Message> o : observers) {
+            o.update(this, message);
+        }
     }
 }
