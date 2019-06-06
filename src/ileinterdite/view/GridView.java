@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GridView implements IObservable<Message> {
+public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, Integer>> {
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
     private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
@@ -42,8 +42,9 @@ public class GridView implements IObservable<Message> {
                 c.gridx = i;
                 c.gridy = j;
                 Cell cell = cells[j][i];
-                CellComponent comp = new CellComponent(cell.getName(), cell.getState());
+                CellComponent comp = new CellComponent(cell.getName(), cell.getState(), i + 1, j + 1);
                 gridPanel.add(comp, c);
+                comp.addObserver(this);
                 cellComponents[j][i] = comp;
             }
         }
@@ -54,34 +55,12 @@ public class GridView implements IObservable<Message> {
      * Shows which cells are selectable
      * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
      */
-    public void showSelectableCells(Utils.State[][] states, Grid grid, Tuple<Integer, Integer> adventurerCoordinates) {
-
-        System.out.println("Grille actuelle :");
-        System.out.println("  1  2  3  4  5  6");
-        for (int j = 0; j < states.length; j++) {
-            System.out.print(j + 1);
-            for (int i = 0; i < states[j].length; i++) {
-                Utils.State st = grid.getCell(i, j).getState();
-                String color = (states[j][i] == Utils.State.ACCESSIBLE) ? ANSI_GREEN : ((i == adventurerCoordinates.x && j == adventurerCoordinates.y) ? ANSI_YELLOW : ANSI_RED);
-                System.out.print(" " + color + st.toString().charAt(0) + st.toString().charAt(1) + ANSI_RESET);
-            }
-            System.out.println();
-        }
-
-        System.out.println("As = Asséchée, In = Inondée, Co = Coulée");
-        System.out.println(ANSI_RED + "Rouge = Inaccessible" + ANSI_RESET + " ; " + ANSI_GREEN + "Vert = Accessible" + ANSI_RESET + " ; " +
-                ANSI_YELLOW + "Jaune = position de l'aventurier" + ANSI_RESET);
-
-        System.out.println("Ces tuiles sont accessibles :");
+    public void showSelectableCells(Utils.State[][] states) {
         for (int j = 0; j < states.length; j++) {
             for (int i = 0; i < states[j].length; i++) {
-                if (states[j][i] == Utils.State.ACCESSIBLE) {
-                    System.out.print("(" + (i + 1) + "," + (j + 1) + ") ");
-                }
+                cellComponents[j][i].setAccessible(states[j][i]);
             }
         }
-
-        System.out.println();
     }
 
     /**
@@ -92,12 +71,25 @@ public class GridView implements IObservable<Message> {
         if (Parameters.LOGS) {
             System.out.println("Adventurer moved to (" + (adv.getX() + 1) + ',' + (adv.getY() + 1) + ")");
         }
+        resetCells();
     }
 
     public void updateCell(int x, int y, Utils.State state) {
         cellComponents[y][x].setState(state);
+        resetCells();
     }
 
+    public void newTurn() {
+        resetCells();
+    }
+
+    public void resetCells() {
+        for (int j = 0; j < cellComponents.length; j++) {
+            for (int i = 0; i < cellComponents[j].length; i++) {
+                cellComponents[j][i].resetAccessible();
+            }
+        }
+    }
 
     @Override
     public void addObserver(IObserver<Message> o) {
@@ -114,5 +106,10 @@ public class GridView implements IObservable<Message> {
         for (IObserver<Message> o : observers) {
             o.update(this, message);
         }
+    }
+
+    @Override
+    public void update(IObservable<Tuple<Integer, Integer>> o, Tuple<Integer, Integer> message) {
+        notifyObservers(new Message(Utils.Action.VALIDATE_ACTION, message.x + " " + message.y));
     }
 }

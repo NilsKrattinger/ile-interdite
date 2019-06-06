@@ -79,7 +79,7 @@ public class Controller implements IObserver<Message> {
     public void initMovement(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
         cellStates = adventurer.getAccessibleCells();
-        gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
+        gridView.showSelectableCells(cellStates);
     }
 
     /**
@@ -91,7 +91,7 @@ public class Controller implements IObserver<Message> {
     public void initDryable(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
         cellStates = adventurer.getDryableCells();
-        gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
+        gridView.showSelectableCells(cellStates);
     }
 
     /**
@@ -137,22 +137,20 @@ public class Controller implements IObserver<Message> {
             int x = Integer.valueOf(m.group(1));
             int y = Integer.valueOf(m.group(2));
             return new Tuple<>(x, y);
-        } else {
-            Utils.showInformation("Les coordonnées entrées sont incorrectes.");
-            return null;
         }
+
+        return null; // This should never happen, as coordinates are sent by components
     }
 
     private boolean validateCellAction(int x, int y) {
         if (x >= 0 && y >= 0 && x < Grid.WIDTH && y < Grid.HEIGHT && isCellAvailable(x, y)) {
             return true;
         } else {
-            Utils.showInformation("Les coordonnées sont invalides.");
             return false;
         }
     }
 
-    public void handleAction(String msg) {
+    public boolean handleAction(String msg) {
         Tuple<Integer, Integer> coords = getPositionFromMessage(msg);
         switch (selectedAction) {
             case MOVE:
@@ -163,6 +161,7 @@ public class Controller implements IObserver<Message> {
                         movement(x, y);
                         reduceNbActions();
                         powerEngineer = false;
+                        return true;
                     }
                 }
                 break;
@@ -180,6 +179,7 @@ public class Controller implements IObserver<Message> {
                         } else {
                             powerEngineer = false;
                         }
+                        return true;
                     }
                 }
                 break;
@@ -188,6 +188,8 @@ public class Controller implements IObserver<Message> {
             case GET_TREASURE:
                 break;
         }
+
+        return false;
     }
 
     public void drawTreasureCards() {
@@ -203,6 +205,8 @@ public class Controller implements IObserver<Message> {
         currentAdventurer.newTurn();
         setNbActions(NB_ACTIONS_PER_TURN);
         selectedAction = null;
+
+        gridView.newTurn();
     }
 
     /**
@@ -262,11 +266,10 @@ public class Controller implements IObserver<Message> {
                 selectedAction = Action.GET_TREASURE;
                 break;
             case VALIDATE_ACTION:
-                if (selectedAction != null) {
-                    handleAction(m.message);
+                if (selectedAction != null && handleAction(m.message)) {
                     currentActionAdventurer = null;
+                    selectedAction = null;
                 }
-                selectedAction = null;
                 break;
             case END_TURN:
                 nextAdventurer();

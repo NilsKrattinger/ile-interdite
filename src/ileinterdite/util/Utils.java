@@ -5,15 +5,18 @@
  */
 package ileinterdite.util;
 
-import java.awt.Color;
+import ileinterdite.model.adventurers.Adventurer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import javax.swing.JOptionPane;
-
-import ileinterdite.model.adventurers.Adventurer;
 
 /**
  *
@@ -132,6 +135,23 @@ public class Utils {
 
         return new BufferedReader(new FileReader(filepath));
 
+    }
 
+    public static BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+    public static void setOpacity(BufferedImage img, int opacity) {
+        WritableRaster raster = img.getRaster();
+        for (int i = 0; i < raster.getWidth(); i++) {
+            for (int j = 0; j < raster.getHeight(); j++) {
+                int[] pixel = raster.getPixel(i, j, (int[]) null);
+                pixel[3] = opacity;
+                raster.setPixel(i, j, pixel);
+            }
+        }
     }
 }
