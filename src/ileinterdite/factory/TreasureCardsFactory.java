@@ -26,6 +26,18 @@ public class TreasureCardsFactory {
             treasureCards.add(new TreasureCard("Le Calice de l'onde",grid));
         }
 
+        for (int i=0; i<3; i++) {
+            treasureCards.add(new TreasureCard("Montée des eaux",grid));
+        }
+
+        for (int i=0; i<3; i++) {
+            treasureCards.add(new TreasureCard("Helicoptère",grid));
+        }
+
+        for (int i=0; i<2; i++) {
+            treasureCards.add(new TreasureCard("Sacs de sable",grid));
+        }
+
         Collections.shuffle(treasureCards);
 
         return treasureCards;
