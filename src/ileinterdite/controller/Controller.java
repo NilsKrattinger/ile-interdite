@@ -43,19 +43,20 @@ public class Controller implements IObserver<Message> {
 
     private boolean powerEngineer = false;
 
-    public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview, int nbPlayers) {
+    public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview) {
         this.controllerMainMenu = cm;
 
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
         this.adventurerView = view;
-            this.gridView = gview;
+        this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][])builtStuff[1],null);
         this.definePlayer(players);
 
         this.initBoard();
         this.gridView.showGrid(this.grid.getCells());
+        this.gridView.showAdventurers(players);
 
         //TODO Add the pawns placement on cell
 

@@ -61,7 +61,7 @@ public class Utils {
         BLUE("Bleu", new Color(66, 100, 173), Color.LIGHT_GRAY),
         WHITE("Blanc", new Color(220, 215, 219), Color.BLACK),
         BLACK("Noir", new Color(9, 18, 22), Color.LIGHT_GRAY),
-        YELLOW("Jaune", new Color(255, 243, 83), Color.BLACK) ;
+        YELLOW("Jaune", new Color(255, 243, 83), Color.BLACK);
 
         private final String label;
         private final Color color;
@@ -151,7 +151,7 @@ public class Utils {
                 ex.printStackTrace();
             }
         }
-        
+
         return null;
     }
 

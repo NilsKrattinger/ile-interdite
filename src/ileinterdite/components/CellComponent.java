@@ -10,12 +10,13 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CellComponent extends JPanel implements IObservable<Tuple<Integer, Integer>>, MouseListener {
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
     private final CopyOnWriteArrayList<IObserver<Tuple<Integer, Integer>>> observers;
+    private final ArrayList<PawnComponent> pawns;
 
     private int x; private int y;
     private BufferedImage image;
@@ -27,7 +28,9 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
     private Rectangle positionInWindow;
 
     public CellComponent(String path, Utils.State state, int x, int y) {
+        setOpaque(false);
         observers = new CopyOnWriteArrayList<>();
+        pawns = new ArrayList<>();
 
         this.x = x;
         this.y = y;
@@ -49,6 +52,14 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
         }
 
         addMouseListener(this);
+    }
+
+    public void addPawn(PawnComponent pawn) {
+        this.pawns.add(pawn);
+    }
+
+    public void removePawn(PawnComponent pawn) {
+        this.pawns.remove(pawn);
     }
 
     public void setState(Utils.State cellState) {
@@ -78,6 +89,15 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
             }
 
             g.drawImage(img, 0, 0, g.getClipBounds().width, g.getClipBounds().height, this);
+            for (int i = 0; i < pawns.size(); i++) {
+                int width = g.getClipBounds().width / 3;
+                int height = g.getClipBounds().height / 3;
+                int x = (i % 2 == 1) ? width + (int) (width / 1.5) + 5 : (int) (width / 1.5);
+                int y = (i > 1) ? height + height / 3 + 5 : height / 3;
+
+                PawnComponent pawn = pawns.get(i);
+                pawn.paintComponent(g.create(x, y, width, height));
+            }
         }
 
         positionInWindow = g.getClipBounds();

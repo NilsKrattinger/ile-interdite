@@ -1,13 +1,15 @@
 package ileinterdite.view;
 
 import ileinterdite.components.CellComponent;
+import ileinterdite.components.PawnComponent;
 import ileinterdite.model.Cell;
-import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.model.adventurers.*;
 import ileinterdite.util.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, Integer>> {
@@ -17,9 +19,11 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
     private JFrame window;
     private JPanel gridPanel;
     private CellComponent[][] cellComponents;
+    private HashMap<Utils.Pawn, PawnComponent> pawns;
 
     public GridView() {
         observers = new CopyOnWriteArrayList<>();
+        pawns = new HashMap<>();
 
         window = new JFrame("Grid");
         window.setSize(500, 500);
@@ -56,6 +60,17 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
         gridPanel.updateUI();
     }
 
+    public void showAdventurers(ArrayList<Adventurer> adventurers) {
+        for (Adventurer a : adventurers) {
+            int x = a.getX();
+            int y = a.getY();
+
+            PawnComponent comp = new PawnComponent(a.getPawn(), x, y);
+            pawns.put(a.getPawn(), comp);
+            cellComponents[y][x].addPawn(comp);
+        }
+    }
+
     /**
      * Shows which cells are selectable
      * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
@@ -73,9 +88,12 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
      * @param adv The adventurer to update
      */
     public void updateAdventurer(Adventurer adv) {
-        if (Parameters.LOGS) {
-            System.out.println("Adventurer moved to (" + (adv.getX() + 1) + ',' + (adv.getY() + 1) + ")");
-        }
+        PawnComponent pawn = pawns.get(adv.getPawn());
+        cellComponents[pawn.getY()][pawn.getX()].removePawn(pawn);
+        pawn.setX(adv.getX());
+        pawn.setY(adv.getY());
+
+        cellComponents[pawn.getY()][pawn.getX()].addPawn(pawn);
         resetCells();
     }
 
