@@ -1,6 +1,6 @@
 SPAWN
 La Porte de Fer
-Violet
+NOIR
 
 SPAWN
 La Porte de Bronze
@@ -12,7 +12,7 @@ VERT
 
 SPAWN
 La Porte d’Argent
-ORANGE
+BLANC
 
 SPAWN
 La Porte d’Or
