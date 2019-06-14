@@ -63,7 +63,7 @@ public class MainMenuView extends Observable {
                 String playerName = field.getText();
                 playerNames.add(playerName);
 
-                if (playerName.isEmpty()) { canStart = false; }
+                //if (playerName.isEmpty()) { canStart = false; }
             }
 
             if (canStart) {

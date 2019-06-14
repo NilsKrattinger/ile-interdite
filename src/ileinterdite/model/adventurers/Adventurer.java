@@ -135,4 +135,6 @@ public abstract class Adventurer {
     public String getName() {
         return name;
     }
+
+    public abstract String getClassName();
 }
