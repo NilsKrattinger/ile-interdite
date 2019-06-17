@@ -2,7 +2,7 @@ package ileinterdite.model;
 
 public class FloodCard extends Card {
     private Cell linkedCell;
-    private String cellName;
+
 
     public FloodCard(Cell linkedCell, Grid board) {
         super(board);
@@ -14,10 +14,6 @@ public class FloodCard extends Card {
     }
 
     public String getCellName() {
-        return cellName;
-    }
-
-    public void setCellName(String cellName) {
-        this.cellName = cellName;
+        return linkedCell.getName();
     }
 }

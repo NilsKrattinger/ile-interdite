@@ -6,6 +6,4 @@ public abstract class Card{
 	public Card(Grid board) {
 		this.board = board;
 	}
-
-	public abstract void setCellName(String cellName);
 }
