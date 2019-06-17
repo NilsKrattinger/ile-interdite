@@ -137,4 +137,7 @@ public abstract class Adventurer {
     }
 
     public abstract String getClassName();
+
+    public Hand getHand() { return this.hand; }
+
 }

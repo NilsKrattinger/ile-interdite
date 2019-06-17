@@ -6,4 +6,8 @@ public class Hand {
 
 	Collection<Card> cards;
 
+	public void clearHand() {
+		this.cards.clear();
+	}
+
 }
