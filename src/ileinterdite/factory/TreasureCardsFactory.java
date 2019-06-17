@@ -38,8 +38,6 @@ public class TreasureCardsFactory {
             treasureCards.add(new TreasureCard("Sacs de sable",grid));
         }
 
-        Collections.shuffle(treasureCards);
-
         return treasureCards;
     }
 }
