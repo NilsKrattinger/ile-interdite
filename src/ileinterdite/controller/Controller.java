@@ -213,7 +213,7 @@ public class Controller implements Observer {
                 break;
             case GIVE_CARD_CARD_CHOICE:
                 if (msg != null) {
-                    selectedCard = this.currentAdventurer.getCard(msg);
+                    selectedCard = this.currentAdventurer.getHand().getCard(msg);
                     if (selectedCard != null) {
                         //adventurerView.chooseCardReceiver();
                         // TODO chooseCardReceiver() method
