@@ -55,7 +55,7 @@ public class Controller implements Observer {
         this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][]) builtStuff[1], null);
-        this.definePLayer(players);
+        this.definePlayer(players);
         this.initCard(this.grid);
         this.initBoard();
         this.nextAdventurer();
@@ -111,12 +111,12 @@ public class Controller implements Observer {
     }
 
     /**
-     *
+     * Ajoute la carte card à la main de aventurier adventurer s'il a moins de 5 cartes dans sa main
      * @param adventurer
      * @param card
      */
     public void giveCard(Adventurer adventurer, Card card) {
-        if (adventurer != null && card != null) {
+        if (adventurer != null && card != null && adventurer.getNumberOfCards()<5) {
             adventurer.getHand().getCards().add(card);
         }
     }
@@ -224,16 +224,16 @@ public class Controller implements Observer {
                 if (msg != null) {
                     Adventurer receiver = this.getAdventurer(msg);
                     int nbOfCardsInReceiverHand = receiver.getNumberOfCards();
-                    if (nbOfCardsInReceiverHand == 5) {
-                        //discard(receiver);
-                        // TODO discard() method
+                    if (nbOfCardsInReceiverHand == 5 && selectedCard != null) {
+                        //initDiscard(receiver,selectedCard);
+                        // TODO method initDiscard() (already in feature-discard-treasure-cards
                     } else {
                         if (selectedCard != null) {
                             currentAdventurer.getHand().getCards().remove(selectedCard);
                             giveCard(receiver,selectedCard);
-                            reduceNbActions();
                         }
                     }
+                    reduceNbActions();
                 }
                 break;
             case GET_TREASURE:
@@ -359,7 +359,7 @@ public class Controller implements Observer {
         return players;
     }
 
-    public ArrayList<Adventurer> definePLayer(ArrayList<Adventurer> players) {
+    public ArrayList<Adventurer> definePlayer(ArrayList<Adventurer> players) {
 
         ArrayList<String> playersName = controllerMainMenu.getPlayersName();
 
