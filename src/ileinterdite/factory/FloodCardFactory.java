@@ -11,7 +11,7 @@ import java.util.Stack;
 public class FloodCardFactory {
 
     public static Stack<Card> floodCardFactory(Grid grid) {
-        Cell[][] cells = new Cell[Grid.HEIGHT][Grid.WIDTH];
+        Cell[][] cells = grid.getCells();
         Stack<Card> cards = new Stack<>();
 
 
