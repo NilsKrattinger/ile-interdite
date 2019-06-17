@@ -56,10 +56,12 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
 
     public void addPawn(PawnComponent pawn) {
         this.pawns.add(pawn);
+        repaint();
     }
 
     public void removePawn(PawnComponent pawn) {
         this.pawns.remove(pawn);
+        repaint();
     }
 
     public void setState(Utils.State cellState) {
@@ -124,12 +126,16 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
+        if (accessible == Utils.State.ACCESSIBLE && positionInWindow != null && positionInWindow.contains(e.getX(), e.getY())) {
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        if (accessible != Utils.State.ACCESSIBLE || positionInWindow == null || !positionInWindow.contains(e.getX(), e.getY())) {
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 
     @Override
