@@ -8,6 +8,7 @@ import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.Message;
+import ileinterdite.util.Parameters;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
@@ -54,7 +55,6 @@ public class Controller implements Observer {
         this.definePLayer(players);
         this.initCard(this.grid);
         this.initBoard();
-        this.drawFloodCards(6);
         this.nextAdventurer();
     }
 
@@ -288,7 +288,7 @@ public class Controller implements Observer {
                 selectedAction = null;
                 break;
             case END_TURN:
-                nextAdventurer();
+                this.endTun();
                 break;
             case CANCEL_ACTION:
                 selectedAction = null;
@@ -296,7 +296,7 @@ public class Controller implements Observer {
         }
 
         if (remainingActions == 0 && (!powerEngineer || selectedAction != Action.DRY && selectedAction != null)) {
-            nextAdventurer();
+            endTun();
         }
     }
 
@@ -315,6 +315,10 @@ public class Controller implements Observer {
                     cells[j][i].spawnAdventurer(i, j);
                 }
             }
+        }
+
+        if(!Parameters.DEMOMAP){
+            this.drawFloodCards(6);
         }
     }
 
@@ -347,6 +351,7 @@ public class Controller implements Observer {
         DiscardPile discardPileTmp;
         this.decks = new HashMap<>();
         deckTmp = DeckFactory.deckFacoty(Utils.CardType.Flood, grid);
+        deckTmp.shuffle();
         decks.put(deckTmp.getCardType(), deckTmp);
 
         this.discardPiles = new HashMap<>();
@@ -355,6 +360,12 @@ public class Controller implements Observer {
 
 
         //TODO IMPLEMENT TREASURE CARD
+    }
+
+    public void endTun(){
+        this.drawFloodCards(2); //TODO Ajouter nomber avec echelle
+        //todo drawTreasureCard
+        this.nextAdventurer();
     }
 
 }

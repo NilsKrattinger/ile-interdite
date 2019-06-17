@@ -61,4 +61,10 @@ public class Deck {
 		cards.addAll(newCards);
 
 	}
+
+	public void shuffle(){
+		Collections.shuffle(cards);
+
+	}
+
 }
