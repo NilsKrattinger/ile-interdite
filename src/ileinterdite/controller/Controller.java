@@ -34,7 +34,8 @@ public class Controller implements Observer {
     private int remainingActions;
 
     //Rising scale
-    private int risingScale = 1;
+    private int risingScale;
+    private boolean totalFlood;
 
     private boolean powerEngineer = false;
 
@@ -48,6 +49,9 @@ public class Controller implements Observer {
         players = randomPlayer(players, nbPlayers);
 
         this.initBoard();
+
+        this.risingScale = 1;
+        this.totalFlood = false;
 
         //TODO Add the pawns placement on cell
 
@@ -271,6 +275,9 @@ public class Controller implements Observer {
 
     private void increaseRisingScale() {
         setRisingScale(getRisingScale() + 1);
+        if (risingScale >= 10) {
+            totalFlood = true;
+        }
     }
 
     private int getFloodedCardToPick() {
@@ -280,7 +287,7 @@ public class Controller implements Observer {
             return 3;
         } else if (getRisingScale() <= 7) {
             return 4;
-        } else if (getRisingScale() <= 9) {
+        } else {
             return 5;
         }
     }
