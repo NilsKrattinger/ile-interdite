@@ -13,9 +13,7 @@ import java.util.Collections;
 
 public class BoardFactory {
     private static final int[] EMPTYCELLINDEX = {0, 1, 4, 5, 6, 11, 24, 29, 30, 31, 34, 35};
-    private static final String DEFAULTCELLFILE = "res/cell.txt"; //TODO FIND THE DEFAULT PATH
-
-
+    private static final String DEFAULTCELLFILE = "res/cell.txt";
     /**
      * initialise le plateau de jeu et créée :
      * les tuilles
@@ -27,6 +25,7 @@ public class BoardFactory {
         Object[] builtStuff = new Object[3];
         ArrayList<Cell> boardCellList = new ArrayList<>();
         ArrayList<Adventurer> adventurers;
+        ArrayList<Treasure> treasures = new ArrayList<>();
         Cell[] builtCells;
 
         Cell emptyCell = new Cell();
@@ -41,7 +40,7 @@ public class BoardFactory {
             filepath = "res/DEMOMAP.txt";
         }
 
-        builtCells = CellsFactory.cellsFactory(filepath, adventurers, null);
+        builtCells = CellsFactory.cellsFactory(filepath,adventurers,treasures.toArray(Treasure[]::new));
         boardCellList.addAll(Arrays.asList(builtCells));
 
         if (!Parameters.DEMOMAP) {
@@ -54,9 +53,7 @@ public class BoardFactory {
 
         builtStuff[0] = adventurers;
         builtStuff[1] = BoardFactory.convertToArray(boardCellList);
-        Treasure[] treasures = new Treasure[1];
-        treasures[0] = new Treasure();
-        builtStuff[2] = treasures; //TODO add treasures
+        builtStuff[2] = TreasureFactory.treasureFactory();
 
         return builtStuff;
     }
@@ -75,4 +72,5 @@ public class BoardFactory {
         }
         return boardCellArray;
     }
+
 }

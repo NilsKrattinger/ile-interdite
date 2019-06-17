@@ -45,7 +45,7 @@ public class CellsFactory {
                     cells[i] = new SpawnCell(adventurer, cellAttributes[i][1]);
                     break;
                 case "TREASURE":
-                    cells[i] = new TreasureCell(treasures[i - 4], cellAttributes[i][1]);
+                    cells[i] = new TreasureCell(treasures[i - 4], cellAttributes[i][1]); //TODO CA COUILLE ICI
                     break;
                 case "SIMPLE":
                     cells[i] = new Cell(cellAttributes[i][1]);

@@ -3,10 +3,7 @@ package ileinterdite.controller;
 import ileinterdite.factory.BoardFactory;
 import ileinterdite.factory.DeckFactory;
 import ileinterdite.factory.DiscardPileFactory;
-import ileinterdite.model.Cell;
-import ileinterdite.model.Deck;
-import ileinterdite.model.DiscardPile;
-import ileinterdite.model.Grid;
+import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
@@ -32,6 +29,8 @@ public class Controller implements Observer {
     private Adventurer currentAdventurer;
     private Adventurer currentActionAdventurer;
 
+    private ArrayList<Treasure> treasures;
+
     private HashMap<Utils.CardType, Deck> decks;
     private HashMap<Utils.CardType, DiscardPile> discardPiles;
 
@@ -53,7 +52,8 @@ public class Controller implements Observer {
         this.adventurerView = view;
         this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
-        this.grid = new Grid((Cell[][]) builtStuff[1], null);
+        this.treasures = (ArrayList<Treasure>) builtStuff[2];
+        this.grid = new Grid((Cell[][]) builtStuff[1], this.treasures);
         this.definePLayer(players);
         this.initCard(this.grid);
         this.initBoard();
