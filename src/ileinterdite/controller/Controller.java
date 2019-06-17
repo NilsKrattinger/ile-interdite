@@ -88,6 +88,19 @@ public class Controller implements Observer {
         gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
     }
 
+
+    /**
+     *
+     * @param adventurer
+     */
+    public void initGiveCard(Adventurer adventurer) {
+        Cell adventurerCell = grid.getCell(adventurer.getX(),adventurer.getY());
+        int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
+        if (nbOfAdventurersOnCell >= 2) {
+            
+        }
+    }
+
     /**
      * Renvoie un boolean si la case choisie par l'utilisateur est accesible
      *
@@ -251,6 +264,7 @@ public class Controller implements Observer {
                 break;
             case GIVE_CARD:
                 selectedAction = Action.GIVE_CARD;
+                initGiveCard(currentAdventurer);
                 break;
             case GET_TREASURE:
                 selectedAction = Action.GET_TREASURE;

@@ -77,4 +77,8 @@ public class Cell {
     	return null;
 	}
 
+	public ArrayList<Adventurer> getAdventurers() {
+		return adventurers;
+	}
+
 }
