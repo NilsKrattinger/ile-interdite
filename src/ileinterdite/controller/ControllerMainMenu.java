@@ -19,11 +19,8 @@ public class ControllerMainMenu implements IObserver<ArrayList<String>> {
     public void update(IObservable<ArrayList<String>> o, ArrayList<String> message) {
         playerName = message;
 
-        AdventurerView adventurerView = new AdventurerView();
         GridView gridView = new GridView();
-        Controller c = new Controller(this, adventurerView, gridView);
-        adventurerView.addObserver(c);
-        adventurerView.setVisible();
+        Controller c = new Controller(this, gridView);
 
         gridView.addObserver(c);
         gridView.setVisible();

@@ -10,13 +10,13 @@ import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
 import ileinterdite.util.Utils.Action;
-import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,7 +34,8 @@ public class Controller implements IObserver<Message> {
     private Collection<DiscardPile> discardPiles;
 
     private GridView gridView;
-    private AdventurerView adventurerView;
+    private HashMap<Adventurer, AdventurerView> adventurerViews;
+    private AdventurerView currentAdventurerView;
 
     // Turn state
     private Action selectedAction;
@@ -43,22 +44,31 @@ public class Controller implements IObserver<Message> {
 
     private boolean powerEngineer = false;
 
-    public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview) {
+    public Controller(ControllerMainMenu cm, GridView gview) {
+        adventurerViews = new HashMap<>();
         this.controllerMainMenu = cm;
 
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
-        this.adventurerView = view;
         this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][])builtStuff[1],null);
         this.definePlayer(players);
 
+        for (Adventurer adv : players) {
+            AdventurerView view = new AdventurerView(adv);
+            adventurerViews.put(adv, view);
+            view.addObserver(this);
+
+            if (currentAdventurerView == null) {
+                currentAdventurerView = view;
+                currentAdventurerView.show();
+            }
+        }
+
         this.initBoard();
         this.gridView.showGrid(this.grid.getCells());
         this.gridView.showAdventurers(players);
-
-        //TODO Add the pawns placement on cell
 
         nextAdventurer();
     }
@@ -66,9 +76,9 @@ public class Controller implements IObserver<Message> {
     private void changeCurrentAdventurer() {
         players.add(players.remove(0));
         currentAdventurer = players.get(0);
-        Pawn currentPawn = currentAdventurer.getPawn();
-        adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
-        adventurerView.setText(currentAdventurer.getName(), currentAdventurer.getClassName());
+        currentAdventurerView.hide();
+        currentAdventurerView = adventurerViews.get(currentAdventurer);
+        currentAdventurerView.show();
     }
 
     /**
@@ -215,10 +225,12 @@ public class Controller implements IObserver<Message> {
      */
     public void setNbActions(int nb) {
         this.remainingActions = Math.max(nb, NB_ACTIONS_PER_TURN);
+        currentAdventurerView.setNbActions(this.remainingActions);
     }
 
     public void reduceNbActions() {
         this.remainingActions--;
+        currentAdventurerView.setNbActions(this.remainingActions);
     }
 
     /**
@@ -250,7 +262,7 @@ public class Controller implements IObserver<Message> {
                 break;
             case MOVE:
                 if (currentAdventurer instanceof Navigator) {
-                    adventurerView.showAdventurers(players);
+                    //adventurerView.showAdventurers(players);
                 } else {
                     selectedAction = Action.MOVE;
                     initMovement(currentAdventurer);
@@ -313,7 +325,6 @@ public class Controller implements IObserver<Message> {
     }
 
     public ArrayList<Adventurer> definePlayer(ArrayList<Adventurer> players){
-        
         ArrayList<String> playersName = controllerMainMenu.getPlayersName();
 
         players = randomPlayer(players, playersName.size());
