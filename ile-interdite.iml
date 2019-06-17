@@ -27,5 +27,25 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="testng">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/testng-6.9.6.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/guice-4.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/javax.inject-1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/aopalliance-1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/guava-16.0.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/bsh-2.0b4.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ant-1.7.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ant-launcher-1.7.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/jcommander-1.48.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/snakeyaml-1.15.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit-4.10.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/hamcrest-core-1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

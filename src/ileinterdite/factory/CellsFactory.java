@@ -51,7 +51,7 @@ public class CellsFactory {
                     cells[i] = new Cell(cellAttributes[i][1]);
                     break;
                 default:
-                    //TODO Implementer Erreur
+                    throw new RuntimeException();
             }
 
             switch (cellAttributes[i][3]) {
