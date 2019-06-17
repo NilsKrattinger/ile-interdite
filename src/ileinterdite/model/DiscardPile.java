@@ -18,7 +18,7 @@ public class DiscardPile {
 	}
 
 	public void clearPile(){
-		this.cards = new ArrayList<>();
+		this.cards.clear();
 	}
 
 	public void addCard(Card card){
