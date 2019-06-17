@@ -3,18 +3,18 @@ package ileinterdite.model;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class Grid {
 
 	private Cell[][] cells;
 	public final static int WIDTH = 6;
 	public final static int HEIGHT = 6;
-	private Treasure[] treasures;
+	private ArrayList<Treasure> treasures;
 
-	public Grid(Cell[][] cells, Treasure[] treasures) {
+	public Grid(Cell[][] cells, ArrayList<Treasure> treasures) {
 		this.cells = cells;
-		this.treasures = treasures;
+		this.setTreasures(treasures);
 	}
 
 	/**
@@ -71,4 +71,11 @@ public class Grid {
 		cells[y][x].setState(Utils.State.NORMAL);
 	}
 
+	public ArrayList<Treasure> getTreasures() {
+		return treasures;
+	}
+
+	public void setTreasures(ArrayList<Treasure> treasures) {
+		this.treasures = treasures;
+	}
 }

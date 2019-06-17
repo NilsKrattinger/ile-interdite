@@ -36,6 +36,10 @@ public class Controller implements Observer {
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
 
+    // victory/defeat
+    private boolean victory;
+    private boolean defeat;
+
     private boolean powerEngineer = false;
 
     public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview, int nbPlayers) {
@@ -44,13 +48,15 @@ public class Controller implements Observer {
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
         this.adventurerView = view;
-            this.gridView = gview;
+        this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][])builtStuff[1],null);
         this.definePLayer(players);
 
         this.initBoard();
 
+        this.victory = false;
+        this.defeat = false;
         //TODO Add the pawns placement on cell
 
         nextAdventurer();
@@ -157,6 +163,7 @@ public class Controller implements Observer {
                         movement(x, y);
                         reduceNbActions();
                         powerEngineer = false;
+                        testVictory();
                     }
                 }
                 break;
@@ -302,7 +309,7 @@ public class Controller implements Observer {
     }
 
     public ArrayList<Adventurer> definePLayer(ArrayList<Adventurer> players){
-        
+
         ArrayList<String> playersName = controllerMainMenu.getPlayersName();
 
         players = randomPlayer(players, playersName.size());
@@ -312,4 +319,42 @@ public class Controller implements Observer {
         return players;
     }
 
+    public void testVictory() {
+        if (this.getGrid().getTreasures().size() == 0) {
+            Cell heliCell = null;
+            for (Cell[] cells : getGrid().getCells()) {
+                for (Cell cell : cells)
+                if (cell.getName() == "Heliport") {
+                    heliCell = cell;
+                }
+            }
+            if (players.size() == heliCell.getAdventurers().size()) {
+                this.victory = true;
+            }
+        }
+    }
+
+    public void testDefeat() {
+        if (totalFlood || this.treasureSink()) {
+            this.defeat = false;
+        }
+    }
+
+    public boolean treasureSink() {
+        ArrayList<Treasure> treasuresNotFound = this.getGrid().getTreasures();
+        ArrayList<Cell> notFoundTreasureCells = new ArrayList<>();
+        for (Cell[] cells : getGrid().getCells()) {
+            for (Cell cell : cells) {
+                if ((cell instanceof TreasureCell) && cell.getState() != Utils.State.SUNKEN && treasuresNotFound.contains(((TreasureCell) cell).getTreasure())) {
+                    notFoundTreasureCells.add(cell);
+                }
+            }
+        }
+        for (Treasure treasure : treasuresNotFound) {
+            if (!notFoundTreasureCells.contains(treasure)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

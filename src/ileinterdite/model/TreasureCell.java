@@ -1,16 +1,21 @@
 package ileinterdite.model;
 
-import ileinterdite.model.adventurers.Adventurer;
-
 public class TreasureCell extends Cell {
     private Treasure treasure;
 
 
     public TreasureCell(Treasure treasure, String name) {
         super(name);
-        this.treasure = treasure;
+        this.setTreasure(treasure);
 
     }
 
 
+    public Treasure getTreasure() {
+        return treasure;
+    }
+
+    public void setTreasure(Treasure treasure) {
+        this.treasure = treasure;
+    }
 }
