@@ -1,6 +1,13 @@
 package ileinterdite.controller;
+
 import ileinterdite.factory.BoardFactory;
-import ileinterdite.model.*;
+import ileinterdite.factory.DeckFactory;
+import ileinterdite.factory.DiscardPileFactory;
+import ileinterdite.model.Cell;
+import ileinterdite.model.Deck;
+import ileinterdite.model.DiscardPile;
+import ileinterdite.model.Grid;
+import ileinterdite.model.Card;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
@@ -11,6 +18,7 @@ import ileinterdite.util.Utils.Action;
 import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GridView;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,8 +33,8 @@ public class Controller implements Observer {
     private Adventurer currentAdventurer;
     private Adventurer currentActionAdventurer;
 
-    private Collection<Deck> decks;
-    private Collection<DiscardPile> discardPiles;
+    private HashMap<Utils.CardType, Deck> decks;
+    private HashMap<Utils.CardType, DiscardPile> discardPiles;
 
     private GridView gridView;
     private AdventurerView adventurerView;
@@ -44,19 +52,16 @@ public class Controller implements Observer {
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
         this.adventurerView = view;
-            this.gridView = gview;
+        this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
-        this.grid = new Grid((Cell[][])builtStuff[1],null);
+        this.grid = new Grid((Cell[][]) builtStuff[1], null);
         this.definePLayer(players);
-
+        this.initCard(this.grid);
         this.initBoard();
-
-        //TODO Add the pawns placement on cell
-
-        nextAdventurer();
+        this.nextAdventurer();
     }
 
-    private void changeCurrentAdventurer() {
+       private void changeCurrentAdventurer() {
         players.add(players.remove(0));
         currentAdventurer = players.get(0);
         Pawn currentPawn = currentAdventurer.getPawn();
@@ -141,8 +146,8 @@ public class Controller implements Observer {
      * @param x
      * @param y
      */
-    public void dry(int x, int y){
-        this.getGrid().dry(x,y);
+    public void dry(int x, int y) {
+        this.getGrid().dry(x, y);
         gridView.updateDriedCell(x, y);
     }
 
@@ -339,7 +344,7 @@ public class Controller implements Observer {
         Cell[][] cells = this.getGrid().getCells();
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
-                if(players.contains(cells[j][i].getAdventurerSpawn())) {
+                if (players.contains(cells[j][i].getAdventurerSpawn())) {
                     cells[j][i].spawnAdventurer(i, j);
                 }
             }
@@ -354,8 +359,8 @@ public class Controller implements Observer {
         return players;
     }
 
-    public ArrayList<Adventurer> definePLayer(ArrayList<Adventurer> players){
-        
+    public ArrayList<Adventurer> definePLayer(ArrayList<Adventurer> players) {
+
         ArrayList<String> playersName = controllerMainMenu.getPlayersName();
 
         players = randomPlayer(players, playersName.size());
@@ -364,6 +369,7 @@ public class Controller implements Observer {
         }
         return players;
     }
+
 
     public Adventurer getAdventurer(String adventurerName) {
         for (Adventurer adventurer : this.getPlayers()) {
@@ -376,5 +382,23 @@ public class Controller implements Observer {
 
     public ArrayList<Adventurer> getPlayers() {
         return this.players;
+    }
+    /**
+     * Create all of the deck and cards
+     * @param grid
+     */
+    private void initCard(Grid grid) {
+        Deck deckTmp;
+        DiscardPile discardPileTmp;
+        this.decks = new HashMap<>();
+        deckTmp = DeckFactory.deckFacoty(Utils.CardType.Flood,grid);
+        decks.put(deckTmp.getCardType(),deckTmp);
+
+        this.discardPiles = new HashMap<>();
+        discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Flood);
+        discardPiles.put(discardPileTmp.getCardType(),discardPileTmp);
+
+
+        //TODO IMPLEMENT TREASURE CARD
     }
 }
