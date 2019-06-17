@@ -10,7 +10,7 @@ import java.util.Stack;
 public class DeckFactory {
     private static Stack<Card> cards;
 
-    public static Deck deckFacotry(Utils.CardType type, Grid grid) {
+    public static Deck deckFacoty(Utils.CardType type, Grid grid) {
         if (type == Utils.CardType.Flood) {
             cards = FloodCardFactory.floodCardFactory(grid);
         } else {

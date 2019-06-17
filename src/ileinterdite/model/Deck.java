@@ -49,7 +49,7 @@ public class Deck {
 	public void addAtTheBottom(ArrayList<Card> cards){
 		Stack<Card> decKTmp = new Stack<>();
 		decKTmp.addAll(cards);
-		decKTmp.addAll(cards);
+		decKTmp.addAll(this.cards);
 		this.cards = decKTmp;
 	}
 
