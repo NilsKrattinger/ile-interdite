@@ -4,11 +4,12 @@ import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
+import ileinterdite.model.Card;
 
 public abstract class Adventurer {
 
 	Grid grid;
-	Hand hand;
+	private Hand hand;
 	String name;
 	private int x;
 	private int y;
@@ -137,4 +138,26 @@ public abstract class Adventurer {
     }
 
     public abstract String getClassName();
+
+
+    public Hand getHand() {
+        return hand;
+    }
+
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
+
+    public int getNumberOfCards() {
+        return this.getHand().getCards().size();
+    }
+
+    public Card getCard(String cardName) {
+        for (Card card : this.getHand().getCards()) {
+            if (card.getCardName().equals(cardName)) {
+                return card;
+            }
+        }
+        return null;
+    }
 }

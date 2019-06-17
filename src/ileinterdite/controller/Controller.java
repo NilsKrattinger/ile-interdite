@@ -90,14 +90,29 @@ public class Controller implements Observer {
 
 
     /**
-     *
-     * @param adventurer
+     *  Lance les actions pour le don d'une carte par l'aventurier adventurer (vérification qu'il y a
+     *  bien un autre aventurier sur sa tuile, et lancement du choix de la carte à donner
+     * @param adventurer : aventurier initiant le don de carte
      */
     public void initGiveCard(Adventurer adventurer) {
+        currentActionAdventurer = adventurer;
         Cell adventurerCell = grid.getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
         if (nbOfAdventurersOnCell >= 2) {
-            
+            ArrayList<Card> giverCards = currentAdventurer.getHand().getCards();
+            //adventurerView.showTradableCards(giverCards);
+            // TODO showTradableCards() method
+        }
+    }
+
+    /**
+     *
+     * @param adventurer
+     * @param card
+     */
+    public void giveCard(Adventurer adventurer, Card card) {
+        if (adventurer != null && card != null) {
+            adventurer.getHand().getCards().add(card);
         }
     }
 
@@ -161,6 +176,7 @@ public class Controller implements Observer {
 
     public void handleAction(String msg) {
         Tuple<Integer, Integer> coords = getPositionFromMessage(msg);
+        Card selectedCard = null;
         switch (selectedAction) {
             case MOVE:
                 if (coords != null) {
@@ -190,7 +206,30 @@ public class Controller implements Observer {
                     }
                 }
                 break;
-            case GIVE_CARD:
+            case GIVE_CARD_CARD_CHOICE:
+                if (msg != null) {
+                    selectedCard = this.currentAdventurer.getCard(msg);
+                    if (selectedCard != null) {
+                        //adventurerView.chooseCardReceiver();
+                        // TODO chooseCardReceiver() method
+                    }
+                }
+                break;
+            case GIVE_CARD_RECEIVER_CHOICE:
+                if (msg != null) {
+                    Adventurer receiver = this.getAdventurer(msg);
+                    int nbOfCardsInReceiverHand = receiver.getNumberOfCards();
+                    if (nbOfCardsInReceiverHand == 5) {
+                        //discard(receiver);
+                        // TODO discard() method
+                    } else {
+                        if (selectedCard != null) {
+                            currentAdventurer.getHand().getCards().remove(selectedCard);
+                            giveCard(receiver,selectedCard);
+                            reduceNbActions();
+                        }
+                    }
+                }
                 break;
             case GET_TREASURE:
                 break;
@@ -262,8 +301,8 @@ public class Controller implements Observer {
                 selectedAction = Action.DRY;
                 initDryable(currentAdventurer);
                 break;
-            case GIVE_CARD:
-                selectedAction = Action.GIVE_CARD;
+            case START_GIVE_CARD:
+                selectedAction = Action.START_GIVE_CARD;
                 initGiveCard(currentAdventurer);
                 break;
             case GET_TREASURE:
@@ -326,4 +365,16 @@ public class Controller implements Observer {
         return players;
     }
 
+    public Adventurer getAdventurer(String adventurerName) {
+        for (Adventurer adventurer : this.getPlayers()) {
+            if (adventurer.getName().equals(adventurerName)) {
+                return adventurer;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Adventurer> getPlayers() {
+        return this.players;
+    }
 }

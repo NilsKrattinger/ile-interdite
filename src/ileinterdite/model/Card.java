@@ -11,4 +11,8 @@ public class Card {
 		this.board = board;
 	}
 
+	public String getCardName() {
+		return cardName;
+	}
+
 }
