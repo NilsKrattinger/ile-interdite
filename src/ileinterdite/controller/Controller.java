@@ -163,7 +163,7 @@ public class Controller implements Observer {
                         movement(x, y);
                         reduceNbActions();
                         powerEngineer = false;
-                        testVictory();
+                        this.testVictory();
                     }
                 }
                 break;
@@ -335,26 +335,33 @@ public class Controller implements Observer {
     }
 
     public void testDefeat() {
-        if (totalFlood || this.treasureSink()) {
-            this.defeat = false;
+        if (totalFlooded || this.treasureSink() || this.heliCellSink()) {
+            this.defeat = true;
         }
     }
 
-    public boolean treasureSink() {
+    private boolean treasureSink() {
         ArrayList<Treasure> treasuresNotFound = this.getGrid().getTreasures();
         ArrayList<Cell> notFoundTreasureCells = new ArrayList<>();
         for (Cell[] cells : getGrid().getCells()) {
             for (Cell cell : cells) {
-                if ((cell instanceof TreasureCell) && cell.getState() != Utils.State.SUNKEN && treasuresNotFound.contains(((TreasureCell) cell).getTreasure())) {
+                if (cell instanceof TreasureCell && cell.getState() != Utils.State.SUNKEN && treasuresNotFound.contains(((TreasureCell) cell).getTreasure())) {
                     notFoundTreasureCells.add(cell);
                 }
             }
         }
         for (Treasure treasure : treasuresNotFound) {
-            if (!notFoundTreasureCells.contains(treasure)) {
-                return true;
-            }
+            return !notFoundTreasureCells.contains(treasure);
         }
         return false;
+    }
+
+    private boolean heliCellSink() {
+        for (Cell[] cells : getGrid().getCells()) {
+            for (Cell cell : cells)
+                if (cell.getName() == "Heliport") {
+                    return cell.getState() == Utils.State.SUNKEN;
+                }
+        }
     }
 }
