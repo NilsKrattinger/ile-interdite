@@ -18,8 +18,7 @@ public class FloodCardFactory {
         for (int i = 0; i < Grid.WIDTH; i++) {
             for (int j = 0; j < Grid.HEIGHT; j++) {
                 if (!(cells[i][j].getState() == Utils.State.NON_EXISTENT)) {
-                    cards.add(new FloodCard(cells[i][j], grid));
-                    cards.lastElement().setCellName(cells[i][j].getName());
+                    cards.add(new FloodCard(cells[j][i], grid));
                 }
             }
         }
