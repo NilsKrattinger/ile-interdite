@@ -9,6 +9,7 @@ import ileinterdite.model.DiscardPile;
 import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
+import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
@@ -29,6 +30,7 @@ public class Controller implements Observer {
 
     private ArrayList<Adventurer> players;
     private Adventurer currentAdventurer;
+    private Adventurer currentActionAdventurer;
 
     private HashMap<Utils.CardType, Deck> decks;
     private HashMap<Utils.CardType, DiscardPile> discardPiles;
@@ -63,7 +65,7 @@ public class Controller implements Observer {
         currentAdventurer = players.get(0);
         Pawn currentPawn = currentAdventurer.getPawn();
         adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
-        adventurerView.setText(currentAdventurer.getName(), currentAdventurer.getClass().getSimpleName());
+        adventurerView.setText(currentAdventurer.getName(), currentAdventurer.getClassName());
     }
 
     /**
@@ -73,6 +75,7 @@ public class Controller implements Observer {
      * @param adventurer
      */
     public void initMovement(Adventurer adventurer) {
+        currentActionAdventurer = adventurer;
         cellStates = adventurer.getAccessibleCells();
         gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
     }
@@ -84,6 +87,7 @@ public class Controller implements Observer {
      * @param adventurer
      */
     public void initDryable(Adventurer adventurer) {
+        currentActionAdventurer = adventurer;
         cellStates = adventurer.getDryableCells();
         gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
     }
@@ -102,9 +106,9 @@ public class Controller implements Observer {
      * @param x
      * @param y deplacement de l'avanturier en X,Y et actualisation de la vue
      */
-    public void movement(int x, int y) {
-        this.currentAdventurer.move(x, y);
-        gridView.updateAdventurer(currentAdventurer);
+    public void movement(int x, int y){
+        currentActionAdventurer.move(x,y);
+        gridView.updateAdventurer(currentActionAdventurer);
     }
 
     /**
@@ -168,7 +172,7 @@ public class Controller implements Observer {
                         dry(x, y);
                         if (!powerEngineer) {
                             reduceNbActions();
-                            if (currentAdventurer instanceof Engineer) {
+                            if (currentActionAdventurer instanceof Engineer) {
                                 powerEngineer = true;
                             }
                         } else {
@@ -210,13 +214,40 @@ public class Controller implements Observer {
         this.remainingActions--;
     }
 
+    /**
+     * Get the adventurer with the given class name.
+     * @return Null if not found
+     */
+    private Adventurer findAdventurerByClassName(String name) {
+        Adventurer adv;
+        int i = 0;
+        do {
+            adv = players.get(i);
+            i++;
+        } while (i < players.size() && !name.equalsIgnoreCase(adv.getClassName()));
+
+        return (name.equalsIgnoreCase(adv.getClassName())) ? adv : null;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         Message m = (Message) arg;
         switch (m.action) {
-            case MOVE:
+            case NAVIGATOR_CHOICE:
                 selectedAction = Action.MOVE;
-                initMovement(currentAdventurer);
+                // The message contains a string with the format "ClassName (PlayerName)"
+                currentActionAdventurer = findAdventurerByClassName(m.message.substring(0, m.message.indexOf(' ')));
+                if (currentActionAdventurer != null) {
+                    initMovement(currentActionAdventurer);
+                }
+                break;
+            case MOVE:
+                if (currentAdventurer instanceof Navigator) {
+                    adventurerView.showAdventurers(players);
+                } else {
+                    selectedAction = Action.MOVE;
+                    initMovement(currentAdventurer);
+                }
                 break;
             case DRY:
                 selectedAction = Action.DRY;
@@ -231,6 +262,7 @@ public class Controller implements Observer {
             case VALIDATE_ACTION:
                 if (selectedAction != null) {
                     handleAction(m.message);
+                    currentActionAdventurer = null;
                 }
                 selectedAction = null;
                 break;

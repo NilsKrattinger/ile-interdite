@@ -1,12 +1,12 @@
 package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
-import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
 
 public class Navigator extends Adventurer {
 
     public static final Pawn PAWN = Pawn.YELLOW;
+    public static final String CLASS_NAME = "Navigateur";
 
     public Navigator() {
         super();
@@ -30,7 +30,7 @@ public class Navigator extends Adventurer {
     }
 
     @Override
-    public void cellChoiceMoving(Utils.State[][] tab) {
-        super.cellChoiceMoving(tab);
+    public String getClassName() {
+        return CLASS_NAME;
     }
 }

@@ -23,6 +23,7 @@ import ileinterdite.model.adventurers.Adventurer;
 public class Utils {
 
     public enum Action {
+        NAVIGATOR_CHOICE,
         MOVE,
         DRY,
         GIVE_CARD,
