@@ -41,13 +41,13 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
             image = Utils.loadImage(path + ".png");
             if (image != null) {
                 translucentImage = Utils.deepCopy(image);
-                Utils.setOpacity(translucentImage, 100);
+                Utils.setOpacity(translucentImage, 50);
             }
 
             floodedImage = Utils.loadImage(path + "_Inonde.png");
             if (floodedImage != null) {
                 translucentFloodedImage = Utils.deepCopy(floodedImage);
-                Utils.setOpacity(translucentFloodedImage, 100);
+                Utils.setOpacity(translucentFloodedImage, 50);
             }
         }
 
