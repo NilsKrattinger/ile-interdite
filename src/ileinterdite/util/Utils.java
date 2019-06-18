@@ -26,6 +26,7 @@ public class Utils {
         NAVIGATOR_CHOICE,
         MOVE,
         DRY,
+        RESCUE,
         START_GIVE_CARD,
         GIVE_CARD_RECEIVER_CHOICE,
         GIVE_CARD_CARD_CHOICE,

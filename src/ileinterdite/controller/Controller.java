@@ -29,6 +29,7 @@ public class Controller implements Observer {
     private ArrayList<Adventurer> players;
     private Adventurer currentAdventurer;
     private Adventurer currentActionAdventurer;
+    private ArrayList<Adventurer> adventurersNeedRescue;
 
     private HashMap<Utils.CardType, Deck> decks;
     private HashMap<Utils.CardType, DiscardPile> discardPiles;
@@ -49,7 +50,7 @@ public class Controller implements Observer {
 
     public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview, int nbPlayers) {
         this.controllerMainMenu = cm;
-
+        adventurersNeedRescue = new ArrayList<>();
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
         this.adventurerView = view;
@@ -243,6 +244,19 @@ public class Controller implements Observer {
                 break;
             case GET_TREASURE:
                 break;
+            case RESCUE:
+                if (coords != null) {
+                    int x = coords.x - 1;
+                    int y = coords.y - 1;
+                    if (validateCellAction(x, y)) {
+                        movement(x, y);
+                    }
+                }
+                adventurersNeedRescue.remove(0);
+                if (! adventurersNeedRescue.isEmpty()){
+                    initRescue(adventurersNeedRescue.get(0));}
+
+                break;
         }
     }
 
@@ -268,6 +282,12 @@ public class Controller implements Observer {
                     break;
                 case FLOODED:
                     floodCard.getLinkedCell().setState(Utils.State.SUNKEN);
+                    adventurersNeedRescue.addAll(floodCard.getLinkedCell().getAdventurers());
+                    break;
+                case SUNKEN:
+                    if (Parameters.LOGS){
+                        System.out.print("Carte indonation : " + card.getCardName() + " Suprimée : Tuile deja coulée");
+                    }
                     break;
                 default:
                     throw new RuntimeException();
@@ -350,15 +370,23 @@ public class Controller implements Observer {
                 break;
             case END_TURN:
                 this.endTurn();
-                break;
+                return;
             case CANCEL_ACTION:
                 selectedAction = null;
                 break;
-        }
+            }
 
         if (remainingActions == 0 && (!powerEngineer || selectedAction != Action.DRY && selectedAction != null)) {
             endTurn();
         }
+    }
+
+    private void initRescue(Adventurer adventurer) {
+        currentActionAdventurer = adventurer;
+        selectedAction = Action.RESCUE;
+        cellStates = adventurer.getRescuCells();
+        Utils.showInformation("ATTENTION l'aventurier " + adventurer.getName() + " bois la tasse, Choisisez vite une case jusqu'a la quelle il va nager !");
+        gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
     }
 
     private Grid getGrid() {
@@ -464,8 +492,11 @@ public class Controller implements Observer {
     }
 
     public void endTurn(){
-        this.drawFloodCards(2); //TODO Ajouter nomber avec echelle
-        //todo drawTreasureCard
-        this.nextAdventurer();
+        this.drawFloodCards(getFloodedCardToPick());
+        if(!adventurersNeedRescue.isEmpty()){
+            initRescue(adventurersNeedRescue.get(0));
+        } else {
+            this.nextAdventurer();
+        }
     }
 }

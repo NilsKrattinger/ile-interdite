@@ -152,5 +152,12 @@ public abstract class Adventurer {
         return this.getHand().getCards().size();
     }
 
+    public Utils.State[][] getRescuCells() {
+        Utils.State[][] cellsState = grid.getStateOfCells();
+        this.cellChoiceMoving(cellsState);
+
+        return cellsState;
+    }
+
 
 }
