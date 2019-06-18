@@ -139,7 +139,6 @@ public abstract class Adventurer {
 
     public abstract String getClassName();
 
-
     public Hand getHand() {
         return hand;
     }
@@ -151,6 +150,5 @@ public abstract class Adventurer {
     public int getNumberOfCards() {
         return this.getHand().getCards().size();
     }
-
 
 }

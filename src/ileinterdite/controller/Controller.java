@@ -3,6 +3,9 @@ package ileinterdite.controller;
 import ileinterdite.factory.BoardFactory;
 import ileinterdite.factory.DeckFactory;
 import ileinterdite.factory.DiscardPileFactory;
+import ileinterdite.model.Cell;
+import ileinterdite.model.Deck;
+import ileinterdite.model.DiscardPile;
 import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
@@ -130,6 +133,19 @@ public class Controller implements Observer {
     }
 
     /**
+     *
+     * @param adventurer
+     * @param card
+     */
+    public void initDiscard(Adventurer adventurer, Card card) {
+        ArrayList<Card> handCards = adventurer.getHand().getCards();
+        adventurer.getHand().clearHand();
+        handCards.add(card);
+        //adventurerView.askCardToDiscard(handCards);
+        // TODO method askCardToDiscard()
+    }
+
+    /**
      * Renvoie un boolean si la case choisie par l'utilisateur est accesible
      *
      * @param x,y
@@ -158,6 +174,21 @@ public class Controller implements Observer {
         this.getGrid().dry(x, y);
         gridView.updateDriedCell(x, y);
     }
+
+    /**
+     *
+     */
+    public void discard(Card card, Adventurer adventurer) {
+        DiscardPile discardTreasureCards;
+        if (card instanceof TreasureCard) {
+            discardTreasureCards = this.discardPiles.get(Utils.CardType.Treasure);
+        } else {
+            discardTreasureCards = this.discardPiles.get(Utils.CardType.Flood);
+        }
+        discardTreasureCards.addCard(card);
+        adventurer.getHand().getCards().remove(card);
+    }
+
 
     /**
      * Split the message contents to retrieve the position
@@ -356,6 +387,9 @@ public class Controller implements Observer {
                 break;
             case CANCEL_ACTION:
                 selectedAction = null;
+                break;
+            case DISCARD:
+                this.discard(currentAdventurer.getHand().getCard(m.message), currentAdventurer);
                 break;
         }
 

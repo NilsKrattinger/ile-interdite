@@ -5,6 +5,7 @@ public class Message {
     public Message(Utils.Action action) {
         this.action = action;
         this.message = "";
+        this.additionalMessage = "";
     }
 
     public Message(Utils.Action action, String message) {
@@ -14,5 +15,4 @@ public class Message {
 
     public Utils.Action action;
     public String message;
-
 }

@@ -32,7 +32,8 @@ public class Utils {
         GET_TREASURE,
         VALIDATE_ACTION,
         END_TURN,
-        CANCEL_ACTION
+        CANCEL_ACTION,
+        DISCARD
     }
  
     public enum State {

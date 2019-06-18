@@ -20,4 +20,8 @@ public class Hand {
         return null;
 	}
 
+	public void clearHand() {
+		this.cards.clear();
+	}
+
 }
