@@ -384,7 +384,7 @@ public class Controller implements Observer {
     private void initRescue(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
         selectedAction = Action.RESCUE;
-        cellStates = adventurer.getRescuCells();
+        cellStates = adventurer.getRescueCells();
         if(avalibleOne(cellStates)){
             Utils.showInformation("ATTENTION l'aventurier " + adventurer.getName() + " bois la tasse, Choisisez vite une case jusqu'a la quelle il va nager !");
             gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));

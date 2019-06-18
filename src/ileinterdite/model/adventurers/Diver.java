@@ -60,7 +60,7 @@ public class Diver extends Adventurer {
         }
     }
 
-    public Utils.State[][] getRescuCells() {
+    public Utils.State[][] getRescueCells() {
         Utils.State[][] cellsState = grid.getStateOfCells();
         super.cellChoiceMoving(cellsState);
 
