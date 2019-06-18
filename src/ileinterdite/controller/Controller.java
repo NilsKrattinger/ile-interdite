@@ -29,8 +29,6 @@ public class Controller implements IObserver<Message> {
     private Adventurer currentAdventurer;
     private Adventurer currentActionAdventurer;
 
-    private ArrayList<Treasure> treasures;
-
     private HashMap<Utils.CardType, Deck> decks;
     private HashMap<Utils.CardType, DiscardPile> discardPiles;
 
@@ -60,8 +58,7 @@ public class Controller implements IObserver<Message> {
         this.gridView = new GridView();
         this.mainView.setGridView(this.gridView);
         this.players = (ArrayList<Adventurer>) builtStuff[0];
-        this.treasures = (ArrayList<Treasure>) builtStuff[2];
-        this.grid = new Grid((Cell[][]) builtStuff[1], this.treasures);
+        this.grid = new Grid((Cell[][]) builtStuff[1], (ArrayList<Treasure>) builtStuff[2]);
         this.definePlayer(players);
 
         for (Adventurer adv : players) {
@@ -130,7 +127,7 @@ public class Controller implements IObserver<Message> {
         Cell adventurerCell = grid.getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
         if (nbOfAdventurersOnCell >= 2) {
-            ArrayList<Card> giverCards = currentAdventurer.getHand().getCards();
+            ArrayList<Card> giverCards = currentAdventurer.getCards();
             //adventurerView.showTradableCards(giverCards);
             // TODO showTradableCards() method
         }
@@ -143,7 +140,7 @@ public class Controller implements IObserver<Message> {
      */
     public void giveCard(Adventurer adventurer, Card card) {
         if (adventurer != null && card != null && adventurer.getNumberOfCards()<5) {
-            adventurer.getHand().getCards().add(card);
+            adventurer.getCards().add(card);
         }
     }
 
@@ -153,7 +150,7 @@ public class Controller implements IObserver<Message> {
      * @param card
      */
     public void initDiscard(Adventurer adventurer, Card card) {
-        ArrayList<Card> handCards = adventurer.getHand().getCards();
+        ArrayList<Card> handCards = adventurer.getCards();
         adventurer.getHand().clearHand();
         handCards.add(card);
         //adventurerView.askCardToDiscard(handCards);
@@ -201,7 +198,7 @@ public class Controller implements IObserver<Message> {
             discardTreasureCards = this.discardPiles.get(Utils.CardType.Flood);
         }
         discardTreasureCards.addCard(card);
-        adventurer.getHand().getCards().remove(card);
+        adventurer.getCards().remove(card);
     }
 
 
@@ -283,7 +280,7 @@ public class Controller implements IObserver<Message> {
                         // TODO method initDiscard() (already in feature-discard-treasure-cards
                     } else {
                         if (selectedCard != null) {
-                            currentAdventurer.getHand().getCards().remove(selectedCard);
+                            currentAdventurer.getCards().remove(selectedCard);
                             giveCard(receiver,selectedCard);
                         }
                     }
@@ -397,6 +394,7 @@ public class Controller implements IObserver<Message> {
                 break;
             case GET_TREASURE:
                 selectedAction = Action.GET_TREASURE;
+                collectTreasure(currentAdventurer);
                 break;
             case VALIDATE_ACTION:
                 if (selectedAction != null && handleAction(m.message)) {
@@ -417,6 +415,30 @@ public class Controller implements IObserver<Message> {
 
         if (remainingActions == 0 && (!powerEngineer || selectedAction != Action.DRY && selectedAction != null)) {
             endTurn();
+        }
+    }
+
+    /**
+     *  Vérifie que l'aventurier peut récupérer un trésor, puis si c'est le cas, retire le trésor de la liste des trésors
+     *  non récupérés, puis défausse les cartes utilisées par l'aventurier pour récupérer le trésor dans la défausse des
+     *  cartes trésors
+     * @param adventurer
+     */
+    private void collectTreasure(Adventurer adventurer) {
+        Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
+        if (collectableTreasure != null) {
+            String collectableTreasureName = collectableTreasure.getNom();
+            this.grid.getTreasures().remove(collectableTreasure);
+            int discardedCards = 0;
+            for (Card card : adventurer.getCards()) {
+                if (card.getCardName().equals(collectableTreasureName) && discardedCards <4 ) {
+                    this.discardPiles.get(Utils.CardType.Treasure).addCard(card);
+                    adventurer.getCards().remove(card);
+                    discardedCards++;
+                }
+            }
+            reduceNbActions();
+            // TODO : methode pour montrer à l'utilisateur que le trésor a bien été récupéré / update de sa main
         }
     }
 
