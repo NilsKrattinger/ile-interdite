@@ -1,17 +1,17 @@
 package ileinterdite.model;
 
 public class Treasure {
-    private String nom;
+    private String name;
 
-    public Treasure(String nom) {
-        this.setNom(nom);
+    public Treasure(String name) {
+        this.setName(name);
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setName(String name) {
+        this.name = name;
     }
 }

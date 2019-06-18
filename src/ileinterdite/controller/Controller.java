@@ -460,21 +460,26 @@ public class Controller implements Observer {
     public void testDefeat() {
         if (totalFlood || this.treasureSink() || this.heliCellSink()) {
             this.defeat = true;
+            System.out.println("c la f1");
+            System.out.println("treasureSink : " + this.treasureSink());
+            System.out.println("heliCellSink : " + this.heliCellSink());
         }
     }
 
     private boolean treasureSink() {
         ArrayList<Treasure> treasuresNotFound = this.getGrid().getTreasures();
-        ArrayList<Cell> notFoundTreasureCells = new ArrayList<>();
+        HashMap<Cell, Treasure> notFoundTreasureCells = new HashMap<>();
         for (Cell[] cells : getGrid().getCells()) {
             for (Cell cell : cells) {
                 if (cell instanceof TreasureCell && cell.getState() != Utils.State.SUNKEN && treasuresNotFound.contains(((TreasureCell) cell).getTreasure())) {
-                    notFoundTreasureCells.add(cell);
+                    notFoundTreasureCells.put(cell, ((TreasureCell) cell).getTreasure());
                 }
             }
         }
         for (Treasure treasure : treasuresNotFound) {
-            return !notFoundTreasureCells.contains(treasure);
+            if (!notFoundTreasureCells.containsValue(treasure)) {
+                return true;
+            }
         }
         return false;
     }
@@ -483,7 +488,7 @@ public class Controller implements Observer {
         Cell heliCell = null;
         for (Cell[] cells : getGrid().getCells()) {
             for (Cell cell : cells) {
-                if (cell.getName() == "Heliport") {
+                if (cell.getName() != null && cell.getName().equals("Heliport")) {
                     heliCell = cell;
                 }
             }
