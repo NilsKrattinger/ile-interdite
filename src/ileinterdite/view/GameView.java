@@ -63,6 +63,7 @@ public class GameView {
     public void setAdventurerView(AdventurerView view) {
         advViewPanel.removeAll();
         advViewPanel.add(view.getMainPanel());
+        advViewPanel.repaint();
     }
 
     public void setGridView(GridView view) {
