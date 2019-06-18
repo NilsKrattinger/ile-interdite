@@ -139,6 +139,13 @@ public class Controller implements Observer {
      *
      */
     public void discard(Card card, Adventurer adventurer) {
+        DiscardPile discardTreasureCards;
+        if (card instanceof TreasureCard) {
+            discardTreasureCards = this.discardPiles.get(Utils.CardType.Treasure);
+        } else {
+            discardTreasureCards = this.discardPiles.get(Utils.CardType.Flood);
+        }
+        discardTreasureCards.addCard(card);
         adventurer.getHand().getCards().remove(card);
     }
 
