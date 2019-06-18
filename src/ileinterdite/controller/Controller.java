@@ -442,6 +442,9 @@ public class Controller implements Observer {
         return players;
     }
 
+    /**
+     * Check si la partie est gagné
+     */
     public void testVictory() {
         if (this.getGrid().getTreasures().size() == 0) {
             Cell heliCell = null;
@@ -457,15 +460,23 @@ public class Controller implements Observer {
         }
     }
 
+    /**
+     *  Check if its dead to win
+     */
     public void testDefeat() {
         if (totalFlood || this.treasureSink() || this.heliCellSink()) {
             this.defeat = true;
             System.out.println("c la f1");
+            System.out.println("totalFlood : " + this.totalFlood);
             System.out.println("treasureSink : " + this.treasureSink());
             System.out.println("heliCellSink : " + this.heliCellSink());
         }
     }
 
+    /**
+     * Check si les tresors restants ont coulés
+     * @return
+     */
     private boolean treasureSink() {
         ArrayList<Treasure> treasuresNotFound = this.getGrid().getTreasures();
         HashMap<Cell, Treasure> notFoundTreasureCells = new HashMap<>();
@@ -484,6 +495,10 @@ public class Controller implements Observer {
         return false;
     }
 
+    /**
+     * Check si l'heliport a coulé
+     * @return
+     */
     private boolean heliCellSink() {
         Cell heliCell = null;
         for (Cell[] cells : getGrid().getCells()) {
