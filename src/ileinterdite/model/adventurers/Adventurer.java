@@ -9,6 +9,7 @@ public abstract class Adventurer {
 
 	Grid grid;
 	Hand hand;
+	String name;
 	private int x;
 	private int y;
 
@@ -126,4 +127,14 @@ public abstract class Adventurer {
         this.grid = grid;
         grid.move(x, y, 0, 0, this);
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public abstract String getClassName();
 }

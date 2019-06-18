@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JOptionPane;
 
+import ileinterdite.model.Treasure;
 import ileinterdite.model.adventurers.Adventurer;
 
 /**
@@ -22,6 +23,7 @@ import ileinterdite.model.adventurers.Adventurer;
 public class Utils {
 
     public enum Action {
+        NAVIGATOR_CHOICE,
         MOVE,
         DRY,
         GIVE_CARD,
@@ -51,6 +53,22 @@ public class Utils {
         }
     }
 
+
+    public enum CardType{
+        Flood("Inondation"),
+        Treasure("Trésor");
+
+        String label;
+
+        CardType(String label) {
+            this.label = label ;
+        }
+
+        @Override
+        public String toString() {
+            return this.label;
+        }
+    }
 
     public enum Pawn {
         RED("Rouge", new Color(209, 45, 42), Color.LIGHT_GRAY),
