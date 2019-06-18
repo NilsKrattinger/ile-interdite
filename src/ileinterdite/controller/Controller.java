@@ -494,6 +494,7 @@ public class Controller implements Observer {
 
         this.discardPiles = new HashMap<>();
         discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Flood);
+        deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
 
         deckTmp = DeckFactory.deckFactory(Utils.CardType.Treasure, grid);
@@ -501,6 +502,7 @@ public class Controller implements Observer {
         decks.put(deckTmp.getCardType(), deckTmp);
 
         discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Treasure);
+        deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
     }
 
