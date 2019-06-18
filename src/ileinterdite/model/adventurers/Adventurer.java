@@ -7,6 +7,8 @@ import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
 import ileinterdite.model.Card;
 
+import java.util.ArrayList;
+
 public abstract class Adventurer {
 
 	Grid grid;
@@ -143,6 +145,8 @@ public abstract class Adventurer {
     public Hand getHand() {
         return hand;
     }
+
+    public ArrayList<Card> getCards() { return this.getHand().getCards(); }
 
     public void setHand(Hand hand) {
         this.hand = hand;

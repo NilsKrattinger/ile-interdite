@@ -112,7 +112,7 @@ public class Controller implements Observer {
         Cell adventurerCell = grid.getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
         if (nbOfAdventurersOnCell >= 2) {
-            ArrayList<Card> giverCards = currentAdventurer.getHand().getCards();
+            ArrayList<Card> giverCards = currentAdventurer.getCards();
             //adventurerView.showTradableCards(giverCards);
             // TODO showTradableCards() method
         }
@@ -125,7 +125,7 @@ public class Controller implements Observer {
      */
     public void giveCard(Adventurer adventurer, Card card) {
         if (adventurer != null && card != null && adventurer.getNumberOfCards()<5) {
-            adventurer.getHand().getCards().add(card);
+            adventurer.getCards().add(card);
         }
     }
 
@@ -135,7 +135,7 @@ public class Controller implements Observer {
      * @param card
      */
     public void initDiscard(Adventurer adventurer, Card card) {
-        ArrayList<Card> handCards = adventurer.getHand().getCards();
+        ArrayList<Card> handCards = adventurer.getCards();
         adventurer.getHand().clearHand();
         handCards.add(card);
         //adventurerView.askCardToDiscard(handCards);
@@ -183,7 +183,7 @@ public class Controller implements Observer {
             discardTreasureCards = this.discardPiles.get(Utils.CardType.Flood);
         }
         discardTreasureCards.addCard(card);
-        adventurer.getHand().getCards().remove(card);
+        adventurer.getCards().remove(card);
     }
 
 
@@ -265,7 +265,7 @@ public class Controller implements Observer {
                         // TODO method initDiscard() (already in feature-discard-treasure-cards
                     } else {
                         if (selectedCard != null) {
-                            currentAdventurer.getHand().getCards().remove(selectedCard);
+                            currentAdventurer.getCards().remove(selectedCard);
                             giveCard(receiver,selectedCard);
                         }
                     }
@@ -408,10 +408,10 @@ public class Controller implements Observer {
             String collectableTreasureName = collectableTreasure.getNom();
             this.grid.getTreasures().remove(collectableTreasure);
             int discardedCards = 0;
-            for (Card card : adventurer.getHand().getCards()) {
+            for (Card card : adventurer.getCards()) {
                 if (card.getCardName().equals(collectableTreasureName) && discardedCards <4 ) {
                     this.discardPiles.get(Utils.CardType.Treasure).addCard(card);
-                    adventurer.getHand().getCards().remove(card);
+                    adventurer.getCards().remove(card);
                     discardedCards++;
                 }
             }
