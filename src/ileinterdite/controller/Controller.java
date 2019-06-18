@@ -286,7 +286,7 @@ public class Controller implements Observer {
                     break;
                 case SUNKEN:
                     if (Parameters.LOGS){
-                        System.out.print("Carte indonation : " + card.getCardName() + " Suprimée : Tuile deja coulée");
+                        System.out.println("Carte inondation : " + card.getCardName() + " Suprimée : Tuile deja coulée");
                     }
                     break;
                 default:
