@@ -2,6 +2,7 @@ package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
+import ileinterdite.model.Treasure;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
 import ileinterdite.model.Card;
@@ -151,6 +152,4 @@ public abstract class Adventurer {
     public int getNumberOfCards() {
         return this.getHand().getCards().size();
     }
-
-
 }
