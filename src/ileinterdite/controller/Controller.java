@@ -463,11 +463,7 @@ public class Controller implements Observer {
     public void testDefeat() {
         if (totalFlood || this.treasureSink() || this.heliCellSink()) {
             this.defeat();
-            System.out.println("c la f1");
         }
-        System.out.println("totalFlood : " + this.totalFlood);
-        System.out.println("treasureSink : " + this.treasureSink());
-        System.out.println("heliCellSink : " + this.heliCellSink());
     }
 
     /**
