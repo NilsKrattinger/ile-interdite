@@ -28,6 +28,7 @@ public class Controller implements IObserver<Message> {
     private ArrayList<Adventurer> players;
     private Adventurer currentAdventurer;
     private Adventurer currentActionAdventurer;
+    private ArrayList<Adventurer> adventurersNeedRescue;
 
     private HashMap<Utils.CardType, Deck> decks;
     private HashMap<Utils.CardType, DiscardPile> discardPiles;
@@ -51,7 +52,7 @@ public class Controller implements IObserver<Message> {
     public Controller(ControllerMainMenu cm) {
         adventurerViews = new HashMap<>();
         this.controllerMainMenu = cm;
-
+        adventurersNeedRescue = new ArrayList<>();
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
         this.mainView = new GameView(1280, 720);
@@ -291,6 +292,19 @@ public class Controller implements IObserver<Message> {
                 break;
             case GET_TREASURE:
                 break;
+            case RESCUE:
+                if (coords != null) {
+                    int x = coords.x - 1;
+                    int y = coords.y - 1;
+                    if (validateCellAction(x, y)) {
+                        movement(x, y);
+                    }
+                }
+                adventurersNeedRescue.remove(0);
+                if (! adventurersNeedRescue.isEmpty()){
+                    initRescue(adventurersNeedRescue.get(0));}
+
+                break;
         }
 
         return false;
@@ -341,6 +355,12 @@ public class Controller implements IObserver<Message> {
                     break;
                 case FLOODED:
                     floodCard.getLinkedCell().setState(Utils.State.SUNKEN);
+                    adventurersNeedRescue.addAll(floodCard.getLinkedCell().getAdventurers());
+                    break;
+                case SUNKEN:
+                    if (Parameters.LOGS){
+                        System.out.println("Carte inondation : " + card.getCardName() + " Suprimée : Tuile deja coulée");
+                    }
                     break;
                 default:
                     throw new RuntimeException();
@@ -428,7 +448,7 @@ public class Controller implements IObserver<Message> {
                 break;
             case END_TURN:
                 this.endTurn();
-                break;
+                return;
             case CANCEL_ACTION:
                 selectedAction = null;
                 break;
@@ -440,6 +460,33 @@ public class Controller implements IObserver<Message> {
         if (remainingActions == 0 && (!powerEngineer || selectedAction != Action.DRY && selectedAction != null)) {
             endTurn();
         }
+    }
+
+    private void initRescue(Adventurer adventurer) {
+        currentActionAdventurer = adventurer;
+        selectedAction = Action.RESCUE;
+        cellStates = adventurer.getRescueCells();
+        if(avalibleOne(cellStates)) {
+            Utils.showInformation("ATTENTION l'aventurier " + adventurer.getName() + " bois la tasse, Choisisez vite une case jusqu'a la quelle il va nager !");
+            gridView.showSelectableCells(cellStates);
+        } else {
+            //TODO FONCTION PERDUUUUUUU T'es NULLLLL
+        }
+
+    }
+
+    private boolean avalibleOne(Utils.State[][] cellStates) {
+        boolean avalibleCell = false;
+        int i = 0;
+        while (i < Grid.HEIGHT && !avalibleCell) {
+            int j = 0;
+            while (j < Grid.WIDTH && !avalibleCell) {
+                avalibleCell = cellStates[i][j] == Utils.State.ACCESSIBLE;
+                j++;
+            }
+            i++;
+        }
+        return avalibleCell;
     }
 
     /**
@@ -574,9 +621,16 @@ public class Controller implements IObserver<Message> {
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
     }
 
-    public void endTurn(){
+    public void endTurn() {
         this.drawTreasureCards(2);
-        this.drawFloodCards(2); //TODO Ajouter nomber avec echelle
+
+        this.drawFloodCards(getFloodedCardToPick());
+        if(!adventurersNeedRescue.isEmpty()){
+            initRescue(adventurersNeedRescue.get(0));
+        } else {
+            this.nextAdventurer();
+        }
+
         this.nextAdventurer();
     }
 }

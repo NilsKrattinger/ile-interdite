@@ -33,7 +33,7 @@ public class Deck {
 	 * @return
 	 */
 	public ArrayList<Card> drawCards (int nbCards){
-		ArrayList<Card> drawedCads = new ArrayList<>();
+		ArrayList<Card> drawedCards = new ArrayList<>();
 
 		for (int i = 0; i < nbCards; i++) {
             if (cards.size() == 0) {
@@ -42,7 +42,7 @@ public class Deck {
                 discardPile.clearPile();
             }
 
-			drawedCads.add(this.cards.pop());
+			drawedCards.add(this.cards.pop());
 		}
 		return drawedCards;
 	}

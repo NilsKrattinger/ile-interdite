@@ -156,6 +156,13 @@ public abstract class Adventurer {
         return this.getHand().getCards().size();
     }
 
+    public Utils.State[][] getRescueCells() {
+        Utils.State[][] cellsState = grid.getStateOfCells();
+        this.cellChoiceMoving(cellsState);
+
+        return cellsState;
+    }
+
     public Treasure isAbleToCollectTreasure() {
         if (this.getNumberOfCards() < 4) {
             return null;
