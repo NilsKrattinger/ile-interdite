@@ -30,6 +30,8 @@ public class Controller implements Observer {
     private Adventurer currentAdventurer;
     private Adventurer currentActionAdventurer;
 
+    private ArrayList<Treasure> treasures;
+
     private HashMap<Utils.CardType, Deck> decks;
     private HashMap<Utils.CardType, DiscardPile> discardPiles;
 
@@ -55,7 +57,8 @@ public class Controller implements Observer {
         this.adventurerView = view;
         this.gridView = gview;
         this.players = (ArrayList<Adventurer>) builtStuff[0];
-        this.grid = new Grid((Cell[][]) builtStuff[1], null);
+        this.treasures = (ArrayList<Treasure>) builtStuff[2];
+        this.grid = new Grid((Cell[][]) builtStuff[1], this.treasures);
         this.definePlayer(players);
         this.initCard(this.grid);
         this.initBoard();
