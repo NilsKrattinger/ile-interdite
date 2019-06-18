@@ -14,17 +14,17 @@ La Caverne Des Ombres
 NORMAL
 Le Cristal ardent
 SPAWN
-La Porte de Fer
+La Porte De Fer
 NOIR
 NORMAL
 
 SPAWN
-La Porte D'or
+La Porte d'Or
 Jaune
 NORMAL
 
 SIMPLE
-Les Falaises de L'oubli
+Les Falaises de L'Oubli
 
 NORMAL
 
@@ -39,7 +39,7 @@ BLANC
 NORMAL
 
 SIMPLE
-Les Dunes De L'illusion
+Les Dunes De L'Illusion
 
 SUNKEN
 

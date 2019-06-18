@@ -9,17 +9,17 @@ ROUGE
 
 
 SPAWN
-La Porte de Cuivre
+La Porte De Cuivre
 VERT
 
 
 SPAWN
-La Porte d’Argent
+La Porte d'Argent
 BLANC
 
 
 SPAWN
-La Porte d’Or
+La Porte d'Or
 JAUNE
 
 
@@ -29,7 +29,7 @@ BLEU
 
 
 SIMPLE
-Les Falaises de l’Oubli
+Les Falaises De L'Oubli
 
 
 
@@ -39,12 +39,12 @@ Le Palais de Corail
 
 Le Calice de l'onde
 SIMPLE
-Le Pont des Abimes
+Le Pont Des Abimes
 
 
 
 SIMPLE
-Les Dunes de l’Illusion
+Les Dunes De L'Illusion
 
 
 
@@ -104,12 +104,12 @@ Le Palais des Marees
 
 Le Calice de l'onde
 SIMPLE
-Le Val du Crepuscule
+Le Val Du Crepuscule
 
 
 
 SIMPLE
-La Tour du Guet
+La Tour Du Guet
 
 
 

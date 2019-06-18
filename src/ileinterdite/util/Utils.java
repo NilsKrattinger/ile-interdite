@@ -5,16 +5,17 @@
  */
 package ileinterdite.util;
 
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import ileinterdite.model.adventurers.Adventurer;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JOptionPane;
-
-import ileinterdite.model.Treasure;
-import ileinterdite.model.adventurers.Adventurer;
 
 /**
  *
@@ -79,7 +80,7 @@ public class Utils {
         BLUE("Bleu", new Color(66, 100, 173), Color.LIGHT_GRAY),
         WHITE("Blanc", new Color(220, 215, 219), Color.BLACK),
         BLACK("Noir", new Color(9, 18, 22), Color.LIGHT_GRAY),
-        YELLOW("Jaune", new Color(255, 243, 83), Color.BLACK) ;
+        YELLOW("Jaune", new Color(255, 243, 83), Color.BLACK);
 
         private final String label;
         private final Color color;
@@ -152,6 +153,50 @@ public class Utils {
 
         return new BufferedReader(new FileReader(filepath));
 
+    }
 
+    /**
+     * Loads an image from path
+     * @param path The path where the image is located, without the res/images/ at the beginning of the path
+     * @return A BufferedImage containing the loaded image
+     */
+    public static BufferedImage loadImage(String path) {
+        path = "res/images/" + path;
+        try {
+            return ImageIO.read(new File(path));
+        } catch (IOException ex) {
+            if (Parameters.LOGS) {
+                System.err.println("File " + path + " could not be opened. More information below.");
+                ex.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Copies a BufferedImage and returns the copy
+     */
+    public static BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+    /**
+     * Changes the opacity of an image
+     * @param img The image to change
+     * @param opacity The opacity to set, from 0 (0%) to 255 (100%)
+     */
+    public static void setOpacity(BufferedImage img, int opacity) {
+        WritableRaster raster = img.getRaster();
+        for (int i = 0; i < raster.getWidth(); i++) {
+            for (int j = 0; j < raster.getHeight(); j++) {
+                int[] pixel = raster.getPixel(i, j, (int[]) null);
+                pixel[3] = opacity;
+                raster.setPixel(i, j, pixel);
+            }
+        }
     }
 }
