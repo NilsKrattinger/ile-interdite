@@ -10,9 +10,9 @@ public class Grid {
 	private Cell[][] cells;
 	public final static int WIDTH = 6;
 	public final static int HEIGHT = 6;
-	private Treasure[] treasures;
+	private ArrayList<Treasure> treasures;
 
-	public Grid(Cell[][] cells, Treasure[] treasures) {
+	public Grid(Cell[][] cells, ArrayList<Treasure> treasures) {
 		this.cells = cells;
 		this.treasures = treasures;
 	}
@@ -71,4 +71,16 @@ public class Grid {
 		cells[y][x].setState(Utils.State.NORMAL);
 	}
 
+	public ArrayList<Treasure> getTreasures() {
+		return this.treasures;
+	}
+
+	public Treasure getTreasure(String treasureName) {
+		for (Treasure treasure : this.getTreasures()) {
+			if (treasure.getNom().equals(treasureName)) {
+				return treasure;
+			}
+		}
+		return null;
+	}
 }

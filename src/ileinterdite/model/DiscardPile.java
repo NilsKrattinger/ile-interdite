@@ -5,8 +5,8 @@ import java.util.*;
 
 public class DiscardPile {
 
-	ArrayList<Card> cards;
-	Utils.CardType cardType;
+	private ArrayList<Card> cards;
+	private Utils.CardType cardType;
 
 	public DiscardPile(Utils.CardType cardType) {
 		this.cards = new ArrayList<>();
@@ -28,4 +28,8 @@ public class DiscardPile {
 	public Utils.CardType getCardType() {
 		return cardType;
 	}
+
+	public void shuffle() {
+	    Collections.shuffle(cards);
+    }
 }

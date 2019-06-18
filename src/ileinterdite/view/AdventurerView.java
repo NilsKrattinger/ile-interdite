@@ -1,116 +1,88 @@
 package ileinterdite.view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.Observable;
-import javax.swing.*;
-
-import static javax.swing.SwingConstants.CENTER;
-
-import javax.swing.border.MatteBorder;
-
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.IObservable;
+import ileinterdite.util.IObserver;
 import ileinterdite.util.Message;
 import ileinterdite.util.Utils;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class AdventurerView extends Observable {
-    private final JPanel buttonsPanel;
-    private final JPanel centeredPanel;
-    private final JFrame window;
-    private final JPanel adventurerPanel;
+
+public class AdventurerView implements IObservable<Message> {
+    // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
+    private final CopyOnWriteArrayList<IObserver<Message>> observers;
+
     private final JPanel mainPanel;
-    private final JButton moveButton;
-    private final JButton dryButton;
-    private final JButton validateCellButton;
-    private final JButton endTurnButton;
-    private final JLabel advName;
-    private JTextField position;
+    private final JLabel nbActionsLabel;
 
-    public AdventurerView() {
+    public AdventurerView(Adventurer ad) {
+        observers = new CopyOnWriteArrayList<>();
 
-        this.window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(350, 200);
         mainPanel = new JPanel(new BorderLayout());
-        this.window.add(mainPanel);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 
-        mainPanel.setBackground(new Color(230, 230, 230));
+        JPanel cardPanel = new JPanel();
+        mainPanel.add(cardPanel);
 
-        // =================================================================================
-        // NORD : le titre = nom de l'aventurier sur la couleurActive du pion
+        JPanel actionButtonPanel = new JPanel(new GridLayout(2, 2));
+        JButton moveButton = new JButton("Bouger") ;
+        moveButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.MOVE)));
 
-        this.adventurerPanel = new JPanel();
-        advName = new JLabel("", SwingConstants.CENTER);
-        adventurerPanel.add(advName);
-        mainPanel.add(adventurerPanel, BorderLayout.NORTH);
+        JButton dryButton = new JButton( "Assécher");
+        dryButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.DRY)));
 
-        // =================================================================================
-        // CENTRE : 1 ligne pour position courante
-        this.centeredPanel = new JPanel(new GridLayout(2, 1));
-        this.centeredPanel.setOpaque(false);
-        mainPanel.add(this.centeredPanel, BorderLayout.CENTER);
+        JButton giveCardButton = new JButton("Donner carte");
+        giveCardButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.START_GIVE_CARD)));
 
-        centeredPanel.add(new JLabel ("Position", SwingConstants.CENTER));
-        position = new  JTextField(30);
-        position.setHorizontalAlignment(CENTER);
-        centeredPanel.add(position);
+        JButton getTreasureButton = new JButton("Récupérer Trésor");
+        getTreasureButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.GET_TREASURE)));
 
+        actionButtonPanel.add(moveButton);
+        actionButtonPanel.add(dryButton);
+        actionButtonPanel.add(giveCardButton);
+        actionButtonPanel.add(getTreasureButton);
+        mainPanel.add(actionButtonPanel);
 
-        // =================================================================================
-        // SUD : les boutons
-        this.buttonsPanel = new JPanel(new GridLayout(2,2));
-        this.buttonsPanel.setOpaque(false);
-        mainPanel.add(this.buttonsPanel, BorderLayout.SOUTH);
+        BufferedImage img = Utils.loadImage("personnages/" + ad.getClassName().toLowerCase() + ".png");
+        if (img != null) {
+            ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 2, img.getHeight() / 2, Image.SCALE_SMOOTH));
+            JLabel adventurerCard = new JLabel();
+            adventurerCard.setIcon(icon);
+            mainPanel.add(adventurerCard);
+        }
 
-        this.moveButton = new JButton("Bouger") ;
-        moveButton.addActionListener(e -> {
-            setChanged();
-            notifyObservers(new Message(Utils.Action.MOVE));
-        });
-        this.dryButton = new JButton( "Assecher");
-        dryButton.addActionListener(e -> {
-            setChanged();
-            notifyObservers(new Message(Utils.Action.DRY));
-        });
-        this.validateCellButton = new JButton("Valider tuile");
-        validateCellButton.addActionListener(e -> {
-            String pos = position.getText();
-            if (pos.length() == 0) {
-                position.setBorder(BorderFactory.createLineBorder(Color.RED));
-                position.grabFocus();
-            } else {
-                position.setBorder(null);
-                setChanged();
-                notifyObservers(new Message(Utils.Action.VALIDATE_ACTION, pos));
-                position.setText("");
-            }
-        });
-        this.endTurnButton = new JButton("Terminer Tour");
-        endTurnButton.addActionListener(e -> {
-            setChanged();
-            notifyObservers(new Message(Utils.Action.END_TURN));
-        });
+        JPanel nbActionsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
 
-        this.buttonsPanel.add(moveButton);
-        this.buttonsPanel.add(dryButton);
-        this.buttonsPanel.add(validateCellButton);
-        this.buttonsPanel.add(endTurnButton);
-    }
+        c.gridx = 0;
+        c.gridy = 0;
+        JPanel nbTextPanel = new JPanel();
+        nbTextPanel.setAlignmentX(SwingConstants.CENTER);
+        JLabel nbTextLabel = new JLabel("NB ACTIONS");
+        nbTextLabel.setFont(new Font(nbActionsPanel.getFont().getName(), nbActionsPanel.getFont().getStyle(), 18));
+        nbTextPanel.add(nbTextLabel);
+        nbActionsPanel.add(nbTextPanel, c);
 
-    public void setColor(Color color, Color textColor) {
-        mainPanel.setBorder(BorderFactory.createLineBorder(color, 2)) ;
-        adventurerPanel.setBackground(color);
-        centeredPanel.setBorder(new MatteBorder(0, 0, 2, 0, color));
-        advName.setForeground(textColor);
-    }
+        c.gridy = 1;
+        JPanel nbPanel = new JPanel();
+        nbPanel.setAlignmentX(SwingConstants.CENTER);
+        nbActionsLabel = new JLabel("3");
+        nbActionsLabel.setFont(new Font(nbActionsPanel.getFont().getName(), nbActionsPanel.getFont().getStyle(), 26));
+        nbPanel.add(nbActionsLabel);
+        nbActionsPanel.add(nbPanel, c);
 
-    public void setText(String playerName, String adventurerName) {
-        //le titre = nom du joueur
-        window.setTitle(playerName);
-        advName.setText(adventurerName + " (" + playerName + ")" );
+        c.gridy = 2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        JButton finishTurnButton = new JButton("Fin tour");
+        finishTurnButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.END_TURN)));
+        nbActionsPanel.add(finishTurnButton, c);
+
+        mainPanel.add(nbActionsPanel);
     }
 
     public void showAdventurers(ArrayList<Adventurer> adventurers) {
@@ -130,7 +102,6 @@ public class AdventurerView extends Observable {
         validate.addActionListener(e -> {
             Message m = new Message(Utils.Action.NAVIGATOR_CHOICE, advList.getSelectedItem().toString());
 
-            setChanged();
             notifyObservers(m);
             advChoice.setVisible(false);
         });
@@ -140,31 +111,28 @@ public class AdventurerView extends Observable {
         advChoice.setVisible(true);
     }
 
-    public void setVisible() {
-        this.window.setVisible(true);
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 
-    public void setPosition(String pos) {
-        this.position.setText(pos);
+    public void setNbActions(int nbActions) {
+        nbActionsLabel.setText(Integer.toString(nbActions));
     }
 
-    public JButton getValidateCellButton() {
-        return validateCellButton;
+    @Override
+    public void addObserver(IObserver<Message> o) {
+        observers.add(o);
     }
 
-    public String getPosition() {
-        return position.getText();
+    @Override
+    public void removeObserver(IObserver<Message> o) {
+        observers.remove(o);
     }
 
-    public JButton getMoveButton() {
-        return moveButton;
-    }
-
-    public JButton getDryButton() {
-        return dryButton;
-    }
-
-    public JButton getEndTurnButton() {
-        return endTurnButton;
+    @Override
+    public void notifyObservers(Message message) {
+        for (IObserver<Message> o : observers) {
+            o.update(this, message);
+        }
     }
 }

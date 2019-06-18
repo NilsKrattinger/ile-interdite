@@ -1,15 +1,18 @@
 package ileinterdite.view;
 
+import ileinterdite.util.IObservable;
+import ileinterdite.util.IObserver;
 import ileinterdite.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class MainMenuView extends Observable {
+public class MainMenuView implements IObservable<ArrayList<String>> {
+    // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
+    private final CopyOnWriteArrayList<IObserver<ArrayList<String>>> observers;
+
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 4;
 
@@ -20,6 +23,8 @@ public class MainMenuView extends Observable {
     private ArrayList<JTextField> playerNameFields;
 
     public MainMenuView() {
+        this.observers = new CopyOnWriteArrayList<>();
+
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(350, 250);
@@ -67,7 +72,6 @@ public class MainMenuView extends Observable {
             }
 
             if (canStart) {
-                setChanged();
                 notifyObservers(playerNames);
                 window.setVisible(false);
             } else {
@@ -107,5 +111,22 @@ public class MainMenuView extends Observable {
 
     public void setVisible() {
         this.window.setVisible(true);
+    }
+
+    @Override
+    public void addObserver(IObserver<ArrayList<String>> o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(IObserver<ArrayList<String>> o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void notifyObservers(ArrayList<String> message) {
+        for (IObserver<ArrayList<String>> observer : observers) {
+            observer.update(this, message);
+        }
     }
 }

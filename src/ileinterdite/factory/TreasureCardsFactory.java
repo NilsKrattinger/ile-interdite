@@ -7,8 +7,8 @@ import java.util.Stack;
 
 public class TreasureCardsFactory {
 
-    public static Stack<TreasureCard> treasureCardsFactory(Grid grid) {
-        Stack<TreasureCard> treasureCards = new Stack<>();
+    public static Stack<Card> treasureCardsFactory(Grid grid) {
+        Stack<Card> treasureCards = new Stack<>();
 
         for (int i=0; i<5; i++) {
             treasureCards.add(new TreasureCard("La Pierre sacrée",grid));

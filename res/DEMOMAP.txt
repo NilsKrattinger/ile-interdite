@@ -2,96 +2,119 @@ SIMPLE
 Le Pont Des Abimes
 
 NORMAL
+
 SPAWN
 La Porte De Bronze
 Rouge
 FLOODED
-SIMPLE
+
+TREASURE
 La Caverne Des Ombres
 
 NORMAL
+Le Cristal ardent
 SPAWN
-La Porte de Fer
+La Porte De Fer
 NOIR
 NORMAL
+
 SPAWN
-La Porte D'or
+La Porte d'Or
 Jaune
 NORMAL
+
 SIMPLE
-Les Falaises de L'oubli
+Les Falaises de L'Oubli
 
 NORMAL
-SIMPLE
+
+TREASURE
 Le Palais de Corail
 
 NORMAL
+Le Calice de l'onde
 SPAWN
 La Porte d'Argent
 BLANC
 NORMAL
+
 SIMPLE
-Les Dunes De L'illusion
+Les Dunes De L'Illusion
 
 SUNKEN
+
 SPAWN
 Heliport
 BLEU
 NORMAL
+
 SPAWN
 La Porte De Cuivre
 VERT
 NORMAL
-SIMPLE
+
+TREASURE
 Le Jardin Des Hurlements
 
 NORMAL
+La Statue du zéphyr
 SIMPLE
 La Foret Pourpre
 
 NORMAL
+
 SIMPLE
 Le Lagon Perdu
 
 FLOODED
+
 SIMPLE
 Le Marais Brumeux
 
 SUNKEN
+
 SIMPLE
 Observatoire
 
 FLOODED
+
 SIMPLE
 Le Rocher Fantome
 
 SUNKEN
-SIMPLE
+
+TREASURE
 La Caverne Du Brasier
 
 FLOODED
-SIMPLE
+Le Cristal ardent
+TREASURE
 Le Temple Du Soleil
 
 NORMAL
-SIMPLE
+La Pierre sacrée
+TREASURE
 Le Temple De La Lune
 
 SUNKEN
-SIMPLE
+La Pierre sacrée
+TREASURE
 Le Palais des Marees
 
 NORMAL
+Le Calice de l'onde
 SIMPLE
 Le Val Du Crepuscule
 
 NORMAL
+
 SIMPLE
 La Tour Du Guet
 
 NORMAL
-SIMPLE
+
+TREASURE
 Le Jardin Des Murmures
 
 FLOODED
-
+La Statue du zéphyr
