@@ -44,7 +44,7 @@ public class Deck {
 
 			drawedCads.add(this.cards.pop());
 		}
-		return drawedCads;
+		return drawedCards;
 	}
 
 	/**
