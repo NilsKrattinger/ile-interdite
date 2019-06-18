@@ -18,7 +18,7 @@ public class CellsFactory {
     public static Cell[] cellsFactory(String filepath, ArrayList<Adventurer> adventurers, Treasure[] treasures) {
         Cell[] cells = new Cell[24];
         Utils.State cellState = null;
-        String[][] cellAttributes = new String[24][4];
+        String[][] cellAttributes = new String[24][5];
 
         try {
             reader = Utils.bufferInit(filepath);
@@ -27,6 +27,7 @@ public class CellsFactory {
                 cellAttributes[i][1] = reader.readLine();
                 cellAttributes[i][2] = reader.readLine();
                 cellAttributes[i][3] = reader.readLine();
+                cellAttributes[i][4] = reader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,13 +46,13 @@ public class CellsFactory {
                     cells[i] = new SpawnCell(adventurer, cellAttributes[i][1]);
                     break;
                 case "TREASURE":
-                    cells[i] = new TreasureCell(treasures[i - 4], cellAttributes[i][1]); //TODO CA COUILLE ICI
+                    cells[i] = new TreasureCell(getTreasureFromName(treasures, cellAttributes[i][4]), cellAttributes[i][1]);
                     break;
                 case "SIMPLE":
                     cells[i] = new Cell(cellAttributes[i][1]);
                     break;
                 default:
-                    //TODO Implementer Erreur
+                    throw new RuntimeException();
             }
 
             switch (cellAttributes[i][3]) {
@@ -69,6 +70,18 @@ public class CellsFactory {
             cells[i].setState(cellState);
         }
         return cells;
+    }
+
+    private static Treasure getTreasureFromName(Treasure[] treasures, String name) {
+        Treasure result = null;
+        // We only have 4 elements (at max) so we can go through the whole array each time for readability improvement
+        for (Treasure t : treasures) {
+            if (t.getNom().equalsIgnoreCase(name)) {
+                result = t;
+            }
+        }
+
+        return result;
     }
 
 }

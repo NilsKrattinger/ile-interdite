@@ -40,7 +40,7 @@ public class BoardFactory {
             filepath = "res/DEMOMAP.txt";
         }
 
-        builtCells = CellsFactory.cellsFactory(filepath,adventurers,treasures.toArray(Treasure[]::new));
+        builtCells = CellsFactory.cellsFactory(filepath,adventurers,treasures.toArray(new Treasure[treasures.size()]));
         boardCellList.addAll(Arrays.asList(builtCells));
 
         if (!Parameters.DEMOMAP) {
