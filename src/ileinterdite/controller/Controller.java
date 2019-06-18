@@ -201,7 +201,6 @@ public class Controller implements Observer {
                         movement(x, y);
                         reduceNbActions();
                         powerEngineer = false;
-                        this.testVictory();
                     }
                 }
                 break;
@@ -445,24 +444,6 @@ public class Controller implements Observer {
 
         //this.endGame()
         //TODO this.endGame()
-    }
-
-    /**
-     * Check si la partie est gagné
-     */
-    public void testVictory() {
-        if (this.getGrid().getTreasures().size() == 0) {
-            Cell heliCell = null;
-            for (Cell[] cells : getGrid().getCells()) {
-                for (Cell cell : cells)
-                if (cell.getName() == "Heliport") {
-                    heliCell = cell;
-                }
-            }
-            if (players.size() == heliCell.getAdventurers().size()) {
-                this.victory();
-            }
-        }
     }
 
     /**
