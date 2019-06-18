@@ -518,13 +518,17 @@ public class Controller implements IObserver<Message> {
         discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Flood);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
 
+        deckTmp = DeckFactory.deckFactory(Utils.CardType.Treasure, grid);
+        deckTmp.shuffle();
+        decks.put(deckTmp.getCardType(), deckTmp);
 
-        //TODO IMPLEMENT TREASURE CARD
+        discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Treasure);
+        discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
     }
 
     public void endTurn(){
-        this.drawFloodCards(2); //TODO Ajouter nomber avec echelle
         //todo drawTreasureCard
+        this.drawFloodCards(2); //TODO Ajouter nomber avec echelle
         this.nextAdventurer();
     }
 }
