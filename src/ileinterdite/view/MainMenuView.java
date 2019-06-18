@@ -2,6 +2,7 @@ package ileinterdite.view;
 
 import ileinterdite.util.IObservable;
 import ileinterdite.util.IObserver;
+import ileinterdite.util.StartMessage;
 import ileinterdite.util.Utils;
 
 import javax.swing.*;
@@ -9,9 +10,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class MainMenuView implements IObservable<ArrayList<String>> {
+public class MainMenuView implements IObservable<StartMessage> {
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
-    private final CopyOnWriteArrayList<IObserver<ArrayList<String>>> observers;
+    private final CopyOnWriteArrayList<IObserver<StartMessage>> observers;
 
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 4;
@@ -21,13 +22,19 @@ public class MainMenuView implements IObservable<ArrayList<String>> {
     private JTextField nbPlayersTextField;
     private JPanel playersNamePanel;
     private ArrayList<JTextField> playerNameFields;
+    private JPanel optionPanel;
+    private JCheckBox demoOption;
+    private JCheckBox logOption;
+    private JCheckBox randomOption;
+    private JLabel optionLabel;
+
 
     public MainMenuView() {
         this.observers = new CopyOnWriteArrayList<>();
 
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(350, 250);
+        window.setSize(500, 250);
         JPanel mainPanel = new JPanel(new BorderLayout());
         this.window.add(mainPanel);
 
@@ -57,6 +64,21 @@ public class MainMenuView implements IObservable<ArrayList<String>> {
         mainPanel.add(playersNamePanel);
         playerNameFields = new ArrayList<>();
 
+
+        optionPanel = new JPanel(new GridLayout(4,1));
+        optionLabel = new JLabel("Options : ");
+        logOption = new JCheckBox("Afficher les log");
+        demoOption = new JCheckBox("Jouer avec la partie de démonstartion");
+        randomOption = new JCheckBox("Jouer avec l'aléatoire");
+        randomOption.setSelected(true);
+
+        optionPanel.add(optionLabel);
+        optionPanel.add(logOption);
+        optionPanel.add(demoOption);
+        optionPanel.add(randomOption);
+
+        mainPanel.add(optionPanel,BorderLayout.EAST);
+
         updatePlayerNames();
 
         JButton validateButton = new JButton("Démarrer la partie");
@@ -72,7 +94,12 @@ public class MainMenuView implements IObservable<ArrayList<String>> {
             }
 
             if (canStart) {
-                notifyObservers(playerNames);
+                StartMessage m = new StartMessage();
+                m.playerName = playerNames;
+                m.demoOption = demoOption.isSelected();
+                m.logOption = logOption.isSelected();
+                m.randomOption = randomOption.isSelected();
+                notifyObservers(m);
                 window.setVisible(false);
             } else {
                 Utils.showInformation("Les noms de joueurs ne peuvent pas être vides !");
@@ -114,19 +141,19 @@ public class MainMenuView implements IObservable<ArrayList<String>> {
     }
 
     @Override
-    public void addObserver(IObserver<ArrayList<String>> o) {
+    public void addObserver(IObserver<StartMessage> o) {
         observers.add(o);
     }
 
     @Override
-    public void removeObserver(IObserver<ArrayList<String>> o) {
+    public void removeObserver(IObserver<StartMessage> o) {
         observers.add(o);
     }
 
     @Override
-    public void notifyObservers(ArrayList<String> message) {
-        for (IObserver<ArrayList<String>> observer : observers) {
-            observer.update(this, message);
+    public void notifyObservers(StartMessage m) {
+        for (IObserver <StartMessage> observer : observers) {
+            observer.update(this, m);
         }
     }
 }
