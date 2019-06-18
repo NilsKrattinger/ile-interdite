@@ -50,16 +50,17 @@ public class Controller implements IObserver<Message> {
     private boolean powerEngineer = false;
 
     public Controller(ControllerMainMenu cm) {
-        adventurerViews = new HashMap<>();
         this.controllerMainMenu = cm;
+
+        adventurerViews = new HashMap<>();
         adventurersNeedRescue = new ArrayList<>();
-        Object[] builtStuff;
-        builtStuff = BoardFactory.boardFactory();
+
+        BoardFactory.initBoardFactory();
         this.mainView = new GameView(1280, 720);
         this.gridView = new GridView();
         this.mainView.setGridView(this.gridView);
-        this.players = (ArrayList<Adventurer>) builtStuff[0];
-        this.grid = new Grid((Cell[][]) builtStuff[1], (ArrayList<Treasure>) builtStuff[2]);
+        this.players = BoardFactory.getAdventurers();
+        this.grid = new Grid(BoardFactory.getCells(), BoardFactory.getTreasures());
         this.definePlayer(players);
 
         for (Adventurer adv : players) {
