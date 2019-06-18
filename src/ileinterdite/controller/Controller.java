@@ -1,37 +1,21 @@
 package ileinterdite.controller;
 
 import ileinterdite.factory.BoardFactory;
-import ileinterdite.model.Cell;
-import ileinterdite.model.Deck;
-import ileinterdite.model.DiscardPile;
-import ileinterdite.model.Grid;
-import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.model.adventurers.Engineer;
-import ileinterdite.model.adventurers.Navigator;
-import ileinterdite.util.*;
 import ileinterdite.factory.DeckFactory;
 import ileinterdite.factory.DiscardPileFactory;
-import ileinterdite.model.Cell;
-import ileinterdite.model.Deck;
-import ileinterdite.model.DiscardPile;
 import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
-import ileinterdite.util.Message;
-import ileinterdite.util.Parameters;
-import ileinterdite.util.Tuple;
-import ileinterdite.util.Utils;
+import ileinterdite.util.*;
 import ileinterdite.util.Utils.Action;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GameView;
 import ileinterdite.view.GridView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -327,7 +311,8 @@ public class Controller implements IObserver<Message> {
         for (Card card : drawedCard) {
             FloodCard floodCard;
             floodCard = (FloodCard) card;
-            state = floodCard.getLinkedCell().getState();
+            Cell linkedCell = floodCard.getLinkedCell();
+            state = linkedCell.getState();
             switch (state) {
                 case NORMAL:
                     floodCard.getLinkedCell().setState(Utils.State.FLOODED);
@@ -339,6 +324,7 @@ public class Controller implements IObserver<Message> {
                 default:
                     throw new RuntimeException();
             }
+            gridView.updateCell(linkedCell.getName(), linkedCell.getState());
         }
     }
 
@@ -395,7 +381,7 @@ public class Controller implements IObserver<Message> {
                 break;
             case MOVE:
                 if (currentAdventurer instanceof Navigator) {
-                    //adventurerView.showAdventurers(players);
+                    currentAdventurerView.showAdventurers(players);
                 } else {
                     selectedAction = Action.MOVE;
                     initMovement(currentAdventurer);

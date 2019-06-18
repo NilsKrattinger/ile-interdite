@@ -19,11 +19,13 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
 
     private JPanel gridPanel;
     private CellComponent[][] cellComponents;
+    private HashMap<String, CellComponent> cellMap;
     private HashMap<Utils.Pawn, PawnComponent> pawns;
 
     public GridView() {
         observers = new CopyOnWriteArrayList<>();
         pawns = new HashMap<>();
+        cellMap = new HashMap<>();
 
         gridPanel = new JPanel(new GridLayout(Grid.WIDTH, Grid.HEIGHT));
     }
@@ -44,6 +46,7 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
 
                 comp.addObserver(this);
                 cellComponents[j][i] = comp;
+                cellMap.put(cell.getName(), comp);
             }
         }
         gridPanel.updateUI();
@@ -89,6 +92,13 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
     public void updateCell(int x, int y, Utils.State state) {
         cellComponents[y][x].setState(state);
         resetCells();
+    }
+
+    public void updateCell(String name, Utils.State state) {
+        if (cellMap.containsKey(name)) {
+            cellMap.get(name).setState(state);
+            resetCells();
+        }
     }
 
     public void newTurn() {
