@@ -45,8 +45,7 @@ public class Controller implements Observer {
     private Action selectedAction;
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
-    private boolean victory;
-    private boolean defeat;
+
     //Rising scale
     private int risingScale;
     private boolean totalFlood;
@@ -65,8 +64,6 @@ public class Controller implements Observer {
         this.definePlayer(players);
         this.initCard(this.grid);
         this.initBoard();
-        this.victory = false;
-        this.defeat = false;
         //TODO Add the pawns placement on cell
         this.risingScale = 1;
         this.totalFlood = false;
@@ -440,6 +437,17 @@ public class Controller implements Observer {
     }
 
     /**
+     * declenche la victoire
+     */
+    private void victory() {
+        //adventurerView.displayVictory()
+        //TODO adventurerView.displayVictory()
+
+        //this.endGame()
+        //TODO this.endGame()
+    }
+
+    /**
      * Check si la partie est gagné
      */
     public void testVictory() {
@@ -452,22 +460,33 @@ public class Controller implements Observer {
                 }
             }
             if (players.size() == heliCell.getAdventurers().size()) {
-                this.victory = true;
+                this.victory();
             }
         }
     }
 
     /**
-     *  Check if its dead to win
+     * declenche la défaite
+     */
+    private void defeat() {
+        //adventurerView.displayDefeat()
+        //TODO adventurerView.displayVictory()
+
+        //this.endGame()
+        //TODO this.endGame()
+    }
+
+    /**
+     * Check if its dead to win
      */
     public void testDefeat() {
         if (totalFlood || this.treasureSink() || this.heliCellSink()) {
-            this.defeat = true;
+            this.defeat();
             System.out.println("c la f1");
-            System.out.println("totalFlood : " + this.totalFlood);
-            System.out.println("treasureSink : " + this.treasureSink());
-            System.out.println("heliCellSink : " + this.heliCellSink());
         }
+        System.out.println("totalFlood : " + this.totalFlood);
+        System.out.println("treasureSink : " + this.treasureSink());
+        System.out.println("heliCellSink : " + this.heliCellSink());
     }
 
     /**
