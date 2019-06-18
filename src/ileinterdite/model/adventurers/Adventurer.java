@@ -33,6 +33,7 @@ public abstract class Adventurer {
         this.grid = grid;
         this.x = x;
         this.y = y;
+        this.hand = new Hand();
     }
 
     /**
