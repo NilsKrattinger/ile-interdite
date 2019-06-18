@@ -6,20 +6,22 @@ import java.util.*;
 
 public class Deck {
 
-	Stack<Card> cards;
-	Utils.CardType cardType;
+    private DiscardPile discardPile;
+    private Stack<Card> cards;
+    private Utils.CardType cardType;
 
-	public Deck(Stack<Card> cards,Utils.CardType type) {
-		this.cards = cards;
-		this.cardType = type;
+    public Deck(Stack<Card> cards, Utils.CardType type) {
+        this.cards = cards;
+        this.cardType = type;
+    }
 
-	}
+    public void setDiscardPile(DiscardPile discard) {
+        this.discardPile = discard;
+    }
 
 	public Utils.CardType getCardType() {
 		return cardType;
 	}
-
-
 
 	public Stack<Card> getCards() {
 		return cards;
@@ -32,11 +34,14 @@ public class Deck {
 	 */
 	public ArrayList<Card> drawCards (int nbCards){
 		ArrayList<Card> drawedCads = new ArrayList<>();
-		if (cards.size() - nbCards < 0){
-			//TODO REFILL DECKS
-		}
 
 		for (int i = 0; i < nbCards; i++) {
+            if (cards.size() == 0) {
+                discardPile.shuffle();
+                addAtTheTop(discardPile.getCards());
+                discardPile.clearPile();
+            }
+
 			drawedCads.add(this.cards.pop());
 		}
 		return drawedCads;

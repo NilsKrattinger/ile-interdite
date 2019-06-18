@@ -538,6 +538,7 @@ public class Controller implements IObserver<Message> {
 
         this.discardPiles = new HashMap<>();
         discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Flood);
+        deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
 
         deckTmp = DeckFactory.deckFactory(Utils.CardType.Treasure, grid);
@@ -545,6 +546,7 @@ public class Controller implements IObserver<Message> {
         decks.put(deckTmp.getCardType(), deckTmp);
 
         discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Treasure);
+        deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
     }
 
