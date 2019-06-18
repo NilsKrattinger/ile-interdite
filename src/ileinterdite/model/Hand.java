@@ -4,6 +4,20 @@ import java.util.*;
 
 public class Hand {
 
-	Collection<Card> cards;
+	private ArrayList<Card> cards;
+
+
+	public ArrayList<Card> getCards() {
+		return cards;
+	}
+
+	public Card getCard(String cardName) {
+		for (Card card : this.getCards()) {
+			if (card.getCardName().equals(cardName)) {
+				return card;
+			}
+		}
+        return null;
+	}
 
 }
