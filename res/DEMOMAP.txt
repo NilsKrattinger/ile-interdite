@@ -24,12 +24,12 @@ Jaune
 NORMAL
 
 SIMPLE
-Les Falaises de L'Oubli
+Les Falaises De L'Oubli
 
 NORMAL
 
 TREASURE
-Le Palais de Corail
+Le Palais De Corail
 
 NORMAL
 Le Calice de l'onde
@@ -99,7 +99,7 @@ Le Temple De La Lune
 SUNKEN
 La Pierre sacrée
 TREASURE
-Le Palais des Marees
+Le Palais Des Marees
 
 NORMAL
 Le Calice de l'onde

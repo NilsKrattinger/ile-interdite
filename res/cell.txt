@@ -1,10 +1,10 @@
 SPAWN
-La Porte de Fer
+La Porte De Fer
 NOIR
 
 
 SPAWN
-La Porte de Bronze
+La Porte De Bronze
 ROUGE
 
 
@@ -34,7 +34,7 @@ Les Falaises De L'Oubli
 
 
 TREASURE
-Le Palais de Corail
+Le Palais De Corail
 
 
 Le Calice de l'onde
@@ -49,12 +49,12 @@ Les Dunes De L'Illusion
 
 
 TREASURE
-La Caverne des Ombres
+La Caverne Des Ombres
 
 
 Le Cristal ardent
 TREASURE
-Le Jardin des Hurlements
+Le Jardin Des Hurlements
 
 
 La Statue du zéphyr
@@ -84,22 +84,22 @@ Le Rocher Fantome
 
 
 TREASURE
-La Caverne du Brasier
+La Caverne Du Brasier
 
 
 Le Cristal ardent
 TREASURE
-Le Temple du Soleil
+Le Temple Du Soleil
 
 
 La Pierre sacrée
 TREASURE
-Le Temple de La Lune
+Le Temple De La Lune
 
 
 La Pierre sacrée
 TREASURE
-Le Palais des Marees
+Le Palais Des Marees
 
 
 Le Calice de l'onde
@@ -114,7 +114,7 @@ La Tour Du Guet
 
 
 TREASURE
-Le Jardin des Murmures
+Le Jardin Des Murmures
 
 
 La Statue du zéphyr
