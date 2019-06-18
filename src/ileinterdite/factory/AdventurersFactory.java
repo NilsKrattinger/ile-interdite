@@ -1,10 +1,6 @@
 package ileinterdite.factory;
 
 import ileinterdite.model.adventurers.*;
-import ileinterdite.util.Utils;
-
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AdventurersFactory {

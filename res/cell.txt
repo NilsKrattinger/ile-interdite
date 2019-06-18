@@ -1,96 +1,120 @@
 SPAWN
-La Porte De Fer
-Violet
+La Porte de Fer
+NOIR
+
 
 SPAWN
 La Porte de Bronze
 ROUGE
 
+
 SPAWN
 La Porte De Cuivre
 VERT
 
+
 SPAWN
 La Porte d'Argent
-ORANGE
+BLANC
+
 
 SPAWN
 La Porte d'Or
 JAUNE
 
+
 SPAWN
 Heliport
 BLEU
+
 
 SIMPLE
 Les Falaises De L'Oubli
 
 
-SIMPLE
-Le Palais De Corail
+
+TREASURE
+Le Palais de Corail
 
 
+Le Calice de l'onde
 SIMPLE
 Le Pont Des Abimes
+
 
 
 SIMPLE
 Les Dunes De L'Illusion
 
 
-SIMPLE
-La Caverne Des Ombres
+
+TREASURE
+La Caverne des Ombres
 
 
-SIMPLE
-Le Jardin Des Hurlements
+Le Cristal ardent
+TREASURE
+Le Jardin des Hurlements
 
 
+La Statue du zéphyr
 SIMPLE
 La Foret Pourpre
+
 
 
 SIMPLE
 Le Lagon Perdu
 
 
+
 SIMPLE
 Le Marais Brumeux
+
 
 
 SIMPLE
 Observatoire
 
 
+
 SIMPLE
 Le Rocher Fantome
 
 
-SIMPLE
-La Caverne Du Brasier
+
+TREASURE
+La Caverne du Brasier
 
 
-SIMPLE
-Le Temple Du Soleil
+Le Cristal ardent
+TREASURE
+Le Temple du Soleil
 
 
-SIMPLE
-Le Temple De La Lune
+La Pierre sacrée
+TREASURE
+Le Temple de La Lune
 
 
-SIMPLE
-Le Palais Des Marees
+La Pierre sacrée
+TREASURE
+Le Palais des Marees
 
 
+Le Calice de l'onde
 SIMPLE
 Le Val Du Crepuscule
+
 
 
 SIMPLE
 La Tour Du Guet
 
 
-SIMPLE
-Le Jardin Des Murmures
+
+TREASURE
+Le Jardin des Murmures
 
 
+La Statue du zéphyr

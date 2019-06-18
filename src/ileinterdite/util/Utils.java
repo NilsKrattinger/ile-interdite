@@ -8,7 +8,6 @@ package ileinterdite.util;
 import ileinterdite.model.adventurers.Adventurer;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -16,6 +15,7 @@ import java.awt.image.WritableRaster;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,11 +27,14 @@ public class Utils {
         NAVIGATOR_CHOICE,
         MOVE,
         DRY,
-        GIVE_CARD,
+        START_GIVE_CARD,
+        GIVE_CARD_RECEIVER_CHOICE,
+        GIVE_CARD_CARD_CHOICE,
         GET_TREASURE,
         VALIDATE_ACTION,
         END_TURN,
-        CANCEL_ACTION
+        CANCEL_ACTION,
+        DISCARD
     }
  
     public enum State {
@@ -54,6 +57,22 @@ public class Utils {
         }
     }
 
+
+    public enum CardType{
+        Flood("Inondation"),
+        Treasure("Trésor");
+
+        String label;
+
+        CardType(String label) {
+            this.label = label ;
+        }
+
+        @Override
+        public String toString() {
+            return this.label;
+        }
+    }
 
     public enum Pawn {
         RED("Rouge", new Color(209, 45, 42), Color.LIGHT_GRAY),

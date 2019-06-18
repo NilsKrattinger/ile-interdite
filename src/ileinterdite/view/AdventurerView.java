@@ -37,7 +37,7 @@ public class AdventurerView implements IObservable<Message> {
         dryButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.DRY)));
 
         JButton giveCardButton = new JButton("Donner carte");
-        giveCardButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.GIVE_CARD)));
+        giveCardButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.START_GIVE_CARD)));
 
         JButton getTreasureButton = new JButton("Récupérer Trésor");
         getTreasureButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.GET_TREASURE)));

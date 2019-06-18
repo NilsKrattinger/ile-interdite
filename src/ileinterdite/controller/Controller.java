@@ -9,6 +9,19 @@ import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
+import ileinterdite.factory.DeckFactory;
+import ileinterdite.factory.DiscardPileFactory;
+import ileinterdite.model.Cell;
+import ileinterdite.model.Deck;
+import ileinterdite.model.DiscardPile;
+import ileinterdite.model.*;
+import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.model.adventurers.Engineer;
+import ileinterdite.model.adventurers.Navigator;
+import ileinterdite.util.Message;
+import ileinterdite.util.Parameters;
+import ileinterdite.util.Tuple;
+import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Action;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GameView;
@@ -18,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +45,10 @@ public class Controller implements IObserver<Message> {
     private Adventurer currentAdventurer;
     private Adventurer currentActionAdventurer;
 
-    private Collection<Deck> decks;
-    private Collection<DiscardPile> discardPiles;
+    private ArrayList<Treasure> treasures;
+
+    private HashMap<Utils.CardType, Deck> decks;
+    private HashMap<Utils.CardType, DiscardPile> discardPiles;
 
     private GameView mainView;
     private GridView gridView;
@@ -43,6 +59,10 @@ public class Controller implements IObserver<Message> {
     private Action selectedAction;
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
+
+    //Rising scale
+    private int risingScale;
+    private boolean totalFlood;
 
     private boolean powerEngineer = false;
 
@@ -56,7 +76,8 @@ public class Controller implements IObserver<Message> {
         this.gridView = new GridView();
         this.mainView.setGridView(this.gridView);
         this.players = (ArrayList<Adventurer>) builtStuff[0];
-        this.grid = new Grid((Cell[][])builtStuff[1],null);
+        this.treasures = (ArrayList<Treasure>) builtStuff[2];
+        this.grid = new Grid((Cell[][]) builtStuff[1], this.treasures);
         this.definePlayer(players);
 
         for (Adventurer adv : players) {
@@ -70,13 +91,17 @@ public class Controller implements IObserver<Message> {
             }
         }
 
+        this.initCard(this.grid);
         this.initBoard();
+        this.risingScale = 1;
+        this.totalFlood = false;
+
         this.gridView.addObserver(this);
         this.gridView.showGrid(this.grid.getCells());
         this.gridView.showAdventurers(players);
         this.mainView.setVisible();
 
-        nextAdventurer();
+        this.nextAdventurer();
     }
 
     private void changeCurrentAdventurer() {
@@ -110,6 +135,47 @@ public class Controller implements IObserver<Message> {
         gridView.showSelectableCells(cellStates);
     }
 
+
+    /**
+     *  Lance les actions pour le don d'une carte par l'aventurier adventurer (vérification qu'il y a
+     *  bien un autre aventurier sur sa tuile, et lancement du choix de la carte à donner
+     * @param adventurer : aventurier initiant le don de carte
+     */
+    public void initGiveCard(Adventurer adventurer) {
+        currentActionAdventurer = adventurer;
+        Cell adventurerCell = grid.getCell(adventurer.getX(),adventurer.getY());
+        int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
+        if (nbOfAdventurersOnCell >= 2) {
+            ArrayList<Card> giverCards = currentAdventurer.getHand().getCards();
+            //adventurerView.showTradableCards(giverCards);
+            // TODO showTradableCards() method
+        }
+    }
+
+    /**
+     * Ajoute la carte card à la main de aventurier adventurer s'il a moins de 5 cartes dans sa main
+     * @param adventurer
+     * @param card
+     */
+    public void giveCard(Adventurer adventurer, Card card) {
+        if (adventurer != null && card != null && adventurer.getNumberOfCards()<5) {
+            adventurer.getHand().getCards().add(card);
+        }
+    }
+
+    /**
+     *
+     * @param adventurer
+     * @param card
+     */
+    public void initDiscard(Adventurer adventurer, Card card) {
+        ArrayList<Card> handCards = adventurer.getHand().getCards();
+        adventurer.getHand().clearHand();
+        handCards.add(card);
+        //adventurerView.askCardToDiscard(handCards);
+        // TODO method askCardToDiscard()
+    }
+
     /**
      * Renvoie un boolean si la case choisie par l'utilisateur est accesible
      *
@@ -124,8 +190,8 @@ public class Controller implements IObserver<Message> {
      * @param x
      * @param y deplacement de l'avanturier en X,Y et actualisation de la vue
      */
-    public void movement(int x, int y){
-        currentActionAdventurer.move(x,y);
+    public void movement(int x, int y) {
+        currentActionAdventurer.move(x, y);
         gridView.updateAdventurer(currentActionAdventurer);
     }
 
@@ -139,6 +205,21 @@ public class Controller implements IObserver<Message> {
         this.getGrid().dry(x,y);
         gridView.updateCell(x, y, Utils.State.NORMAL);
     }
+
+    /**
+     *
+     */
+    public void discard(Card card, Adventurer adventurer) {
+        DiscardPile discardTreasureCards;
+        if (card instanceof TreasureCard) {
+            discardTreasureCards = this.discardPiles.get(Utils.CardType.Treasure);
+        } else {
+            discardTreasureCards = this.discardPiles.get(Utils.CardType.Flood);
+        }
+        discardTreasureCards.addCard(card);
+        adventurer.getHand().getCards().remove(card);
+    }
+
 
     /**
      * Split the message contents to retrieve the position
@@ -168,6 +249,7 @@ public class Controller implements IObserver<Message> {
 
     public boolean handleAction(String msg) {
         Tuple<Integer, Integer> coords = getPositionFromMessage(msg);
+        Card selectedCard = null;
         switch (selectedAction) {
             case MOVE:
                 if (coords != null) {
@@ -199,7 +281,30 @@ public class Controller implements IObserver<Message> {
                     }
                 }
                 break;
-            case GIVE_CARD:
+            case GIVE_CARD_CARD_CHOICE:
+                if (msg != null) {
+                    selectedCard = this.currentAdventurer.getHand().getCard(msg);
+                    if (selectedCard != null) {
+                        //adventurerView.chooseCardReceiver();
+                        // TODO chooseCardReceiver() method
+                    }
+                }
+                break;
+            case GIVE_CARD_RECEIVER_CHOICE:
+                if (msg != null) {
+                    Adventurer receiver = this.getAdventurer(msg);
+                    int nbOfCardsInReceiverHand = receiver.getNumberOfCards();
+                    if (nbOfCardsInReceiverHand == 5 && selectedCard != null) {
+                        //initDiscard(receiver,selectedCard);
+                        // TODO method initDiscard() (already in feature-discard-treasure-cards
+                    } else {
+                        if (selectedCard != null) {
+                            currentAdventurer.getHand().getCards().remove(selectedCard);
+                            giveCard(receiver,selectedCard);
+                        }
+                    }
+                    reduceNbActions();
+                }
                 break;
             case GET_TREASURE:
                 break;
@@ -212,9 +317,31 @@ public class Controller implements IObserver<Message> {
 
     }
 
-    public void drawFloodCards() {
-
+    /**
+     * Change state of card et put in the discard pile if needed.
+     * @param nbCard
+     */
+    public void drawFloodCards(int nbCard) {
+        ArrayList<Card> drawedCard = decks.get(Utils.CardType.Flood).drawCards(nbCard);
+        Utils.State state;
+        for (Card card : drawedCard) {
+            FloodCard floodCard;
+            floodCard = (FloodCard) card;
+            state = floodCard.getLinkedCell().getState();
+            switch (state) {
+                case NORMAL:
+                    floodCard.getLinkedCell().setState(Utils.State.FLOODED);
+                    discardPiles.get(Utils.CardType.Flood).addCard(floodCard);
+                    break;
+                case FLOODED:
+                    floodCard.getLinkedCell().setState(Utils.State.SUNKEN);
+                    break;
+                default:
+                    throw new RuntimeException();
+            }
+        }
     }
+
 
     public void nextAdventurer() {
         changeCurrentAdventurer();
@@ -240,6 +367,7 @@ public class Controller implements IObserver<Message> {
 
     /**
      * Get the adventurer with the given class name.
+     *
      * @return Null if not found
      */
     private Adventurer findAdventurerByClassName(String name) {
@@ -277,8 +405,9 @@ public class Controller implements IObserver<Message> {
                 selectedAction = Action.DRY;
                 initDryable(currentAdventurer);
                 break;
-            case GIVE_CARD:
-                selectedAction = Action.GIVE_CARD;
+            case START_GIVE_CARD:
+                selectedAction = Action.START_GIVE_CARD;
+                initGiveCard(currentAdventurer);
                 break;
             case GET_TREASURE:
                 selectedAction = Action.GET_TREASURE;
@@ -290,15 +419,18 @@ public class Controller implements IObserver<Message> {
                 }
                 break;
             case END_TURN:
-                nextAdventurer();
+                this.endTurn();
                 break;
             case CANCEL_ACTION:
                 selectedAction = null;
                 break;
+            case DISCARD:
+                this.discard(currentAdventurer.getHand().getCard(m.message), currentAdventurer);
+                break;
         }
 
         if (remainingActions == 0 && (!powerEngineer || selectedAction != Action.DRY && selectedAction != null)) {
-            nextAdventurer();
+            endTurn();
         }
     }
 
@@ -314,11 +446,42 @@ public class Controller implements IObserver<Message> {
         Cell[][] cells = this.getGrid().getCells();
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
-                if(players.contains(cells[j][i].getAdventurerSpawn())) {
+                if (players.contains(cells[j][i].getAdventurerSpawn())) {
                     cells[j][i].spawnAdventurer(i, j);
                 }
             }
         }
+
+        if(!Parameters.DEMOMAP){
+            this.drawFloodCards(6);
+        }
+    }
+
+    private void increaseRisingScale() {
+        setRisingScale(getRisingScale() + 1);
+        if (risingScale >= 10) {
+            totalFlood = true;
+        }
+    }
+
+    private int getFloodedCardToPick() {
+        if (getRisingScale() <= 2) {
+            return 2;
+        } else if (getRisingScale() <= 5) {
+            return 3;
+        } else if (getRisingScale() <= 7) {
+            return 4;
+        } else {
+            return 5;
+        }
+    }
+
+    public int getRisingScale() {
+        return risingScale;
+    }
+
+    public void setRisingScale(int risingScale) {
+        this.risingScale = risingScale;
     }
 
     private ArrayList<Adventurer> randomPlayer(ArrayList<Adventurer> players, int nbPlayers) {
@@ -329,7 +492,7 @@ public class Controller implements IObserver<Message> {
         return players;
     }
 
-    public ArrayList<Adventurer> definePlayer(ArrayList<Adventurer> players){
+    public ArrayList<Adventurer> definePlayer(ArrayList<Adventurer> players) {
         ArrayList<String> playersName = controllerMainMenu.getPlayersName();
 
         players = randomPlayer(players, playersName.size());
@@ -337,5 +500,45 @@ public class Controller implements IObserver<Message> {
             players.get(i).setName(playersName.get(i));
         }
         return players;
+    }
+
+
+    public Adventurer getAdventurer(String adventurerName) {
+        for (Adventurer adventurer : this.getPlayers()) {
+            if (adventurer.getName().equals(adventurerName)) {
+                return adventurer;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Adventurer> getPlayers() {
+        return this.players;
+    }
+    /**
+     * Create all of the deck and cards
+     *
+     * @param grid
+     */
+    private void initCard(Grid grid) {
+        Deck deckTmp;
+        DiscardPile discardPileTmp;
+        this.decks = new HashMap<>();
+        deckTmp = DeckFactory.deckFactory(Utils.CardType.Flood, grid);
+        deckTmp.shuffle();
+        decks.put(deckTmp.getCardType(), deckTmp);
+
+        this.discardPiles = new HashMap<>();
+        discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Flood);
+        discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
+
+
+        //TODO IMPLEMENT TREASURE CARD
+    }
+
+    public void endTurn(){
+        this.drawFloodCards(2); //TODO Ajouter nomber avec echelle
+        //todo drawTreasureCard
+        this.nextAdventurer();
     }
 }
