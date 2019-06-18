@@ -3,27 +3,23 @@ package ileinterdite.controller;
 import ileinterdite.factory.BoardFactory;
 import ileinterdite.factory.DeckFactory;
 import ileinterdite.factory.DiscardPileFactory;
-import ileinterdite.model.Cell;
-import ileinterdite.model.Deck;
-import ileinterdite.model.DiscardPile;
 import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
-import ileinterdite.util.Message;
-import ileinterdite.util.Parameters;
-import ileinterdite.util.Tuple;
-import ileinterdite.util.Utils;
+import ileinterdite.util.*;
 import ileinterdite.util.Utils.Action;
-import ileinterdite.util.Utils.Pawn;
 import ileinterdite.view.AdventurerView;
+import ileinterdite.view.GameView;
 import ileinterdite.view.GridView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Controller implements Observer {
+public class Controller implements IObserver<Message> {
     private ControllerMainMenu controllerMainMenu;
 
     private Grid grid;
@@ -33,13 +29,13 @@ public class Controller implements Observer {
     private Adventurer currentAdventurer;
     private Adventurer currentActionAdventurer;
 
-    private ArrayList<Treasure> treasures;
-
     private HashMap<Utils.CardType, Deck> decks;
     private HashMap<Utils.CardType, DiscardPile> discardPiles;
 
+    private GameView mainView;
     private GridView gridView;
-    private AdventurerView adventurerView;
+    private HashMap<Adventurer, AdventurerView> adventurerViews;
+    private AdventurerView currentAdventurerView;
 
     // Turn state
     private Action selectedAction;
@@ -52,22 +48,39 @@ public class Controller implements Observer {
 
     private boolean powerEngineer = false;
 
-    public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview, int nbPlayers) {
+    public Controller(ControllerMainMenu cm) {
+        adventurerViews = new HashMap<>();
         this.controllerMainMenu = cm;
 
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
-        this.adventurerView = view;
-        this.gridView = gview;
+        this.mainView = new GameView(1280, 720);
+        this.gridView = new GridView();
+        this.mainView.setGridView(this.gridView);
         this.players = (ArrayList<Adventurer>) builtStuff[0];
-        this.treasures = (ArrayList<Treasure>) builtStuff[2];
-        this.grid = new Grid((Cell[][]) builtStuff[1], this.treasures);
+        this.grid = new Grid((Cell[][]) builtStuff[1], (ArrayList<Treasure>) builtStuff[2]);
         this.definePlayer(players);
+
+        for (Adventurer adv : players) {
+            AdventurerView view = new AdventurerView(adv);
+            adventurerViews.put(adv, view);
+            view.addObserver(this);
+
+            if (currentAdventurerView == null) {
+                currentAdventurerView = view;
+                this.mainView.setAdventurerView(currentAdventurerView);
+            }
+        }
+
         this.initCard(this.grid);
         this.initBoard();
-
         this.risingScale = 1;
         this.totalFlood = false;
+
+        this.gridView.addObserver(this);
+        this.gridView.showGrid(this.grid.getCells());
+        this.gridView.showAdventurers(players);
+        this.mainView.setVisible();
 
         this.nextAdventurer();
     }
@@ -75,9 +88,8 @@ public class Controller implements Observer {
     private void changeCurrentAdventurer() {
         players.add(players.remove(0));
         currentAdventurer = players.get(0);
-        Pawn currentPawn = currentAdventurer.getPawn();
-        adventurerView.setColor(currentPawn.getColor(), currentPawn.getTextColor());
-        adventurerView.setText(currentAdventurer.getName(), currentAdventurer.getClassName());
+        currentAdventurerView = adventurerViews.get(currentAdventurer);
+        this.mainView.setAdventurerView(currentAdventurerView);
     }
 
     /**
@@ -89,7 +101,7 @@ public class Controller implements Observer {
     public void initMovement(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
         cellStates = adventurer.getAccessibleCells();
-        gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
+        gridView.showSelectableCells(cellStates);
     }
 
     /**
@@ -101,7 +113,7 @@ public class Controller implements Observer {
     public void initDryable(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
         cellStates = adventurer.getDryableCells();
-        gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
+        gridView.showSelectableCells(cellStates);
     }
 
 
@@ -115,7 +127,7 @@ public class Controller implements Observer {
         Cell adventurerCell = grid.getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
         if (nbOfAdventurersOnCell >= 2) {
-            ArrayList<Card> giverCards = currentAdventurer.getHand().getCards();
+            ArrayList<Card> giverCards = currentAdventurer.getCards();
             //adventurerView.showTradableCards(giverCards);
             // TODO showTradableCards() method
         }
@@ -128,7 +140,7 @@ public class Controller implements Observer {
      */
     public void giveCard(Adventurer adventurer, Card card) {
         if (adventurer != null && card != null && adventurer.getNumberOfCards()<5) {
-            adventurer.getHand().getCards().add(card);
+            adventurer.getCards().add(card);
         }
     }
 
@@ -138,7 +150,7 @@ public class Controller implements Observer {
      * @param card
      */
     public void initDiscard(Adventurer adventurer, Card card) {
-        ArrayList<Card> handCards = adventurer.getHand().getCards();
+        ArrayList<Card> handCards = adventurer.getCards();
         adventurer.getHand().clearHand();
         if (card != null) {
             handCards.add(card);
@@ -172,9 +184,9 @@ public class Controller implements Observer {
      * @param x
      * @param y
      */
-    public void dry(int x, int y) {
-        this.getGrid().dry(x, y);
-        gridView.updateDriedCell(x, y);
+    public void dry(int x, int y){
+        this.getGrid().dry(x,y);
+        gridView.updateCell(x, y, Utils.State.NORMAL);
     }
 
     /**
@@ -188,7 +200,7 @@ public class Controller implements Observer {
             discardTreasureCards = this.discardPiles.get(Utils.CardType.Flood);
         }
         discardTreasureCards.addCard(card);
-        adventurer.getHand().getCards().remove(card);
+        adventurer.getCards().remove(card);
     }
 
 
@@ -205,22 +217,20 @@ public class Controller implements Observer {
             int x = Integer.valueOf(m.group(1));
             int y = Integer.valueOf(m.group(2));
             return new Tuple<>(x, y);
-        } else {
-            Utils.showInformation("Les coordonnées entrées sont incorrectes.");
-            return null;
         }
+
+        return null; // This should never happen, as coordinates are sent by components
     }
 
     private boolean validateCellAction(int x, int y) {
         if (x >= 0 && y >= 0 && x < Grid.WIDTH && y < Grid.HEIGHT && isCellAvailable(x, y)) {
             return true;
         } else {
-            Utils.showInformation("Les coordonnées sont invalides.");
             return false;
         }
     }
 
-    public void handleAction(String msg) {
+    public boolean handleAction(String msg) {
         Tuple<Integer, Integer> coords = getPositionFromMessage(msg);
         Card selectedCard = null;
         switch (selectedAction) {
@@ -232,6 +242,7 @@ public class Controller implements Observer {
                         movement(x, y);
                         reduceNbActions();
                         powerEngineer = false;
+                        return true;
                     }
                 }
                 break;
@@ -249,6 +260,7 @@ public class Controller implements Observer {
                         } else {
                             powerEngineer = false;
                         }
+                        return true;
                     }
                 }
                 break;
@@ -270,7 +282,7 @@ public class Controller implements Observer {
                         // TODO method initDiscard() (already in feature-discard-treasure-cards
                     } else {
                         if (selectedCard != null) {
-                            currentAdventurer.getHand().getCards().remove(selectedCard);
+                            currentAdventurer.getCards().remove(selectedCard);
                             giveCard(receiver,selectedCard);
                         }
                     }
@@ -280,6 +292,8 @@ public class Controller implements Observer {
             case GET_TREASURE:
                 break;
         }
+
+        return false;
     }
 
     public void drawTreasureCards(int nbCard) {
@@ -318,7 +332,8 @@ public class Controller implements Observer {
         for (Card card : drawedCard) {
             FloodCard floodCard;
             floodCard = (FloodCard) card;
-            state = floodCard.getLinkedCell().getState();
+            Cell linkedCell = floodCard.getLinkedCell();
+            state = linkedCell.getState();
             switch (state) {
                 case NORMAL:
                     floodCard.getLinkedCell().setState(Utils.State.FLOODED);
@@ -330,6 +345,7 @@ public class Controller implements Observer {
                 default:
                     throw new RuntimeException();
             }
+            gridView.updateCell(linkedCell.getName(), linkedCell.getState());
         }
     }
 
@@ -339,6 +355,8 @@ public class Controller implements Observer {
         currentAdventurer.newTurn();
         setNbActions(NB_ACTIONS_PER_TURN);
         selectedAction = null;
+
+        gridView.newTurn();
     }
 
     /**
@@ -346,10 +364,12 @@ public class Controller implements Observer {
      */
     public void setNbActions(int nb) {
         this.remainingActions = Math.max(nb, NB_ACTIONS_PER_TURN);
+        currentAdventurerView.setNbActions(this.remainingActions);
     }
 
     public void reduceNbActions() {
         this.remainingActions--;
+        currentAdventurerView.setNbActions(this.remainingActions);
     }
 
     /**
@@ -368,9 +388,9 @@ public class Controller implements Observer {
         return (name.equalsIgnoreCase(adv.getClassName())) ? adv : null;
     }
 
+
     @Override
-    public void update(Observable o, Object arg) {
-        Message m = (Message) arg;
+    public void update(IObservable<Message> o, Message m) {
         switch (m.action) {
             case NAVIGATOR_CHOICE:
                 selectedAction = Action.MOVE;
@@ -382,7 +402,7 @@ public class Controller implements Observer {
                 break;
             case MOVE:
                 if (currentAdventurer instanceof Navigator) {
-                    adventurerView.showAdventurers(players);
+                    currentAdventurerView.showAdventurers(players);
                 } else {
                     selectedAction = Action.MOVE;
                     initMovement(currentAdventurer);
@@ -398,13 +418,13 @@ public class Controller implements Observer {
                 break;
             case GET_TREASURE:
                 selectedAction = Action.GET_TREASURE;
+                collectTreasure(currentAdventurer);
                 break;
             case VALIDATE_ACTION:
-                if (selectedAction != null) {
-                    handleAction(m.message);
+                if (selectedAction != null && handleAction(m.message)) {
                     currentActionAdventurer = null;
+                    selectedAction = null;
                 }
-                selectedAction = null;
                 break;
             case END_TURN:
                 this.endTurn();
@@ -422,6 +442,30 @@ public class Controller implements Observer {
         }
     }
 
+    /**
+     *  Vérifie que l'aventurier peut récupérer un trésor, puis si c'est le cas, retire le trésor de la liste des trésors
+     *  non récupérés, puis défausse les cartes utilisées par l'aventurier pour récupérer le trésor dans la défausse des
+     *  cartes trésors
+     * @param adventurer
+     */
+    private void collectTreasure(Adventurer adventurer) {
+        Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
+        if (collectableTreasure != null) {
+            String collectableTreasureName = collectableTreasure.getNom();
+            this.grid.getTreasures().remove(collectableTreasure);
+            int discardedCards = 0;
+            for (Card card : adventurer.getCards()) {
+                if (card.getCardName().equals(collectableTreasureName) && discardedCards <4 ) {
+                    this.discardPiles.get(Utils.CardType.Treasure).addCard(card);
+                    adventurer.getCards().remove(card);
+                    discardedCards++;
+                }
+            }
+            reduceNbActions();
+            // TODO : methode pour montrer à l'utilisateur que le trésor a bien été récupéré / update de sa main
+        }
+    }
+
     private Grid getGrid() {
         return grid;
     }
@@ -430,6 +474,7 @@ public class Controller implements Observer {
         for (Adventurer adventurer : players) {
             adventurer.setGrid(this.grid);
         }
+
         Cell[][] cells = this.getGrid().getCells();
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
@@ -480,7 +525,6 @@ public class Controller implements Observer {
     }
 
     public ArrayList<Adventurer> definePlayer(ArrayList<Adventurer> players) {
-
         ArrayList<String> playersName = controllerMainMenu.getPlayersName();
 
         players = randomPlayer(players, playersName.size());
@@ -518,6 +562,7 @@ public class Controller implements Observer {
 
         this.discardPiles = new HashMap<>();
         discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Flood);
+        deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
 
         deckTmp = DeckFactory.deckFactory(Utils.CardType.Treasure, grid);
@@ -525,6 +570,7 @@ public class Controller implements Observer {
         decks.put(deckTmp.getCardType(), deckTmp);
 
         discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Treasure);
+        deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
     }
 

@@ -14,4 +14,6 @@ public class Treasure {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+    public static final String[] TREASURE_NAMES = {"La Pierre sacrée", "La Statue du zéphyr", "Le Cristal ardent", "Le Calice de l'onde"};
 }

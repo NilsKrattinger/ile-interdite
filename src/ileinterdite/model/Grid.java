@@ -71,4 +71,16 @@ public class Grid {
 		cells[y][x].setState(Utils.State.NORMAL);
 	}
 
+	public ArrayList<Treasure> getTreasures() {
+		return this.treasures;
+	}
+
+	public Treasure getTreasure(String treasureName) {
+		for (Treasure treasure : this.getTreasures()) {
+			if (treasure.getNom().equals(treasureName)) {
+				return treasure;
+			}
+		}
+		return null;
+	}
 }

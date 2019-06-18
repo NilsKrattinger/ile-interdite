@@ -1,101 +1,78 @@
 package ileinterdite.view;
 
+import ileinterdite.components.CellComponent;
+import ileinterdite.components.PawnComponent;
+import ileinterdite.model.Cell;
 import ileinterdite.model.Grid;
-import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.util.Parameters;
-import ileinterdite.util.Tuple;
-import ileinterdite.util.Utils;
+import ileinterdite.model.adventurers.*;
+import ileinterdite.util.*;
 
-import java.util.Collection;
-import java.util.Observable;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GridView extends Observable {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, Integer>> {
+    // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
+    private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
-    public void showActions() {
-        // TODO - implement ileinterdite.view.GridView.showActions
-        throw new UnsupportedOperationException();
+    private JPanel gridPanel;
+    private CellComponent[][] cellComponents;
+    private HashMap<String, CellComponent> cellMap;
+    private HashMap<Utils.Pawn, PawnComponent> pawns;
+
+    public GridView() {
+        observers = new CopyOnWriteArrayList<>();
+        pawns = new HashMap<>();
+        cellMap = new HashMap<>();
+
+        gridPanel = new JPanel(new GridLayout(Grid.WIDTH, Grid.HEIGHT));
     }
 
-    /**
-     *
-     * @param tab
-     */
-    public void showMovements(Collection<Utils.State> tab) {
-        // TODO - implement ileinterdite.view.GridView.showMovements
-        throw new UnsupportedOperationException();
+    public JPanel getMainPanel() {
+        return gridPanel;
     }
 
-    /**
-     *
-     * @param x
-     * @param y
-     * @param adv
-     */
-    public void updateAdvPosition(int x, int y, Adventurer adv) {
-        // TODO - implement ileinterdite.view.GridView.updateAdvPosition
-        throw new UnsupportedOperationException();
+    public void showGrid(Cell[][] cells) {
+        cellComponents = new CellComponent[cells.length][cells.length];
+
+        for (int j = 0; j < cells.length; j++) {
+            for (int i = 0; i < cells[j].length; i++) {
+                Cell cell = cells[j][i];
+
+                CellComponent comp = new CellComponent(cell.getName(), cell.getState(), i + 1, j + 1);
+                gridPanel.add(comp);
+
+                comp.addObserver(this);
+                cellComponents[j][i] = comp;
+                cellMap.put(cell.getName(), comp);
+            }
+        }
+        gridPanel.updateUI();
     }
 
-    /**
-     *
-     * @param tab
-     */
-    public void showDryOptions(Collection<Utils.State> tab) {
-        // TODO - implement ileinterdite.view.GridView.showDryOptions
-        throw new UnsupportedOperationException();
-    }
+    public void showAdventurers(ArrayList<Adventurer> adventurers) {
+        for (Adventurer a : adventurers) {
+            int x = a.getX();
+            int y = a.getY();
 
-    /**
-     *
-     * @param x
-     * @param y
-     */
-    public void updateDriedCells(int x, int y) {
-        // TODO - implement ileinterdite.view.GridView.updateDriedCells
-        throw new UnsupportedOperationException();
+            PawnComponent comp = new PawnComponent(a.getPawn(), x, y);
+            pawns.put(a.getPawn(), comp);
+            cellComponents[y][x].addPawn(comp);
+        }
     }
 
     /**
      * Shows which cells are selectable
      * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
      */
-    public void showSelectableCells(Utils.State[][] states, Grid grid, Tuple<Integer, Integer> adventurerCoordinates) {
-
-        System.out.println("Grille actuelle :");
-        System.out.println("  1  2  3  4  5  6");
-        for (int j = 0; j < states.length; j++) {
-            System.out.print(j + 1);
-            for (int i = 0; i < states[j].length; i++) {
-                Utils.State st = grid.getCell(i, j).getState();
-                String color = (states[j][i] == Utils.State.ACCESSIBLE) ? ANSI_GREEN : ((i == adventurerCoordinates.x && j == adventurerCoordinates.y) ? ANSI_YELLOW : ANSI_RED);
-                System.out.print(" " + color + st.toString().charAt(0) + st.toString().charAt(1) + ANSI_RESET);
-            }
-            System.out.println();
-        }
-
-        System.out.println("As = Asséchée, In = Inondée, Co = Coulée");
-        System.out.println(ANSI_RED + "Rouge = Inaccessible" + ANSI_RESET + " ; " + ANSI_GREEN + "Vert = Accessible" + ANSI_RESET + " ; " +
-                ANSI_YELLOW + "Jaune = position de l'aventurier" + ANSI_RESET);
-
-        System.out.println("Ces tuiles sont accessibles :");
+    public void showSelectableCells(Utils.State[][] states) {
         for (int j = 0; j < states.length; j++) {
             for (int i = 0; i < states[j].length; i++) {
-                if (states[j][i] == Utils.State.ACCESSIBLE) {
-                    System.out.print("(" + (i + 1) + "," + (j + 1) + ") ");
-                }
+                cellComponents[j][i].setAccessible(states[j][i]);
             }
         }
-
-        System.out.println();
     }
 
     /**
@@ -103,15 +80,58 @@ public class GridView extends Observable {
      * @param adv The adventurer to update
      */
     public void updateAdventurer(Adventurer adv) {
-        if (Parameters.LOGS) {
-            System.out.println("Adventurer moved to (" + (adv.getX() + 1) + ',' + (adv.getY() + 1) + ")");
+        PawnComponent pawn = pawns.get(adv.getPawn());
+        cellComponents[pawn.getY()][pawn.getX()].removePawn(pawn);
+        pawn.setX(adv.getX());
+        pawn.setY(adv.getY());
+
+        cellComponents[pawn.getY()][pawn.getX()].addPawn(pawn);
+        resetCells();
+    }
+
+    public void updateCell(int x, int y, Utils.State state) {
+        cellComponents[y][x].setState(state);
+        resetCells();
+    }
+
+    public void updateCell(String name, Utils.State state) {
+        if (cellMap.containsKey(name)) {
+            cellMap.get(name).setState(state);
+            resetCells();
         }
     }
 
-    public void updateDriedCell(int x, int y) {
-        if (Parameters.LOGS) {
-            System.out.println("Cell at (" + (x + 1) + ',' + (y + 1) + ") is now dry.");
+    public void newTurn() {
+        resetCells();
+    }
+
+    public void resetCells() {
+        for (int j = 0; j < cellComponents.length; j++) {
+            for (int i = 0; i < cellComponents[j].length; i++) {
+                cellComponents[j][i].resetAccessible();
+            }
         }
     }
 
+    @Override
+    public void addObserver(IObserver<Message> o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(IObserver<Message> o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notifyObservers(Message message) {
+        for (IObserver<Message> o : observers) {
+            o.update(this, message);
+        }
+    }
+
+    @Override
+    public void update(IObservable<Tuple<Integer, Integer>> o, Tuple<Integer, Integer> message) {
+        notifyObservers(new Message(Utils.Action.VALIDATE_ACTION, message.x + " " + message.y));
+    }
 }

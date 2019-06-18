@@ -2,9 +2,12 @@ package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
 import ileinterdite.model.Hand;
+import ileinterdite.model.Treasure;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
 import ileinterdite.model.Card;
+
+import java.util.ArrayList;
 
 public abstract class Adventurer {
 
@@ -143,6 +146,8 @@ public abstract class Adventurer {
         return hand;
     }
 
+    public ArrayList<Card> getCards() { return this.getHand().getCards(); }
+
     public void setHand(Hand hand) {
         this.hand = hand;
     }
@@ -151,4 +156,24 @@ public abstract class Adventurer {
         return this.getHand().getCards().size();
     }
 
+    public Treasure isAbleToCollectTreasure() {
+        if (this.getNumberOfCards() < 4) {
+            return null;
+        } else {
+            boolean collectableTreasure = false;
+            int nbTreasureCards;
+            for (String treasureName : Treasure.TREASURE_NAMES) {
+                nbTreasureCards = 0;
+                for (Card card : this.getHand().getCards()) {
+                    if (card.getCardName().equals(treasureName)) {
+                        nbTreasureCards++;
+                    }
+                }
+                if (nbTreasureCards >= 4) {
+                    return this.grid.getTreasure(treasureName);
+                }
+            }
+            return null;
+        }
+    }
 }
