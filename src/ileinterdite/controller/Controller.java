@@ -385,8 +385,27 @@ public class Controller implements Observer {
         currentActionAdventurer = adventurer;
         selectedAction = Action.RESCUE;
         cellStates = adventurer.getRescuCells();
-        Utils.showInformation("ATTENTION l'aventurier " + adventurer.getName() + " bois la tasse, Choisisez vite une case jusqu'a la quelle il va nager !");
-        gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
+        if(avalibleOne(cellStates)){
+            Utils.showInformation("ATTENTION l'aventurier " + adventurer.getName() + " bois la tasse, Choisisez vite une case jusqu'a la quelle il va nager !");
+            gridView.showSelectableCells(cellStates, grid, new Tuple<>(adventurer.getX(), adventurer.getY()));
+        } else {
+            //TODO FONCTION PERDUUUUUUU T'es NULLLLL
+        }
+
+    }
+
+    private boolean avalibleOne(Utils.State[][] cellStates) {
+        boolean avalibleCell = false;
+        int i = 0;
+        while (i < Grid.HEIGHT && !avalibleCell){
+            int j = 0;
+            while (j < Grid.WIDTH && !avalibleCell){
+                avalibleCell = cellStates[i][j] == Utils.State.ACCESSIBLE;
+                j++;
+            }
+            i++;
+        }
+        return avalibleCell;
     }
 
     private Grid getGrid() {
