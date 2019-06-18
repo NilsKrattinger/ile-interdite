@@ -43,6 +43,10 @@ public class Controller implements Observer {
     private static final int NB_ACTIONS_PER_TURN = 3;
     private int remainingActions;
 
+    //Rising scale
+    private int risingScale;
+    private boolean totalFlood;
+
     private boolean powerEngineer = false;
 
     public Controller(ControllerMainMenu cm, AdventurerView view, GridView gview, int nbPlayers) {
@@ -57,6 +61,10 @@ public class Controller implements Observer {
         this.definePLayer(players);
         this.initCard(this.grid);
         this.initBoard();
+
+        this.risingScale = 1;
+        this.totalFlood = false;
+
         this.nextAdventurer();
     }
 
@@ -297,6 +305,33 @@ public class Controller implements Observer {
         }
     }
 
+    private void increaseRisingScale() {
+        setRisingScale(getRisingScale() + 1);
+        if (risingScale >= 10) {
+            totalFlood = true;
+        }
+    }
+
+    private int getFloodedCardToPick() {
+        if (getRisingScale() <= 2) {
+            return 2;
+        } else if (getRisingScale() <= 5) {
+            return 3;
+        } else if (getRisingScale() <= 7) {
+            return 4;
+        } else {
+            return 5;
+        }
+    }
+
+    public int getRisingScale() {
+        return risingScale;
+    }
+
+    public void setRisingScale(int risingScale) {
+        this.risingScale = risingScale;
+    }
+
     private ArrayList<Adventurer> randomPlayer(ArrayList<Adventurer> players, int nbPlayers) {
         Collections.shuffle(players);
         while (players.size() > nbPlayers) {
@@ -334,5 +369,4 @@ public class Controller implements Observer {
 
         //TODO IMPLEMENT TREASURE CARD
     }
-
 }
