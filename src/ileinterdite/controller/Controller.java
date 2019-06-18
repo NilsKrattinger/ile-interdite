@@ -140,7 +140,9 @@ public class Controller implements Observer {
     public void initDiscard(Adventurer adventurer, Card card) {
         ArrayList<Card> handCards = adventurer.getHand().getCards();
         adventurer.getHand().clearHand();
-        handCards.add(card);
+        if (card != null) {
+            handCards.add(card);
+        }
         //adventurerView.askCardToDiscard(handCards);
         // TODO method askCardToDiscard()
     }
@@ -280,8 +282,30 @@ public class Controller implements Observer {
         }
     }
 
-    public void drawTreasureCards() {
-
+    public void drawTreasureCards(int nbCard) {
+        int maximumNbCardFromHand = 5;
+        int nbCardsInHand = this.currentAdventurer.getNumberOfCards();
+        ArrayList<Card> drawedCards = this.decks.get(Utils.CardType.Treasure).drawCards(nbCard);
+        for (Card card : drawedCards) {
+            if (card.getCardName() != "Montée des eaux") {
+                this.currentAdventurer.getCards().add(card);
+                nbCardsInHand++;
+            } else {
+                this.increaseRisingScale();
+                if (!discardPiles.get(Utils.CardType.Flood).getCards().isEmpty()) {
+                    this.discardPiles.get(Utils.CardType.Flood).shuffle();
+                    ArrayList<Card> discardFloodCards = this.discardPiles.get(Utils.CardType.Flood).getCards();
+                    this.decks.get(Utils.CardType.Flood).addAtTheTop(discardFloodCards);
+                    this.discardPiles.get(Utils.CardType.Flood).clearPile();
+                }
+                this.discardPiles.get(Utils.CardType.Treasure).addCard(card);
+            }
+        }
+        if (nbCardsInHand > maximumNbCardFromHand) {
+            for (int i = 0; i < nbCardsInHand - maximumNbCardFromHand; i++) {
+                initDiscard(this.currentAdventurer, (Card) null);
+            }
+        }
     }
 
     /**
@@ -505,7 +529,7 @@ public class Controller implements Observer {
     }
 
     public void endTurn(){
-        //todo drawTreasureCard
+        this.drawTreasureCards(2);
         this.drawFloodCards(2); //TODO Ajouter nomber avec echelle
         this.nextAdventurer();
     }

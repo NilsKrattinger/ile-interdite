@@ -28,4 +28,9 @@ public class DiscardPile {
 	public Utils.CardType getCardType() {
 		return cardType;
 	}
+
+	public void shuffle(){
+		Collections.shuffle(cards);
+
+	}
 }

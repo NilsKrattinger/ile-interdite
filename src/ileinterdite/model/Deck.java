@@ -31,15 +31,15 @@ public class Deck {
 	 * @return
 	 */
 	public ArrayList<Card> drawCards (int nbCards){
-		ArrayList<Card> drawedCads = new ArrayList<>();
+		ArrayList<Card> drawedCards = new ArrayList<>();
 		if (cards.size() - nbCards < 0){
 			//TODO REFILL DECKS
 		}
 
 		for (int i = 0; i < nbCards; i++) {
-			drawedCads.add(this.cards.pop());
+			drawedCards.add(this.cards.pop());
 		}
-		return drawedCads;
+		return drawedCards;
 	}
 
 	/**
