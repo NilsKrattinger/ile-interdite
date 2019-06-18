@@ -630,7 +630,5 @@ public class Controller implements IObserver<Message> {
         } else {
             this.nextAdventurer();
         }
-
-        this.nextAdventurer();
     }
 }
