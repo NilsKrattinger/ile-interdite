@@ -14,4 +14,5 @@ public class Message {
 
     public Utils.Action action;
     public String message;
+
 }
