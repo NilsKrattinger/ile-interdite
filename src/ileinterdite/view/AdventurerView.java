@@ -27,6 +27,7 @@ public class AdventurerView implements IObservable<Message> {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 
         JPanel cardPanel = new JPanel();
+        mainPanel.add(cardPanel);
 
         JPanel actionButtonPanel = new JPanel(new GridLayout(2, 2));
         JButton moveButton = new JButton("Bouger") ;
@@ -49,7 +50,7 @@ public class AdventurerView implements IObservable<Message> {
 
         BufferedImage img = Utils.loadImage("personnages/" + ad.getClassName().toLowerCase() + ".png");
         if (img != null) {
-            ImageIcon icon = new ImageIcon(img);
+            ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 2, img.getHeight() / 2, Image.SCALE_SMOOTH));
             JLabel adventurerCard = new JLabel();
             adventurerCard.setIcon(icon);
             mainPanel.add(adventurerCard);
@@ -63,7 +64,7 @@ public class AdventurerView implements IObservable<Message> {
         JPanel nbTextPanel = new JPanel();
         nbTextPanel.setAlignmentX(SwingConstants.CENTER);
         JLabel nbTextLabel = new JLabel("NB ACTIONS");
-        nbTextLabel.setFont(new Font(nbActionsPanel.getFont().getName(), nbActionsPanel.getFont().getStyle(), 20));
+        nbTextLabel.setFont(new Font(nbActionsPanel.getFont().getName(), nbActionsPanel.getFont().getStyle(), 18));
         nbTextPanel.add(nbTextLabel);
         nbActionsPanel.add(nbTextPanel, c);
 
