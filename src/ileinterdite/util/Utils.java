@@ -35,7 +35,9 @@ public class Utils {
         VALIDATE_ACTION,
         END_TURN,
         CANCEL_ACTION,
-        DISCARD
+        DISCARD,
+        SANDBAGUSAGE,
+        HELICOPTERUSAGE
     }
  
     public enum State {

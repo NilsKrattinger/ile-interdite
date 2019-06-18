@@ -1,5 +1,6 @@
 package ileinterdite.view;
 
+import ileinterdite.model.Hand;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.IObservable;
 import ileinterdite.util.IObserver;

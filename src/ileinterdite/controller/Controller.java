@@ -12,6 +12,7 @@ import ileinterdite.util.Utils.Action;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GameView;
 import ileinterdite.view.GridView;
+import ileinterdite.view.HandView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +38,7 @@ public class Controller implements IObserver<Message> {
     private GridView gridView;
     private HashMap<Adventurer, AdventurerView> adventurerViews;
     private AdventurerView currentAdventurerView;
+    private HandView handView;
 
     // Turn state
     private Action selectedAction;
@@ -57,6 +59,7 @@ public class Controller implements IObserver<Message> {
         builtStuff = BoardFactory.boardFactory();
         this.mainView = new GameView(1280, 720);
         this.gridView = new GridView();
+        this.handView = new HandView();
         this.mainView.setGridView(this.gridView);
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][]) builtStuff[1], (ArrayList<Treasure>) builtStuff[2]);
@@ -77,7 +80,7 @@ public class Controller implements IObserver<Message> {
         this.initBoard();
         this.risingScale = 1;
         this.totalFlood = false;
-
+        
         this.gridView.addObserver(this);
         this.gridView.showGrid(this.grid.getCells());
         this.gridView.showAdventurers(players);
@@ -623,6 +626,8 @@ public class Controller implements IObserver<Message> {
 
     public void endTurn() {
         this.drawTreasureCards(2);
+        this.handView.update(currentAdventurer);
+
 
         this.drawFloodCards(getFloodedCardToPick());
         if(!adventurersNeedRescue.isEmpty()){
