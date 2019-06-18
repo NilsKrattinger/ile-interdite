@@ -11,6 +11,7 @@ import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
 import ileinterdite.util.Utils.Action;
 import ileinterdite.view.AdventurerView;
+import ileinterdite.view.GameView;
 import ileinterdite.view.GridView;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class Controller implements IObserver<Message> {
     private Collection<Deck> decks;
     private Collection<DiscardPile> discardPiles;
 
+    private GameView mainView;
     private GridView gridView;
     private HashMap<Adventurer, AdventurerView> adventurerViews;
     private AdventurerView currentAdventurerView;
@@ -44,13 +46,15 @@ public class Controller implements IObserver<Message> {
 
     private boolean powerEngineer = false;
 
-    public Controller(ControllerMainMenu cm, GridView gview) {
+    public Controller(ControllerMainMenu cm) {
         adventurerViews = new HashMap<>();
         this.controllerMainMenu = cm;
 
         Object[] builtStuff;
         builtStuff = BoardFactory.boardFactory();
-        this.gridView = gview;
+        this.mainView = new GameView(1280, 720);
+        this.gridView = new GridView();
+        this.mainView.setGridView(this.gridView);
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][])builtStuff[1],null);
         this.definePlayer(players);
@@ -62,13 +66,15 @@ public class Controller implements IObserver<Message> {
 
             if (currentAdventurerView == null) {
                 currentAdventurerView = view;
-                currentAdventurerView.show();
+                this.mainView.setAdventurerView(currentAdventurerView);
             }
         }
 
         this.initBoard();
+        this.gridView.addObserver(this);
         this.gridView.showGrid(this.grid.getCells());
         this.gridView.showAdventurers(players);
+        this.mainView.setVisible();
 
         nextAdventurer();
     }
@@ -76,9 +82,8 @@ public class Controller implements IObserver<Message> {
     private void changeCurrentAdventurer() {
         players.add(players.remove(0));
         currentAdventurer = players.get(0);
-        currentAdventurerView.hide();
         currentAdventurerView = adventurerViews.get(currentAdventurer);
-        currentAdventurerView.show();
+        this.mainView.setAdventurerView(currentAdventurerView);
     }
 
     /**

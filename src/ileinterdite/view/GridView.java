@@ -3,6 +3,7 @@ package ileinterdite.view;
 import ileinterdite.components.CellComponent;
 import ileinterdite.components.PawnComponent;
 import ileinterdite.model.Cell;
+import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.*;
 import ileinterdite.util.*;
 
@@ -16,7 +17,6 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
     private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
-    private JFrame window;
     private JPanel gridPanel;
     private CellComponent[][] cellComponents;
     private HashMap<Utils.Pawn, PawnComponent> pawns;
@@ -25,33 +25,22 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
         observers = new CopyOnWriteArrayList<>();
         pawns = new HashMap<>();
 
-        window = new JFrame("Grid");
-        window.setSize(500, 500);
-
-        gridPanel = new JPanel(new GridBagLayout());
-        window.add(gridPanel);
+        gridPanel = new JPanel(new GridLayout(Grid.WIDTH, Grid.HEIGHT));
     }
 
-    public void setVisible() {
-        window.setVisible(true);
+    public JPanel getMainPanel() {
+        return gridPanel;
     }
 
     public void showGrid(Cell[][] cells) {
         cellComponents = new CellComponent[cells.length][cells.length];
-        GridBagConstraints c = new GridBagConstraints();
-        c.weightx = 2;
-        c.weighty = 2;
-        c.fill = GridBagConstraints.BOTH;
 
         for (int j = 0; j < cells.length; j++) {
             for (int i = 0; i < cells[j].length; i++) {
                 Cell cell = cells[j][i];
 
                 CellComponent comp = new CellComponent(cell.getName(), cell.getState(), i + 1, j + 1);
-
-                c.gridx = i;
-                c.gridy = j;
-                gridPanel.add(comp, c);
+                gridPanel.add(comp);
 
                 comp.addObserver(this);
                 cellComponents[j][i] = comp;

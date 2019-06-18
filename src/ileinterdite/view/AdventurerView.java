@@ -17,20 +17,14 @@ public class AdventurerView implements IObservable<Message> {
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
     private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
-    private final JFrame window;
     private final JPanel mainPanel;
     private final JLabel nbActionsLabel;
 
     public AdventurerView(Adventurer ad) {
         observers = new CopyOnWriteArrayList<>();
 
-        this.window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(720, 220);
-
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-        this.window.add(mainPanel);
 
         JPanel cardPanel = new JPanel();
 
@@ -62,7 +56,6 @@ public class AdventurerView implements IObservable<Message> {
         }
 
         JPanel nbActionsPanel = new JPanel(new GridBagLayout());
-        //nbActionsPanel.setLayout(new BoxLayout(nbActionsPanel, BoxLayout.Y_AXIS));
         GridBagConstraints c = new GridBagConstraints();
 
         c.gridx = 0;
@@ -117,12 +110,8 @@ public class AdventurerView implements IObservable<Message> {
         advChoice.setVisible(true);
     }
 
-    public void show() {
-        this.window.setVisible(true);
-    }
-
-    public void hide() {
-        this.window.setVisible(false);
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 
     public void setNbActions(int nbActions) {
