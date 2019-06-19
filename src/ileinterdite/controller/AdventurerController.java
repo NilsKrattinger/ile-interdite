@@ -75,6 +75,7 @@ public class AdventurerController {
         currentHandView = adventurerHandViews.get(currentAdventurer);
         controller.getWindow().setAdventurerView(currentView);
         currentHandView.update(currentAdventurer);
+
     }
 
     /* **************** *

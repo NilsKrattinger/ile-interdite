@@ -22,14 +22,12 @@ public class PawnsSelectionView  implements IObservable<Message> {
 
     private JFrame window;
     private JPanel mainPanel;
-    private JPanel choicePanel;
     private JButton annulerButton;
-    private ArrayList<JLabel> pawnsIco;
+
 
 
     public PawnsSelectionView() {
         observers = new CopyOnWriteArrayList<>();
-        pawnsIco = new ArrayList<>();
         mainPanel = new JPanel(new BorderLayout());
 
         annulerButton = new JButton("Annuler");
@@ -37,18 +35,17 @@ public class PawnsSelectionView  implements IObservable<Message> {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Message m = new Message(Utils.Action.CANCEL_ACTION, null);
-                pawnsIco.clear();
-                choicePanel = null;
+
                 window.setVisible(false);
                 notifyObservers(m);
             }
         });
-        choicePanel = new JPanel();
+
 
 
 
         mainPanel.add(annulerButton,BorderLayout.SOUTH);
-        mainPanel.add(choicePanel,BorderLayout.CENTER);
+
 
 
         this.initFrame();
@@ -57,11 +54,14 @@ public class PawnsSelectionView  implements IObservable<Message> {
 
     public void update(ArrayList<Adventurer> adventurers) {
 
-        choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
+         ArrayList<JLabel> pawnsIco = new ArrayList<>();
+         JPanel choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
+
+
 
 
         for (Adventurer adventuer : adventurers) {
-            JPanel tmp = new JPanel(new GridLayout(2, 1));
+
 
             String path = adventuer.getPawn().toString();
             path = "pion" + path;
@@ -69,18 +69,25 @@ public class PawnsSelectionView  implements IObservable<Message> {
 
             BufferedImage img = Utils.loadImage(path + ".png");
             if (img != null) {
+
+                JPanel tmp = new JPanel(new GridLayout(2, 1));
                 ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 2, img.getHeight() / 2, Image.SCALE_SMOOTH));
                 JLabel pawnIco = new JLabel("", SwingConstants.CENTER);
                 pawnIco.setIcon(icon);
+                pawnsIco.add(pawnIco);
+                tmp.add(pawnIco);
+                tmp.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
                 pawnIco.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
                         int index;
-                        index = PawnsSelectionView.this.pawnsIco.indexOf(mouseEvent.getComponent());
+                        System.out.println(33);
+                        index = pawnsIco.indexOf(mouseEvent.getComponent());
                         if (index != -1) {
+                            System.out.println("YOY");
                             Message m = new Message(Utils.Action.ADVENTURER_CHOICE, adventurers.get(index).getClassName());
                             pawnsIco.clear();
-                            choicePanel = null;
+                            mainPanel.remove(choicePanel);
                             window.setVisible(false);
                             notifyObservers(m);
                         }
@@ -107,14 +114,13 @@ public class PawnsSelectionView  implements IObservable<Message> {
 
                     }
                 });
-                pawnsIco.add(pawnIco);
-                tmp.add(pawnIco);
-                tmp.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
+
+
                 choicePanel.add(tmp);
                 mainPanel.add(choicePanel,BorderLayout.CENTER);
                 window.add(mainPanel);
-                window.repaint();
                 window.setVisible(true);
+                choicePanel.repaint();
 
             }
 
