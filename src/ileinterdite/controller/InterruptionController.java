@@ -44,14 +44,19 @@ public class InterruptionController {
                 rescue(ActionControllerHelper.getPositionFromMessage(m.message));
                 break;
             case NAVIGATOR_CHOICE:
-                currentAction = Utils.Action.MOVE;
-                currentActionAdventurer = findAdventurerByClassName(m.message);
-                if (currentActionAdventurer != null) {
-                    if (currentActionAdventurer instanceof Navigator) {
-                        cellStates = controller.getAdventurerController().initMove(currentActionAdventurer);
-                    } else {
-                        cellStates = controller.getAdventurerController().initPowerNavigatorMovement(currentActionAdventurer);
+                if(m.action != Utils.Action.CANCEL_ACTION) {
+                    currentAction = Utils.Action.MOVE;
+                    currentActionAdventurer = findAdventurerByClassName(m.message);
+                    if (currentActionAdventurer != null) {
+                        if (currentActionAdventurer instanceof Navigator) {
+                            cellStates = controller.getAdventurerController().initMove(currentActionAdventurer);
+                        } else {
+                            cellStates = controller.getAdventurerController().initPowerNavigatorMovement(currentActionAdventurer);
+                        }
                     }
+                } else {
+                    controller.getActionController().stopInterruption();
+
                 }
                 break;
             case MOVE:

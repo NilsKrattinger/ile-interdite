@@ -180,6 +180,14 @@ public class ActionController implements IObserver<Message> {
     }
 
     /**
+     * Stop an interruption action.
+     */
+    public void stopInterruption() {
+        this.isInterrupted = false;
+    }
+
+
+    /**
      * End an interruption action. Everything is back at normal
      */
     public void endInterruption() {
