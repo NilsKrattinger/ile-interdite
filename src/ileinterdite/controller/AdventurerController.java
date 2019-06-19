@@ -2,6 +2,7 @@ package ileinterdite.controller;
 
 import ileinterdite.model.Card;
 import ileinterdite.model.Cell;
+import ileinterdite.model.Hand;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Messager;
 import ileinterdite.util.Message;
@@ -206,9 +207,11 @@ public class AdventurerController {
     public void setSelectedAdventurer(Message m) {
         Adventurer receiver = this.getAdventurerFromName(m.message);
         int nbOfCardsInReceiverHand = receiver.getNumberOfCards();
-        if (nbOfCardsInReceiverHand == 5 && selectedCard != null) {
-            controller.getInterruptionController().initDiscard(receiver,selectedCard);
-            // TODO method initDiscard() (already in feature-discard-treasure-cards
+        if (nbOfCardsInReceiverHand == Hand.NB_MAX_CARDS && selectedCard != null) {
+            ArrayList<Card> cards = new ArrayList<>(receiver.getHand().getCards());
+            receiver.getHand().clearHand();
+            cards.add(selectedCard);
+            controller.getInterruptionController().initDiscard(receiver, cards);
         } else {
             if (selectedCard != null) {
                 currentAdventurer.getCards().remove(selectedCard);
@@ -218,12 +221,12 @@ public class AdventurerController {
     }
 
     /**
-     * Ajoute la carte card à la main de aventurier adventurer s'il a moins de 5 cartes dans sa main
+     * Ajoute la carte card à la main de aventurier adventurer s'il a moins du nombre max de cartes dans sa main
      * @param adventurer
      * @param card
      */
     public void giveCard(Adventurer adventurer, Card card) {
-        if (adventurer != null && card != null && adventurer.getNumberOfCards()<5) {
+        if (adventurer != null && card != null && adventurer.getNumberOfCards() < Hand.NB_MAX_CARDS) {
             adventurer.getCards().add(card);
         }
     }
