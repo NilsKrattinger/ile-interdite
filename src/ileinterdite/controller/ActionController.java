@@ -17,9 +17,13 @@ public class ActionController implements IObserver<Message> {
 
     // Action specific variables
     private Utils.State[][] cellStates; //< The state of all states, if needed by the action
-    private boolean isInterrupted;
-    private boolean engineerPower;
+    private boolean isInterrupted; //< Whether the actions are interrupted or not
+    private boolean engineerPower; //< The power of the engineer to dry two cells
 
+    /**
+     * Creates the controller that receives interactions made with the window
+     * @param c A reference to the GameController
+     */
     public ActionController(GameController c) {
         this.controller = c;
         this.isInterrupted = false;
@@ -78,6 +82,9 @@ public class ActionController implements IObserver<Message> {
         }
     }
 
+    /**
+     * Starts a new turn
+     */
     public void newTurn() {
         currentAction = null;
         selectedAction = null;
@@ -146,10 +153,17 @@ public class ActionController implements IObserver<Message> {
     /* ************* *
      * INTERRUPTIONS *
      * ************* */
+
+    /**
+     * Start an interruption action. Nothing else will work
+     */
     public void startInterruption() {
         this.isInterrupted = true;
     }
 
+    /**
+     * End an interruption action. Everything is back at normal
+     */
     public void endInterruption() {
         this.isInterrupted = false;
     }
@@ -157,6 +171,12 @@ public class ActionController implements IObserver<Message> {
     /* *********************** *
      * ACTION SPECIFIC METHODS *
      * *********************** */
+
+    /**
+     * Sets the power of the engineer (to dry twice).
+     * @param power false to remove the ability to dry a second cell, it will reduce the number of actions if it was
+     *              set to true
+     */
     private void setEngineerPower(boolean power) {
         if (!power && engineerPower) {
             reduceNbActions();

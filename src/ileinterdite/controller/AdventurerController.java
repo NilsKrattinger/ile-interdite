@@ -30,6 +30,12 @@ public class AdventurerController {
     Card selectedCard; //< The card selected by the player during a GIVE_CARD action
     Adventurer selectedAdventurer; //< The adventurer selected by the player during a GIVE_CARD action
 
+    /**
+     * Creates the controller that handles everything the Adventurers do
+     * @param c A reference to the GameController
+     * @param adventurers The list of adventurers in the game
+     * @param playerNames The names to be given to the adventurers
+     */
     public AdventurerController(GameController c, ArrayList<Adventurer> adventurers, ArrayList<String> playerNames) {
         this.controller = c;
         this.adventurers = AdventurerControllerHelper.getPlayers(adventurers, playerNames);
@@ -42,11 +48,17 @@ public class AdventurerController {
      * TURN HANDLING *
      * ************* */
 
+    /**
+     * Switch actions to the next adventurer
+     */
     public void nextAdventurer() {
         changeCurrentAdventurer();
         currentAdventurer.newTurn();
     }
 
+    /**
+     * Change the current adventurer with the new adventurer
+     */
     private void changeCurrentAdventurer() {
         adventurers.add(adventurers.remove(0));
         currentAdventurer = adventurers.get(0);
@@ -58,6 +70,10 @@ public class AdventurerController {
      * RECEIVE MESSAGES *
      * **************** */
 
+    /**
+     * Handles a message received from the ActionController
+     * @param m The message sent by the view
+     */
     public void handleAction(Message m) {
 
         switch (m.action) {
@@ -75,15 +91,19 @@ public class AdventurerController {
      * INIT ACTIONS  *
      * ************* */
 
+    /**
+     * Start an action that impacts a cell
+     * @param message The message received from the view
+     * @return
+     */
     public Utils.State[][] startCellAction(Message message) {
         return (message.action == Utils.Action.MOVE) ? initMove(currentAdventurer) : initDry(currentAdventurer);
     }
 
     /**
-     * Lance les actions pour le deplacement de l'aventurier.
-     * puis l'interaction avec l'interface
-     *
-     * @param adventurer
+     * Start the movement action
+     * @param adventurer The adventurer that will start the movement
+     * @return The list of states with either ACCESSIBLE or INACCESSIBLE
      */
     public Utils.State[][] initMove(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
@@ -94,10 +114,9 @@ public class AdventurerController {
     }
 
     /**
-     * Lance les actions pour le deplacement de l'aventurier.
-     * puis l'interaction avec l'interface
-     *
-     * @param adventurer
+     * Starts the action to dry a cell
+     * @param adventurer The adventurer that will dry the cell
+     * @return The list of states with either ACCESSIBLE or INACCESSIBLE
      */
     public Utils.State[][] initDry(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
@@ -109,9 +128,8 @@ public class AdventurerController {
 
 
     /**
-     *  Lance les actions pour le don d'une carte par l'aventurier adventurer (vérification qu'il y a
-     *  bien un autre aventurier sur sa tuile, et lancement du choix de la carte à donner
-     * @param adventurer : aventurier initiant le don de carte
+     * Starts the action to give a card
+     * @param adventurer The adventurer that will give one of its cards
      */
     public void initGiveCard(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
@@ -128,15 +146,28 @@ public class AdventurerController {
      * MAKE ACTIONS *
      * ************ */
 
+    /**
+     * Move the current adventurer
+     * @param pos The position where the adventurer will move
+     */
     public void movement(Tuple<Integer, Integer> pos) {
         movement(pos, currentActionAdventurer);
     }
 
+    /**
+     * Move an adventurer
+     * @param pos The position where the adventurer will move
+     * @param adv The adventurer to move
+     */
     public void movement(Tuple<Integer, Integer> pos, Adventurer adv) {
         adv.move(pos.x, pos.y);
         controller.getGridController().getGridView().updateAdventurer(adv);
     }
 
+    /**
+     * Set the selected card for the GIVE_CARD action
+     * @param m The message received from the view
+     */
     public void setSelectedCard(Message m) {
         selectedCard = this.currentAdventurer.getHand().getCard(m.message);
         if (selectedCard != null) {
@@ -145,6 +176,10 @@ public class AdventurerController {
         }
     }
 
+    /**
+     * Set the selected adventurer for the GIVE_CARD action
+     * @param m The message received from the view
+     */
     public void setSelectedAdventurer(Message m) {
         Adventurer receiver = this.getAdventurerFromName(m.message);
         int nbOfCardsInReceiverHand = receiver.getNumberOfCards();
