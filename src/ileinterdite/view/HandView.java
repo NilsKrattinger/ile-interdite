@@ -27,12 +27,12 @@ public class HandView implements IObservable<Message> {
         observers = new CopyOnWriteArrayList<>();
 
         cards = new ArrayList<>();
-        initcards();
+        initCards();
 
         mainPanel = new JPanel(new BorderLayout());
-        cardPanel = new JPanel(new GridLayout(1, 5));
+        cardPanel = new JPanel(new GridLayout(1, Hand.NB_MAX_CARDS));
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < Hand.NB_MAX_CARDS; i++) {
             cardPanel.add(cards.get(i));
         }
 
@@ -42,8 +42,8 @@ public class HandView implements IObservable<Message> {
 
     }
 
-    private void initcards() {
-        for (int i = 0; i < 5; i++) {
+    private void initCards() {
+        for (int i = 0; i < Hand.NB_MAX_CARDS; i++) {
             cards.add(new JLabel());
             cards.get(i).setIcon(null);
             cards.get(i).addMouseListener(new MouseListener() {

@@ -51,6 +51,7 @@ public class ActionController implements IObserver<Message> {
                 break;
 
             case GIVE_CARD:
+                currentAction = Utils.Action.GIVE_CARD;
                 setEngineerPower(false);
                 controller.startAdventurerAction(message);
                 break;

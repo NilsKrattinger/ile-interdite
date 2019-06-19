@@ -3,6 +3,7 @@ package ileinterdite.controller;
 import ileinterdite.model.Card;
 import ileinterdite.model.Cell;
 import ileinterdite.model.adventurers.*;
+import ileinterdite.model.Hand;
 import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
@@ -153,7 +154,7 @@ public class AdventurerController {
         currentActionAdventurer = adventurer;
         Cell adventurerCell = controller.getGridController().getGrid().getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
-        if ((nbOfAdventurersOnCell >= 2 && adventurer.getNumberOfCards() > 0) || adventurer instanceof Messager) {
+        if ((nbOfAdventurersOnCell >= 2 && adventurer.getNumberOfCards() > 0) || (adventurer instanceof Messager && adventurer.getNumberOfCards() > 0)) {
             cardGivingView = new CardGivingView(this.controller);
             ArrayList<Card> giverCards = new ArrayList<>();
             giverCards.addAll(currentAdventurer.getCards());
@@ -218,13 +219,15 @@ public class AdventurerController {
         controller.getGridController().getGridView().updateAdventurer(adv);
     }
 
+
+
     /**
-     * Ajoute la carte card à la main de aventurier adventurer s'il a moins de 5 cartes dans sa main
+     * Ajoute la carte card à la main de aventurier adventurer s'il a moins du nombre max de cartes dans sa main
      * @param adventurer
      * @param card
      */
     public void giveCard(Adventurer adventurer, Card card) {
-        if (adventurer != null && card != null && adventurer.getNumberOfCards()<5) {
+        if (adventurer != null && card != null && adventurer.getNumberOfCards() < Hand.NB_MAX_CARDS) {
             adventurer.getCards().add(card);
         }
     }

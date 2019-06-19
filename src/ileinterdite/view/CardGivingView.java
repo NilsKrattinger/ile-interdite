@@ -23,7 +23,7 @@ public class CardGivingView {
     }
 
     public void showPotentialReceivers(ArrayList<Adventurer> potentielReceivers) {
-        System.out.println("Voici les cartes parmis lesquelles vous pouvez choisir pour donner une carte : ");
+        System.out.println("Voici les aventuriers parmis lesquels vous pouvez choisir : ");
         for (Adventurer adventurer : potentielReceivers) {
             System.out.println(adventurer.getName());
         }

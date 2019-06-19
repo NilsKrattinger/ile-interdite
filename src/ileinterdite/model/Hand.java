@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Hand {
 
+    public static final int NB_MAX_CARDS = 5;
 	private ArrayList<Card> cards;
 
 	public Hand() {
