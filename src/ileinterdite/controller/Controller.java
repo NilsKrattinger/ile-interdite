@@ -1,9 +1,14 @@
 package ileinterdite.controller;
 
+
 import ileinterdite.factory.BoardFactory;
 import ileinterdite.factory.DeckFactory;
 import ileinterdite.factory.DiscardPileFactory;
 import ileinterdite.model.*;
+import ileinterdite.model.Cell;
+import ileinterdite.model.Deck;
+import ileinterdite.model.DiscardPile;
+import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
@@ -375,6 +380,7 @@ public class Controller implements IObserver<Message> {
         currentAdventurer.newTurn();
         setNbActions(NB_ACTIONS_PER_TURN);
         selectedAction = null;
+        this.testDefeat();
 
         gridView.newTurn();
     }
@@ -581,6 +587,74 @@ public class Controller implements IObserver<Message> {
         return players;
     }
 
+    /**
+     * declenche la victoire
+     */
+    private void victory() {
+        //adventurerView.displayVictory()
+        //TODO adventurerView.displayVictory()
+
+        //this.endGame()
+        //TODO this.endGame()
+    }
+
+    /**
+     * declenche la défaite
+     */
+    private void defeat() {
+        //adventurerView.displayDefeat()
+        //TODO adventurerView.displayVictory()
+
+        //this.endGame()
+        //TODO this.endGame()
+    }
+
+    /**
+     * Check if its dead to win
+     */
+    public void testDefeat() {
+        if (totalFlood || this.treasureSink() || this.heliCellSink()) {
+            this.defeat();
+        }
+    }
+
+    /**
+     * Check si les tresors restants ont coulés
+     * @return
+     */
+    private boolean treasureSink() {
+        ArrayList<Treasure> treasuresNotFound = this.getGrid().getTreasures();
+        HashMap<Cell, Treasure> notFoundTreasureCells = new HashMap<>();
+        for (Cell[] cells : getGrid().getCells()) {
+            for (Cell cell : cells) {
+                if (cell instanceof TreasureCell && cell.getState() != Utils.State.SUNKEN && treasuresNotFound.contains(((TreasureCell) cell).getTreasure())) {
+                    notFoundTreasureCells.put(cell, ((TreasureCell) cell).getTreasure());
+                }
+            }
+        }
+        for (Treasure treasure : treasuresNotFound) {
+            if (!notFoundTreasureCells.containsValue(treasure)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check si l'heliport a coulé
+     * @return
+     */
+    private boolean heliCellSink() {
+        Cell heliCell = null;
+        for (Cell[] cells : getGrid().getCells()) {
+            for (Cell cell : cells) {
+                if (cell.getName() != null && cell.getName().equals("Heliport")) {
+                    heliCell = cell;
+                }
+            }
+        }
+        return heliCell.getState() == Utils.State.SUNKEN;
+    }
 
     public Adventurer getAdventurer(String adventurerName) {
         for (Adventurer adventurer : this.getPlayers()) {
@@ -594,6 +668,7 @@ public class Controller implements IObserver<Message> {
     public ArrayList<Adventurer> getPlayers() {
         return this.players;
     }
+
     /**
      * Create all of the deck and cards
      *
