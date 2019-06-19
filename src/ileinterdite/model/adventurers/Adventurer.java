@@ -1,11 +1,8 @@
 package ileinterdite.model.adventurers;
 
-import ileinterdite.model.Grid;
-import ileinterdite.model.Hand;
-import ileinterdite.model.Treasure;
+import ileinterdite.model.*;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
-import ileinterdite.model.Card;
 
 import java.util.ArrayList;
 
@@ -53,6 +50,25 @@ public abstract class Adventurer {
 		return cellsState;
 	}
 
+    /**
+     * Methode qui retourne un tableau avec les case  accessible par l'aventurier déplacer par le navigateur
+     * @return State[][] avec une marque accesible ou non
+     */
+    public Utils.State[][] getPowerNavigatorAccessibleCells() {
+        Utils.State[][] cellsState = grid.getStateOfCells();
+        cellPowerNavigatorChoiceMoving(cellsState, x, y, 2);
+
+        for (int j = 0; j < cellsState.length; j++) {
+            for (int i = 0; i < cellsState[j].length; i++) {
+                if (cellsState[j][i] != Utils.State.ACCESSIBLE) {
+                    cellsState[j][i] = Utils.State.INACCESSIBLE;
+                }
+            }
+        }
+
+        return cellsState;
+    }
+
 	/**
 	 * Methode qui retourne un tableau avec les case assechables par l'aventurier
 	 * @return State[][] avec une marque assechable ou non
@@ -93,6 +109,34 @@ public abstract class Adventurer {
                 } else {
                     tab[j][i] = Utils.State.INACCESSIBLE;
                 }
+            }
+        }
+    }
+
+    /**
+     * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile,
+     * si elle est accessible ou non par l'aventurier déplacé par le Navigateur
+     * @param tab
+     */
+    public void cellPowerNavigatorChoiceMoving(Utils.State[][] tab, int x, int y, int distance) {
+        if (x < 0 || y < 0 || x >= Grid.WIDTH || y >= Grid.HEIGHT) {
+            return;
+        }
+        
+        Utils.State currState = tab[y][x];
+        if (currState == Utils.State.NORMAL || currState == Utils.State.FLOODED) {
+            if ((x != this.getX() || y != this.getY())) {
+                distance--;
+                tab[y][x] = Utils.State.ACCESSIBLE;
+            } else {
+                tab[y][x] = Utils.State.INACCESSIBLE;
+            }
+
+            if (distance > 0) {
+                cellPowerNavigatorChoiceMoving(tab, x - 1, y, distance);
+                cellPowerNavigatorChoiceMoving(tab, x + 1, y, distance);
+                cellPowerNavigatorChoiceMoving(tab, x, y - 1, distance);
+                cellPowerNavigatorChoiceMoving(tab, x, y + 1, distance);
             }
         }
     }
@@ -164,21 +208,29 @@ public abstract class Adventurer {
         return cellsState;
     }
 
+    /**
+     *  Vérifie que l'aventurier dispose d'au moins 4 cartes du même du trésor et qu'il est bien sur la tuile associée
+     *  au trésor dont il a les 4 cartes
+     * @return le trésor qu'il peut récupérer ou null s'il ne peut en récupérer aucun (moins de 4 cartes, pas 4 cartes
+     * du même trésor ou pas sur la tuile associée à ses 4 cartes
+     */
     public Treasure isAbleToCollectTreasure() {
         if (this.getNumberOfCards() < 4) {
             return null;
         } else {
-            boolean collectableTreasure = false;
             int nbTreasureCards;
             for (String treasureName : Treasure.TREASURE_NAMES) {
                 nbTreasureCards = 0;
-                for (Card card : this.getHand().getCards()) {
+                for (Card card : this.getCards()) {
                     if (card.getCardName().equals(treasureName)) {
                         nbTreasureCards++;
                     }
                 }
-                if (nbTreasureCards >= 4) {
-                    return this.grid.getTreasure(treasureName);
+                if (nbTreasureCards >= 4 && grid.getCell(this.getX(),this.getY()) instanceof TreasureCell) {
+                    TreasureCell adventurerCell = (TreasureCell) this.grid.getCell(this.getX(),this.getY());
+                    if (adventurerCell.getTreasure().getName().equalsIgnoreCase(treasureName)) {
+                        return grid.getTreasure(treasureName);
+                    }
                 }
             }
             return null;

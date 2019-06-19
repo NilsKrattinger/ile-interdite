@@ -26,9 +26,7 @@ public class GameController {
 
     private GameView mainView;
 
-    private boolean powerEngineer = false;
-
-    public GameController(MainMenuController cm) {
+    public GameController(MainMenuController cm, int difficulty) {
         BoardFactory.initBoardFactory();
         this.mainView = new GameView(1280, 720);
 
@@ -36,10 +34,11 @@ public class GameController {
         this.actionController = new ActionController(this);
         this.adventurerController = new AdventurerController(this, BoardFactory.getAdventurers(), mainMenuController.getPlayersName());
         this.gridController = new GridController(this);
-        this.interruptionController = new InterruptionController(this);
-        this.waterScaleController = new WaterScaleController(1);
         this.deckController = new DeckController(this);
+        this.interruptionController = new InterruptionController(this);
+        this.waterScaleController = new WaterScaleController(difficulty);
 
+        this.gridController.finishGridInit();
         this.mainView.setVisible();
         this.newTurn();
     }
@@ -91,7 +90,7 @@ public class GameController {
      * TURN HANDLING *
      * ************* */
 
-    private void newTurn() {
+    public void newTurn() {
         testDefeat();
         adventurerController.nextAdventurer();
         gridController.newTurn();

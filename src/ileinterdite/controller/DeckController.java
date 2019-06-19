@@ -51,13 +51,12 @@ public class DeckController {
     }
 
     public void drawTreasureCards(int nbCard) {
-        int maximumNbCardFromHand = 5;
-        int nbCardsInHand = controller.getCurrentAdventurer().getNumberOfCards();
         ArrayList<Card> drawedCards = this.decks.get(Utils.CardType.Treasure).drawCards(nbCard);
-        for (Card card : drawedCards) {
-            if (!card.getCardName().equalsIgnoreCase("Montée des eaux")) {
-                controller.getCurrentAdventurer().getCards().add(card);
-                nbCardsInHand++;
+        ArrayList<Card> tempAdventurerHandCards = new ArrayList<>(controller.getCurrentAdventurer().getCards());
+        controller.getCurrentAdventurer().getHand().clearHand();
+        for (Card drawedCard : drawedCards) {
+            if (!drawedCard.getCardName().equalsIgnoreCase("Montée des eaux")) {
+                tempAdventurerHandCards.add(drawedCard);
             } else {
                 controller.getWaterScaleController().increaseWaterScale();
                 if (!discardPiles.get(Utils.CardType.Flood).getCards().isEmpty()) {
@@ -66,12 +65,14 @@ public class DeckController {
                     this.decks.get(Utils.CardType.Flood).addAtTheTop(discardFloodCards);
                     this.discardPiles.get(Utils.CardType.Flood).clearPile();
                 }
-                this.discardPiles.get(Utils.CardType.Treasure).addCard(card);
+                this.discardPiles.get(Utils.CardType.Treasure).addCard(drawedCard);
             }
         }
-        if (nbCardsInHand > maximumNbCardFromHand) {
-            for (int i = 0; i < nbCardsInHand - maximumNbCardFromHand; i++) {
-                controller.getInterruptionController().initDiscard(controller.getCurrentAdventurer(), null);
+        if (tempAdventurerHandCards.size() > Hand.NB_MAX_CARDS) {
+            controller.getInterruptionController().initDiscard(controller.getCurrentAdventurer(), tempAdventurerHandCards);
+        } else {
+            for (Card card : tempAdventurerHandCards) {
+                controller.getAdventurerController().giveCard(controller.getCurrentAdventurer(), card);
             }
         }
     }

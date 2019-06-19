@@ -74,7 +74,9 @@ public class ActionController implements IObserver<Message> {
                 break;
 
             case VALIDATE_ACTION:
-                validateAction(message);
+                if (selectedAction != null) {
+                    validateAction(message);
+                }
                 break;
 
             case END_TURN:
@@ -114,7 +116,7 @@ public class ActionController implements IObserver<Message> {
             case MOVE: case DRY:
                 validateCellAction(message, selectedAction);
                 break;
-            case GIVE_CARD: //TODO Donner la carte
+            case START_GIVE_CARD: //TODO Donner la carte
                 break;
         }
     }

@@ -28,12 +28,12 @@ public class Utils {
         MOVE,
         DRY,
         GET_TREASURE,
-        GIVE_CARD,
 
         // More actions initialized by the player
         START_GIVE_CARD,
         CANCEL_ACTION,
         END_TURN,
+        USE_TREASURE_CARD,
 
         // Actions for the system only
         RESCUE,

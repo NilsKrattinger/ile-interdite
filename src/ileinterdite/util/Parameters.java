@@ -15,7 +15,7 @@ public class Parameters {
 
     // ====================================================================================
     // Paramètres NF
-    public static final Boolean LOGS = true ; // Afficher des traces par System.out.println()
-    public static final Boolean RANDOM = true ; // Attribuer les aventuriers aléatoirement ou non, mélanger les défausses et les pioches
-    public static final Boolean DEMOMAP = true ; // Utiliser un plateau avec les cartes pré placer
+    public static  Boolean LOGS = true ; // Afficher des traces par System.out.println()
+    public static  Boolean RANDOM = true ; // Attribuer les aventuriers aléatoirement ou non, mélanger les défausses et les pioches
+    public static  Boolean DEMOMAP = false ; // Utiliser un plateau avec les cartes pré placer
 }

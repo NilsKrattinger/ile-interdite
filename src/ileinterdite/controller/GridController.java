@@ -11,6 +11,8 @@ import ileinterdite.util.Utils;
 import ileinterdite.util.helper.GridControllerHelper;
 import ileinterdite.view.GridView;
 
+import java.util.ArrayList;
+
 public class GridController {
 
     private GameController controller; //< A reference to the main controller
@@ -27,11 +29,13 @@ public class GridController {
         GridControllerHelper.spawnAdventurers(c.getAdventurers(), grid);
         GridControllerHelper.initView(gridView, grid, controller.getAdventurers(), controller.getActionController());
 
-        if(!Parameters.DEMOMAP){
+        controller.getWindow().setGridView(gridView);
+    }
+
+    public void finishGridInit() {
+        if (!Parameters.DEMOMAP) {
             controller.getDeckController().drawFloodCards(6);
         }
-
-        controller.getWindow().setGridView(gridView);
     }
 
     /* ************* *
@@ -58,17 +62,22 @@ public class GridController {
      * @param adventurer
      */
     public void collectTreasure(Adventurer adventurer) {
-        Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
-        if (collectableTreasure != null) {
-            String collectableTreasureName = collectableTreasure.getName();
-            this.grid.getTreasures().remove(collectableTreasure);
+        Treasure collectibleTreasure = adventurer.isAbleToCollectTreasure();
+        if (collectibleTreasure != null) {
+            String collectibleTreasureName = collectibleTreasure.getName();
+            this.grid.getTreasures().remove(grid.getTreasure(collectibleTreasureName));
             int discardedCards = 0;
+            ArrayList<Card> cardsToDiscard = new ArrayList<>();
             for (Card card : adventurer.getCards()) {
-                if (card.getCardName().equals(collectableTreasureName) && discardedCards <4 ) {
+                if (card.getCardName().equals(collectibleTreasureName) && discardedCards < 4) {
                     controller.getDeckController().getDiscardPile(Utils.CardType.Treasure).addCard(card);
-                    adventurer.getCards().remove(card);
+                    cardsToDiscard.add(card);
                     discardedCards++;
                 }
+            }
+
+            for (Card card : cardsToDiscard) {
+                adventurer.getCards().remove(card);
             }
             controller.getActionController().reduceNbActions();
             // TODO : methode pour montrer à l'utilisateur que le trésor a bien été récupéré / update de sa main
