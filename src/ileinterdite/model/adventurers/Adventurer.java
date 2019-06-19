@@ -53,6 +53,17 @@ public abstract class Adventurer {
 		return cellsState;
 	}
 
+    /**
+     * Methode qui retourne un tableau avec les case  accessible par l'aventurier déplacer par le navigateur
+     * @return State[][] avec une marque accesible ou non
+     */
+    public Utils.State[][] getPowerNavigatorAccessibleCells() {
+        Utils.State[][] cellsState = grid.getStateOfCells();
+        cellPowerNavigatorChoiceMoving(cellsState);
+
+        return cellsState;
+    }
+
 	/**
 	 * Methode qui retourne un tableau avec les case assechables par l'aventurier
 	 * @return State[][] avec une marque assechable ou non
@@ -91,6 +102,45 @@ public abstract class Adventurer {
                         && (this.getY() == j-1 || this.getY() == j+1))) {
                     tab[j][i] = Utils.State.ACCESSIBLE;
                 } else {
+                    tab[j][i] = Utils.State.INACCESSIBLE;
+                }
+            }
+        }
+    }
+
+    /**
+     * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile,
+     * si elle est accessible ou non par l'aventurier déplacé par le Navigateur
+     * @param tab
+     */
+    public void cellPowerNavigatorChoiceMoving(Utils.State[][] tab) {
+        for (int j = 0; j < Grid.HEIGHT; j++) {
+            for (int i = 0; i < Grid.WIDTH; i++) {
+                Utils.State state = tab[j][i];
+                if ((state == Utils.State.FLOODED || state == Utils.State.NORMAL)
+                        && (this.getY() == j && (this.getX() == i-1
+                        || this.getX() == i+1) || this.getX() == i
+                        && (this.getY() == j-1 || this.getY() == j+1))) {
+                    tab[j][i] = Utils.State.ACCESSIBLE;
+
+                    for (int k = 0; k < Grid.HEIGHT; k++) {
+                        for (int l = 0; l < Grid.WIDTH; l++) {
+                            Utils.State state1 = tab[k][l];
+                            if ((state1 == Utils.State.FLOODED || state1 == Utils.State.NORMAL)
+                                    && (j == k && (i == l-1
+                                    || i == l+1) || i == l
+                                    && (j == k-1 || j == k+1))) {
+                                tab[k][l] = Utils.State.ACCESSIBLE;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (int j = 0; j < Grid.HEIGHT; j++) {
+            for (int i = 0; i < Grid.WIDTH; i++) {
+                Utils.State state = tab[j][i];
+                if (state != Utils.State.ACCESSIBLE) {
                     tab[j][i] = Utils.State.INACCESSIBLE;
                 }
             }

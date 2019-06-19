@@ -110,6 +110,12 @@ public class Controller implements IObserver<Message> {
         gridView.showSelectableCells(cellStates);
     }
 
+    public void initPowerNavigatorMovement(Adventurer adventurer) {
+        currentActionAdventurer = adventurer;
+        cellStates = adventurer.getPowerNavigatorAccessibleCells();
+        gridView.showSelectableCells(cellStates);
+    }
+
     /**
      * Lance les actions pour le deplacement de l'aventurier.
      * puis l'interaction avec l'interface
@@ -423,7 +429,11 @@ public class Controller implements IObserver<Message> {
                 // The message contains a string with the format "ClassName (PlayerName)"
                 currentActionAdventurer = findAdventurerByClassName(m.message.substring(0, m.message.indexOf(' ')));
                 if (currentActionAdventurer != null) {
-                    initMovement(currentActionAdventurer);
+                    if (currentActionAdventurer instanceof Navigator) {
+                        this.initMovement(currentActionAdventurer);
+                    } else {
+                        this.initPowerNavigatorMovement(currentActionAdventurer);
+                    }
                 }
                 break;
             case MOVE:
@@ -504,7 +514,7 @@ public class Controller implements IObserver<Message> {
     private void collectTreasure(Adventurer adventurer) {
         Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
         if (collectableTreasure != null) {
-            String collectableTreasureName = collectableTreasure.getNom();
+            String collectableTreasureName = collectableTreasure.getName();
             this.grid.getTreasures().remove(collectableTreasure);
             int discardedCards = 0;
             for (Card card : adventurer.getCards()) {
