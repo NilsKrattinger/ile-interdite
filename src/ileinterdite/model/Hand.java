@@ -23,8 +23,15 @@ public class Hand {
         return null;
 	}
 
+	public Card getCard(int index) {
+	    return cards.get(index);
+	}
+
 	public void clearHand() {
 		this.cards.clear();
 	}
 
+	public int getSize() {
+		return cards.size();
+	}
 }

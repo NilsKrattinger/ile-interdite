@@ -50,6 +50,25 @@ public abstract class Adventurer {
 		return cellsState;
 	}
 
+    /**
+     * Methode qui retourne un tableau avec les case  accessible par l'aventurier déplacer par le navigateur
+     * @return State[][] avec une marque accesible ou non
+     */
+    public Utils.State[][] getPowerNavigatorAccessibleCells() {
+        Utils.State[][] cellsState = grid.getStateOfCells();
+        cellPowerNavigatorChoiceMoving(cellsState, x, y, 2);
+
+        for (int j = 0; j < cellsState.length; j++) {
+            for (int i = 0; i < cellsState[j].length; i++) {
+                if (cellsState[j][i] != Utils.State.ACCESSIBLE) {
+                    cellsState[j][i] = Utils.State.INACCESSIBLE;
+                }
+            }
+        }
+
+        return cellsState;
+    }
+
 	/**
 	 * Methode qui retourne un tableau avec les case assechables par l'aventurier
 	 * @return State[][] avec une marque assechable ou non
@@ -90,6 +109,34 @@ public abstract class Adventurer {
                 } else {
                     tab[j][i] = Utils.State.INACCESSIBLE;
                 }
+            }
+        }
+    }
+
+    /**
+     * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile,
+     * si elle est accessible ou non par l'aventurier déplacé par le Navigateur
+     * @param tab
+     */
+    public void cellPowerNavigatorChoiceMoving(Utils.State[][] tab, int x, int y, int distance) {
+        if (x < 0 || y < 0 || x >= Grid.WIDTH || y >= Grid.HEIGHT) {
+            return;
+        }
+        
+        Utils.State currState = tab[y][x];
+        if (currState == Utils.State.NORMAL || currState == Utils.State.FLOODED) {
+            if ((x != this.getX() || y != this.getY())) {
+                distance--;
+                tab[y][x] = Utils.State.ACCESSIBLE;
+            } else {
+                tab[y][x] = Utils.State.INACCESSIBLE;
+            }
+
+            if (distance > 0) {
+                cellPowerNavigatorChoiceMoving(tab, x - 1, y, distance);
+                cellPowerNavigatorChoiceMoving(tab, x + 1, y, distance);
+                cellPowerNavigatorChoiceMoving(tab, x, y - 1, distance);
+                cellPowerNavigatorChoiceMoving(tab, x, y + 1, distance);
             }
         }
     }
