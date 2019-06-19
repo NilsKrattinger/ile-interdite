@@ -12,7 +12,7 @@ import java.util.Hashtable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
-public class MainMenuView implements IObservable<StartMessage> {
+public class MainMenuView2 implements IObservable<StartMessage> {
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
     private final CopyOnWriteArrayList<IObserver<StartMessage>> observers;
 
@@ -35,7 +35,7 @@ public class MainMenuView implements IObservable<StartMessage> {
     private JCheckBox randomOption;
     private JLabel optionLabel;
 
-    public MainMenuView() {
+    public MainMenuView2() {
         this.observers = new CopyOnWriteArrayList<>();
         this.initWindow();
 
@@ -136,7 +136,6 @@ public class MainMenuView implements IObservable<StartMessage> {
                 m.demoOption = demoOption.isSelected();
                 m.logOption = logOption.isSelected();
                 m.randomOption = randomOption.isSelected();
-                m.difficulty = difficluty.getValue();
                 notifyObservers(m);
                 window.setVisible(false);
             } else {

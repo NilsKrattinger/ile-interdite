@@ -21,8 +21,9 @@ public class ControllerMainMenu implements IObserver<StartMessage> {
         Parameters.LOGS = message.logOption;
         Parameters.DEMOMAP = message.demoOption;
         Parameters.RANDOM = message.randomOption;
+        int difficulty = message.difficulty;
 
-        Controller c = new Controller(this);
+        Controller c = new Controller(this, difficulty);
 
     }
 }

@@ -49,7 +49,7 @@ public class Controller implements IObserver<Message> {
 
     private boolean powerEngineer = false;
 
-    public Controller(ControllerMainMenu cm) {
+    public Controller(ControllerMainMenu cm, int difficulty) {
         adventurerViews = new HashMap<>();
         this.controllerMainMenu = cm;
         adventurersNeedRescue = new ArrayList<>();
@@ -83,6 +83,7 @@ public class Controller implements IObserver<Message> {
         this.gridView.showAdventurers(players);
         this.mainView.setVisible();
 
+        this.setRisingScale(difficulty);
         this.nextAdventurer();
     }
 
