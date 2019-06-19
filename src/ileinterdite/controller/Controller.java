@@ -17,6 +17,8 @@ import ileinterdite.util.Utils.Action;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GameView;
 import ileinterdite.view.GridView;
+import ileinterdite.view.DiscardView;
+
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class Controller implements IObserver<Message> {
     private GridView gridView;
     private HashMap<Adventurer, AdventurerView> adventurerViews;
     private AdventurerView currentAdventurerView;
+    private DiscardView discardView;
 
     // Turn state
     private Action selectedAction;
@@ -56,6 +59,7 @@ public class Controller implements IObserver<Message> {
     private boolean powerEngineer = false;
 
     public Controller(ControllerMainMenu cm) {
+        discardView = new DiscardView(this);
         adventurerViews = new HashMap<>();
         this.controllerMainMenu = cm;
         adventurersNeedRescue = new ArrayList<>();
@@ -157,13 +161,24 @@ public class Controller implements IObserver<Message> {
      * @param cards
      */
     public void initDiscard(Adventurer adventurer, ArrayList<Card> cards) {
-        ArrayList<Card> cardsToDiscard = getCardsToDiscard(Hand.NB_MAX_CARDS - cards.size());
+        ArrayList<String> cardNamesToDiscard = discardView.getCardsToDiscard(cards,cards.size() - Hand.NB_MAX_CARDS);
+        ArrayList<Card> cardsToDiscard = new ArrayList<>();
+        boolean cardAdded;
+        for (String cardName : cardNamesToDiscard) {
+            cardAdded = false;
+            for (Card card : cards) {
+                if (card.getCardName().equals(cardName) && cardAdded == false) {
+                    cardsToDiscard.add(card);
+                    cardAdded = true;
+                }
+            }
+        }
         for (Card card : cardsToDiscard) {
             discard(card);
             cards.remove(card);
         }
         for (Card card : cards) {
-            adventurer.getCards().add(card);
+            this.giveCard(adventurer,card);
         }
     }
 
@@ -316,7 +331,8 @@ public class Controller implements IObserver<Message> {
 
     public void drawTreasureCards(int nbCard) {
         ArrayList<Card> drawedCards = this.decks.get(Utils.CardType.Treasure).drawCards(nbCard);
-        ArrayList<Card> tempAdventurerHandCards = currentAdventurer.getCards();
+        ArrayList<Card> tempAdventurerHandCards = new ArrayList<>();
+        tempAdventurerHandCards.addAll(currentAdventurer.getCards());
         currentAdventurer.getHand().clearHand();
         for (Card drawedCard : drawedCards) {
             if (drawedCard.getCardName() != "Montée des eaux") {
@@ -336,7 +352,7 @@ public class Controller implements IObserver<Message> {
             initDiscard(currentAdventurer,tempAdventurerHandCards);
         } else {
             for (Card card : tempAdventurerHandCards) {
-                currentAdventurer.getCards().add(card);
+                giveCard(currentAdventurer,card);
             }
         }
     }
@@ -695,7 +711,7 @@ public class Controller implements IObserver<Message> {
 
     public void endTurn() {
         this.drawTreasureCards(2);
-
+        System.out.println(this.currentAdventurer.getNumberOfCards());
         this.drawFloodCards(getFloodedCardToPick());
         if(!adventurersNeedRescue.isEmpty()){
             initRescue(adventurersNeedRescue.get(0));
