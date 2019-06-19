@@ -64,7 +64,9 @@ public class ActionController implements IObserver<Message> {
                 break;
 
             case VALIDATE_ACTION:
-                validateAction(message);
+                if (selectedAction != null) {
+                    validateAction(message);
+                }
                 break;
 
             case END_TURN:
