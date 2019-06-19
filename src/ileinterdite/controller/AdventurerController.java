@@ -3,6 +3,7 @@ package ileinterdite.controller;
 import ileinterdite.model.Card;
 import ileinterdite.model.Cell;
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.model.adventurers.Messager;
 import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
@@ -151,7 +152,7 @@ public class AdventurerController {
         currentActionAdventurer = adventurer;
         Cell adventurerCell = controller.getGridController().getGrid().getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
-        if (nbOfAdventurersOnCell >= 2) {
+        if (nbOfAdventurersOnCell >= 2 || adventurer instanceof Messager) {
             ArrayList<Card> giverCards = currentAdventurer.getCards();
             //adventurerView.showTradableCards(giverCards);
             // TODO showTradableCards() method
@@ -187,8 +188,14 @@ public class AdventurerController {
     public void setSelectedCard(Message m) {
         selectedCard = this.currentAdventurer.getHand().getCard(m.message);
         if (selectedCard != null) {
-            //adventurerView.chooseCardReceiver();
-            // TODO chooseCardReceiver() method
+            ArrayList<Adventurer> advs = new ArrayList<>();
+            for (Adventurer adv : adventurers) {
+                if (currentAdventurer instanceof Messager || (adv != currentAdventurer && adv.getY() == currentAdventurer.getY() && adv.getX() == currentAdventurer.getX())) {
+                    advs.add(adv);
+                }
+                //adventurerView.chooseCardReceiver();
+                // TODO chooseCardReceiver(adv) method
+            }
         }
     }
 
