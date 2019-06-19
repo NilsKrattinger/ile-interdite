@@ -8,6 +8,8 @@ import ileinterdite.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -31,6 +33,16 @@ public class PawnsSelectionView  implements IObservable<Message> {
         mainPanel = new JPanel(new BorderLayout());
 
         annulerButton = new JButton("Annuler");
+        annulerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Message m = new Message(Utils.Action.CANCEL_ACTION, null);
+                pawnsIco.clear();
+                choicePanel = null;
+                window.setVisible(false);
+                notifyObservers(m);
+            }
+        });
         choicePanel = new JPanel();
 
 
