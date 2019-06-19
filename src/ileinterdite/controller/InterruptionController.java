@@ -101,7 +101,7 @@ public class InterruptionController {
             Utils.showInformation("ATTENTION l'aventurier " + currentActionAdventurer.getName() + " boit la tasse, Choisissez vite une case jusqu'à laquelle il va nager !");
             controller.getGridController().getGridView().showSelectableCells(cellStates);
         } else {
-            //TODO FONCTION PERDUUUUUUU T'es NULLLLL
+            controller.defeat();
         }
     }
 
@@ -110,13 +110,14 @@ public class InterruptionController {
      * @param adventurer
      */
     public void initDiscard(Adventurer adventurer, ArrayList<Card> cards) {
+
         ArrayList<String> cardNamesToDiscard = discardView.getCardsToDiscard(cards,cards.size() - Hand.NB_MAX_CARDS);
         ArrayList<Card> cardsToDiscard = new ArrayList<>();
         boolean cardAdded;
         for (String cardName : cardNamesToDiscard) {
             cardAdded = false;
             for (Card card : cards) {
-                if (card.getCardName().equals(cardName) && cardAdded == false) {
+                if (card.getCardName().equals(cardName) && !cardAdded) {
                     cardsToDiscard.add(card);
                     cardAdded = true;
                 }
