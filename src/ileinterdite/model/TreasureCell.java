@@ -10,9 +10,8 @@ public class TreasureCell extends Cell {
 
     }
 
-
     public Treasure getTreasure() {
-        return treasure;
+        return this.treasure;
     }
 
     public void setTreasure(Treasure treasure) {

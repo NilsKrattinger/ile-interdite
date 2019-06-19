@@ -1,6 +1,5 @@
 package ileinterdite.view;
 
-import ileinterdite.controller.Controller;
 import ileinterdite.model.Card;
 import ileinterdite.util.Parameters;
 
@@ -8,12 +7,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DiscardView {
-
-    private Controller controller;
-
-    public DiscardView(Controller controller) {
-        this.controller = controller;
-    }
 
     public ArrayList<String> getCardsToDiscard(ArrayList<Card> cards, int nbCard) {
         if (Parameters.LOGS) {
