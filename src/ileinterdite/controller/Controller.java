@@ -711,7 +711,7 @@ public class Controller implements IObserver<Message> {
 
     public void endTurn() {
         this.drawTreasureCards(2);
-        System.out.println(this.currentAdventurer.getNumberOfCards());
+        System.out.println(currentAdventurer + " a " + this.currentAdventurer.getNumberOfCards() + " cartes dans sa main");
         this.drawFloodCards(getFloodedCardToPick());
         if(!adventurersNeedRescue.isEmpty()){
             initRescue(adventurersNeedRescue.get(0));
