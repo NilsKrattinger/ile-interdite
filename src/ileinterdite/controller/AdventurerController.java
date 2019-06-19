@@ -8,6 +8,7 @@ import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.helper.AdventurerControllerHelper;
 import ileinterdite.view.AdventurerView;
+import ileinterdite.view.PawnsSelectionView;
 
 import java.util.ArrayList;
 import java.util.HashMap;

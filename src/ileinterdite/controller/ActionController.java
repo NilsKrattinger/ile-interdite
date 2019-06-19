@@ -1,13 +1,20 @@
 package ileinterdite.controller;
 
+import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
 import ileinterdite.util.helper.ActionControllerHelper;
+import ileinterdite.view.PawnsSelectionView;
+
+import java.util.ArrayList;
 
 public class ActionController implements IObserver<Message> {
 
     private GameController controller; //< A reference to the main controller
+
+    // View specific Variables
+    private PawnsSelectionView pawnsSelectionView;
 
     // Variables used to handle all actions
     private Utils.Action currentAction; //< The action being processed
@@ -28,6 +35,9 @@ public class ActionController implements IObserver<Message> {
         this.controller = c;
         this.isInterrupted = false;
         this.engineerPower = false;
+
+        pawnsSelectionView = new PawnsSelectionView();
+        pawnsSelectionView.addObserver(this);
     }
 
     @Override
@@ -74,6 +84,10 @@ public class ActionController implements IObserver<Message> {
             case CANCEL_ACTION:
                 currentAction = null;
                 break;
+            case ADVENTURER_CHOICE:
+                validateAction(message);
+                break;
+
         }
         selectedAction = currentAction;
 
@@ -99,6 +113,8 @@ public class ActionController implements IObserver<Message> {
         switch (selectedAction) {
             case MOVE: case DRY:
                 validateCellAction(message, selectedAction);
+                break;
+            case GIVE_CARD: //TODO Donner la carte
                 break;
         }
     }
@@ -184,4 +200,14 @@ public class ActionController implements IObserver<Message> {
 
         engineerPower = power;
     }
+
+    /* *********************** *
+     * PAWN CHOICE METHODS     *
+     * *********************** */
+
+    public void choiceAdventuer(ArrayList<Adventurer> adventurers){
+        pawnsSelectionView.update(adventurers);
+
+    }
+
 }

@@ -60,7 +60,7 @@ public class GridController {
     public void collectTreasure(Adventurer adventurer) {
         Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
         if (collectableTreasure != null) {
-            String collectableTreasureName = collectableTreasure.getNom();
+            String collectableTreasureName = collectableTreasure.getName();
             this.grid.getTreasures().remove(collectableTreasure);
             int discardedCards = 0;
             for (Card card : adventurer.getCards()) {

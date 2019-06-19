@@ -12,6 +12,7 @@ public class GameView {
     private final JPanel gridPanel;
 
     public GameView(int width, int height) {
+
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(width, height);
