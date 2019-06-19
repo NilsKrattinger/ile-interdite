@@ -12,5 +12,8 @@ public class TreasureCell extends Cell {
 
     }
 
+    public Treasure getTreasure() {
+        return this.treasure;
+    }
 
 }

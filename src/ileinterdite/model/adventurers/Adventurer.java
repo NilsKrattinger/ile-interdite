@@ -1,11 +1,8 @@
 package ileinterdite.model.adventurers;
 
-import ileinterdite.model.Grid;
-import ileinterdite.model.Hand;
-import ileinterdite.model.Treasure;
+import ileinterdite.model.*;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
-import ileinterdite.model.Card;
 
 import java.util.ArrayList;
 
@@ -164,6 +161,12 @@ public abstract class Adventurer {
         return cellsState;
     }
 
+    /**
+     *  Vérifie que l'aventurier dispose d'au moins 4 cartes du même du trésor et qu'il est bien sur la tuile associée
+     *  au trésor dont il a les 4 cartes
+     * @return le trésor qu'il peut récupérer ou null s'il ne peut en récupérer aucun (moins de 4 cartes, pas 4 cartes
+     * du même trésor ou pas sur la tuile associée à ses 4 cartes
+     */
     public Treasure isAbleToCollectTreasure() {
         if (this.getNumberOfCards() < 4) {
             return null;
@@ -177,8 +180,11 @@ public abstract class Adventurer {
                         nbTreasureCards++;
                     }
                 }
-                if (nbTreasureCards >= 4) {
-                    return this.grid.getTreasure(treasureName);
+                if (nbTreasureCards >= 4 && grid.getCell(this.getX(),this.getY()) instanceof TreasureCell) {
+                    TreasureCell adventurerCell = (TreasureCell) this.grid.getCell(this.getX(),this.getY());
+                    if (adventurerCell.getTreasure().getName().equalsIgnoreCase(treasureName)) {
+                        return grid.getTreasure(treasureName);
+                    }
                 }
             }
             return null;
