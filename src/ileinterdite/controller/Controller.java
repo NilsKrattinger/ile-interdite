@@ -275,8 +275,12 @@ public class Controller implements IObserver<Message> {
                 if (msg != null) {
                     selectedCard = this.currentAdventurer.getHand().getCard(msg);
                     if (selectedCard != null) {
-                        //adventurerView.chooseCardReceiver();
-                        // TODO chooseCardReceiver() method
+                        for (Adventurer adv : players) {
+                            if (currentAdventurer instanceof Messager || (adv != currentAdventurer) && (adv.getY() == currentAdventurer.getY() && adv.getX() == currentAdventurer.getX())) {
+                            //adventurerView.chooseCardReceiver();
+                            // TODO chooseCardReceiver(adv) method
+                        }
+                        }
                     }
                 }
                 break;
@@ -286,7 +290,7 @@ public class Controller implements IObserver<Message> {
                     int nbOfCardsInReceiverHand = receiver.getNumberOfCards();
                     if (nbOfCardsInReceiverHand == 5 && selectedCard != null) {
                         //initDiscard(receiver,selectedCard);
-                        // TODO method initDiscard() (already in feature-discard-treasure-cards
+                        // TODO method initDiscard() (already in feature-discard-treasure-cards)
                     } else {
                         if (selectedCard != null) {
                             currentAdventurer.getCards().remove(selectedCard);
