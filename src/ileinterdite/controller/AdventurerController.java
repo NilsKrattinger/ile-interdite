@@ -2,7 +2,7 @@ package ileinterdite.controller;
 
 import ileinterdite.model.Card;
 import ileinterdite.model.Cell;
-import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.model.adventurers.*;
 import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
@@ -153,7 +153,7 @@ public class AdventurerController {
         currentActionAdventurer = adventurer;
         Cell adventurerCell = controller.getGridController().getGrid().getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
-        if (nbOfAdventurersOnCell >= 2 && adventurer.getNumberOfCards() > 0) {
+        if ((nbOfAdventurersOnCell >= 2 && adventurer.getNumberOfCards() > 0) || adventurer instanceof Messager) {
             cardGivingView = new CardGivingView(this.controller);
             ArrayList<Card> giverCards = new ArrayList<>();
             giverCards.addAll(currentAdventurer.getCards());
@@ -167,19 +167,32 @@ public class AdventurerController {
                 }
             }
 
+            ArrayList<Adventurer> potentialAdventurers = new ArrayList<>();
+            for (Adventurer adv : adventurers) {
+                if ((currentAdventurer instanceof Messager && adv != currentAdventurer)
+                    || (adv != currentAdventurer
+                        && adv.getY() == currentAdventurer.getY()
+                        && adv.getX() == currentAdventurer.getX())) {
+                    potentialAdventurers.add(adv);
+                }
+            }
+            cardGivingView.showPotentialReceivers(potentialAdventurers);
+
             String receiverName = cardGivingView.getReceiverName();
             selectedAdventurer = getAdventurerFromName(receiverName);
 
-            int nbOfCardsInReceiverHand = selectedAdventurer.getNumberOfCards();
-            if (nbOfCardsInReceiverHand == 5) {
-                ArrayList<Card> tempAdventurerHandCards = new ArrayList<>();
-                tempAdventurerHandCards.addAll(selectedAdventurer.getCards());
-                selectedAdventurer.getHand().clearHand();
-                this.controller.getInterruptionController().initDiscard(selectedAdventurer,tempAdventurerHandCards);
+            if (potentialAdventurers.contains(selectedAdventurer)) {
+                int nbOfCardsInReceiverHand = selectedAdventurer.getNumberOfCards();
+                if (nbOfCardsInReceiverHand == 5) {
+                    ArrayList<Card> tempAdventurerHandCards = new ArrayList<>();
+                    tempAdventurerHandCards.addAll(selectedAdventurer.getCards());
+                    selectedAdventurer.getHand().clearHand();
+                    this.controller.getInterruptionController().initDiscard(selectedAdventurer, tempAdventurerHandCards);
+                }
+                giveCard(selectedAdventurer, selectedCard);
+                adventurer.getCards().remove(selectedCard);
+                this.controller.getActionController().reduceNbActions();
             }
-            giveCard(selectedAdventurer,selectedCard);
-            adventurer.getCards().remove(selectedCard);
-            this.controller.getActionController().reduceNbActions();
         }
     }
 
