@@ -53,6 +53,10 @@ public class InterruptionController {
                     } else {
                         cellStates = controller.getAdventurerController().initPowerNavigatorMovement(currentActionAdventurer);
                     }
+
+                    if (!InterruptionControllerHelper.isMovementPossible(cellStates)) {
+                        controller.getActionController().endInterruption();
+                    }
                 }
                 break;
             case MOVE:

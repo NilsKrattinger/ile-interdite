@@ -19,4 +19,19 @@ public class InterruptionControllerHelper {
         return availableCellFound;
     }
 
+    public static boolean isMovementPossible(Utils.State[][] cellStates) {
+        boolean availability = false;
+        int j = 0;
+        while (!availability && j < cellStates.length) {
+            int i = 0;
+            while (!availability && i < cellStates[j].length) {
+                availability = cellStates[j][i] == Utils.State.ACCESSIBLE;
+                i++;
+            }
+            j++;
+        }
+
+        return availability;
+    }
+
 }
