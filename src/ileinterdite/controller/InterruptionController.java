@@ -46,7 +46,8 @@ public class InterruptionController {
             case NAVIGATOR_CHOICE:
                 if(m.action != Utils.Action.CANCEL_ACTION) {
                     currentAction = Utils.Action.MOVE;
-                    currentActionAdventurer = findAdventurerByClassName(m.message);
+                    String[] adventurerClass = InterruptionControllerHelper.splitAdventurerClassName(m.message);
+                    currentActionAdventurer = findAdventurerByClassName(adventurerClass[0]);
                     if (currentActionAdventurer != null) {
                         if (currentActionAdventurer instanceof Navigator) {
                             cellStates = controller.getAdventurerController().initMove(currentActionAdventurer);

@@ -16,19 +16,35 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class PawnsSelectionView  implements IObservable<Message> {
+public class PawnsSelectionView implements IObservable<Message> {
 
     private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
     private JFrame window;
     private JPanel mainPanel;
     private JButton annulerButton;
-
+    private JButton validerButton;
+    private JPanel buttonPanel;
+    private ArrayList<JLabel> pawnsIco;
+    private ArrayList<Integer> pawnsSelected;
+    private ArrayList<Adventurer> adventurers;
 
 
     public PawnsSelectionView() {
+        pawnsSelected = new ArrayList<>();
+        adventurers = new ArrayList<>();
         observers = new CopyOnWriteArrayList<>();
         mainPanel = new JPanel(new BorderLayout());
+        pawnsIco = new ArrayList<>();
+
+        this.initFrame();
+        validerButton = new JButton("Valider");
+        validerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println("Yolo");
+            }
+        });
 
         annulerButton = new JButton("Annuler");
         annulerButton.addActionListener(new ActionListener() {
@@ -39,64 +55,111 @@ public class PawnsSelectionView  implements IObservable<Message> {
                 notifyObservers(m);
             }
         });
-        mainPanel.add(annulerButton,BorderLayout.SOUTH);
-        this.initFrame();
+
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        buttonPanel.add(validerButton,c);
+        c.gridx = 2;
+        c.gridy = 0;
+        buttonPanel.add(annulerButton,c);
+
+        //mainPanel.add(annulerButton, BorderLayout.SOUTH);
+        window.add(mainPanel);
+
     }
 
-    public void update(ArrayList<Adventurer> adventurers) {
+    public void update(ArrayList<Adventurer> avalibleAdventurers, int nbAdveturer) {
+        windowLoad();
 
-         ArrayList<JLabel> pawnsIco = new ArrayList<>();
-         JPanel choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
+        if(nbAdveturer > 1){
+            validerButton.setEnabled(true);
+            validerButton.setVisible(true);
+        } else {
+            validerButton.setEnabled(false);
+            validerButton.setVisible(false);
+        }
+
+
+        adventurers = avalibleAdventurers;
+
+        JPanel choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
 
         for (Adventurer adventuer : adventurers) {
 
-            String path = adventuer.getPawn().toString();
-            path = "pion" + path;
-            path = "pions/" + path;
+            String path = "pions/" + "pion" + adventuer.getPawn().toString();
+
+            JPanel pawnPanel = new JPanel(new GridLayout(2, 1));
 
             BufferedImage img = Utils.loadImage(path + ".png");
             if (img != null) {
-
-                JPanel tmp = new JPanel(new GridLayout(2, 1));
                 ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 2, img.getHeight() / 2, Image.SCALE_SMOOTH));
                 JLabel pawnIco = new JLabel("", SwingConstants.CENTER);
                 pawnIco.setIcon(icon);
-                pawnsIco.add(pawnIco);
                 pawnIco.addMouseListener(new MouseListener() {
+
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
-                        int index;
-                        System.out.println(33);
-                        index = pawnsIco.indexOf(mouseEvent.getComponent());
-                        if (index != -1) {
-                            System.out.println("YOY");
-                            Message m = new Message(Utils.Action.ADVENTURER_CHOICE, adventurers.get(index).getClassName());
-                            pawnsIco.clear();
-                            mainPanel.remove(choicePanel);
-                            window.setVisible(false);
-                            notifyObservers(m);
+                        int pawnIndex;
+
+                        pawnIndex = pawnsIco.indexOf(mouseEvent.getComponent());
+                        if (pawnIndex != -1) {
+                            JLabel pawn = pawnsIco.get(pawnIndex);
+                            if (pawnsSelected.contains(pawnIndex)){
+                                pawn.getParent().setBackground(Color.lightGray);
+                                pawnsSelected.remove(pawnsSelected.indexOf(pawnIndex));
+                            } else {
+                                pawn.getParent().setBackground(Color.WHITE);
+                                pawnsSelected.add(pawnIndex);
+                            }
                         }
 
+                        if (pawnsSelected.size() == nbAdveturer) {
+                            Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
+
+                            mainPanel.remove(choicePanel);
+                            notifyObservers(m);
+                            windowClose();
+
+                        }
                     }
+
                     @Override
-                    public void mousePressed(MouseEvent mouseEvent) {}
+                    public void mousePressed(MouseEvent mouseEvent) {
+                    }
+
                     @Override
-                    public void mouseReleased(MouseEvent mouseEvent) {}
+                    public void mouseReleased(MouseEvent mouseEvent) {
+                    }
+
                     @Override
-                    public void mouseEntered(MouseEvent mouseEvent) {}
+                    public void mouseEntered(MouseEvent mouseEvent) {
+                    }
+
                     @Override
-                    public void mouseExited(MouseEvent mouseEvent) {}
+                    public void mouseExited(MouseEvent mouseEvent) {
+                    }
                 });
-                tmp.add(pawnIco);
-                tmp.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
-                choicePanel.add(tmp);
-                mainPanel.add(choicePanel,BorderLayout.CENTER);
-                window.add(mainPanel);
-                window.setVisible(true);
+
+                mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+                pawnsIco.add(pawnIco);
+
+                pawnPanel.add(pawnIco);
+                pawnPanel.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
+                pawnPanel.setBackground(Color.lightGray);
+
+                choicePanel.add(pawnPanel);
+                mainPanel.add(choicePanel, BorderLayout.CENTER);
+
                 choicePanel.repaint();
+                window.setVisible(true);
             }
         }
     }
+
 
     private void initFrame() {
         window = new JFrame();
@@ -107,6 +170,25 @@ public class PawnsSelectionView  implements IObservable<Message> {
         window.setUndecorated(true);
 
 
+    }
+
+    private String buildStringMessage(ArrayList<Integer> pawnsSelected) {
+        String stringMessage = "";
+        for (Integer i : pawnsSelected) {
+            stringMessage = stringMessage + "/" + adventurers.get(i).getClassName();
+        }
+        return stringMessage;
+    }
+
+    private void windowClose() {
+
+        window.setVisible(false);
+
+    }
+
+    private void  windowLoad(){
+        pawnsIco.clear();
+        pawnsSelected.clear();
     }
 
     @Override
