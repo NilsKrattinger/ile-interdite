@@ -39,6 +39,7 @@ public class GameController {
         this.waterScaleController = new WaterScaleController(difficulty);
 
         this.gridController.finishGridInit();
+        this.adventurerController.finishAdventurerInit();
         this.mainView.setVisible();
 
         this.newTurn();
@@ -99,7 +100,7 @@ public class GameController {
     }
 
     public void endTurn() {
-        deckController.drawTreasureCards(2);
+        deckController.drawTreasureCards(2, getCurrentAdventurer());
         deckController.drawFloodCards(waterScaleController.getFloodedCardToPick());
         if (!interruptionController.getAdventurersToRescue().isEmpty()){
             interruptionController.initRescue();

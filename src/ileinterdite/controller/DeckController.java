@@ -50,10 +50,10 @@ public class DeckController {
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
     }
 
-    public void drawTreasureCards(int nbCard) {
+    public void drawTreasureCards(int nbCard, Adventurer adv) {
         ArrayList<Card> drawedCards = this.decks.get(Utils.CardType.Treasure).drawCards(nbCard);
-        ArrayList<Card> tempAdventurerHandCards = new ArrayList<>(controller.getCurrentAdventurer().getCards());
-        controller.getCurrentAdventurer().getHand().clearHand();
+        ArrayList<Card> tempAdventurerHandCards = new ArrayList<>(adv.getCards());
+        adv.getHand().clearHand();
         for (Card drawedCard : drawedCards) {
             if (!drawedCard.getCardName().equalsIgnoreCase("Montée des eaux")) {
                 tempAdventurerHandCards.add(drawedCard);
@@ -69,10 +69,10 @@ public class DeckController {
             }
         }
         if (tempAdventurerHandCards.size() > Hand.NB_MAX_CARDS) {
-            controller.getInterruptionController().initDiscard(controller.getCurrentAdventurer(), tempAdventurerHandCards);
+            controller.getInterruptionController().initDiscard(adv, tempAdventurerHandCards);
         } else {
             for (Card card : tempAdventurerHandCards) {
-                controller.getAdventurerController().giveCard(controller.getCurrentAdventurer(), card);
+                controller.getAdventurerController().giveCard(adv, card);
             }
         }
     }

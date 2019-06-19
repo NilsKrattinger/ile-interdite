@@ -48,6 +48,12 @@ public class AdventurerController {
         AdventurerControllerHelper.createViews(adventurers, controller.getActionController());
         this.adventurerViews = AdventurerControllerHelper.getAdventurerViews();
         this.adventurerHandViews = AdventurerControllerHelper.getAdventurerHandViews();
+    }
+
+    public void finishAdventurerInit() {
+        for (Adventurer adv : adventurers) {
+            controller.getDeckController().drawTreasureCards(2, adv);
+        }
 
         nextAdventurer();
     }
