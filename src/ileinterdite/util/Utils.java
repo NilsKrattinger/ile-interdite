@@ -36,8 +36,7 @@ public class Utils {
         END_TURN,
         CANCEL_ACTION,
         DISCARD,
-        SANDBAGUSAGE,
-        HELICOPTERUSAGE
+        USE_TREASURE_CARD;
     }
  
     public enum State {

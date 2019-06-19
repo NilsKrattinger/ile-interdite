@@ -37,8 +37,9 @@ public class Controller implements IObserver<Message> {
     private GameView mainView;
     private GridView gridView;
     private HashMap<Adventurer, AdventurerView> adventurerViews;
+    private HashMap<Adventurer,HandView> adventurerHandViews;
     private AdventurerView currentAdventurerView;
-    private HandView handView;
+    private HandView currentHandView;
 
     // Turn state
     private Action selectedAction;
@@ -52,6 +53,7 @@ public class Controller implements IObserver<Message> {
     private boolean powerEngineer = false;
 
     public Controller(ControllerMainMenu cm) {
+        adventurerHandViews = new HashMap<>();
         adventurerViews = new HashMap<>();
         this.controllerMainMenu = cm;
         adventurersNeedRescue = new ArrayList<>();
@@ -59,7 +61,6 @@ public class Controller implements IObserver<Message> {
         builtStuff = BoardFactory.boardFactory();
         this.mainView = new GameView(1280, 720);
         this.gridView = new GridView();
-        this.handView = new HandView();
         this.mainView.setGridView(this.gridView);
         this.players = (ArrayList<Adventurer>) builtStuff[0];
         this.grid = new Grid((Cell[][]) builtStuff[1], (ArrayList<Treasure>) builtStuff[2]);
@@ -76,15 +77,27 @@ public class Controller implements IObserver<Message> {
             }
         }
 
+        for (Adventurer adv : players) {
+            HandView view = new HandView(adv);
+            adventurerHandViews.put(adv, view);
+            view.addObserver(this);
+
+            if (currentHandView == null) {
+                currentHandView = view;
+            }
+        }
+
         this.initCard(this.grid);
         this.initBoard();
         this.risingScale = 1;
         this.totalFlood = false;
-        
+
         this.gridView.addObserver(this);
         this.gridView.showGrid(this.grid.getCells());
         this.gridView.showAdventurers(players);
         this.mainView.setVisible();
+
+
 
         this.nextAdventurer();
     }
@@ -375,6 +388,7 @@ public class Controller implements IObserver<Message> {
 
     public void nextAdventurer() {
         changeCurrentAdventurer();
+        this.currentHandView = adventurerHandViews.get(currentAdventurer);
         currentAdventurer.newTurn();
         setNbActions(NB_ACTIONS_PER_TURN);
         selectedAction = null;
@@ -626,7 +640,7 @@ public class Controller implements IObserver<Message> {
 
     public void endTurn() {
         this.drawTreasureCards(2);
-        this.handView.update(currentAdventurer);
+        this.currentHandView.update(currentAdventurer);
 
 
         this.drawFloodCards(getFloodedCardToPick());
