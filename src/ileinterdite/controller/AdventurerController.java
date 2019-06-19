@@ -8,6 +8,7 @@ import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.helper.AdventurerControllerHelper;
 import ileinterdite.view.AdventurerView;
+import ileinterdite.view.CardGivingView;
 import ileinterdite.view.HandView;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class AdventurerController {
     private Adventurer currentActionAdventurer; //< The adventurer making the current action (may differ from currentAdventurer)
 
     // Action-specific variables
+    private CardGivingView cardGivingView;
     private Card selectedCard; //< The card selected by the player during a GIVE_CARD action
     private Adventurer selectedAdventurer; //< The adventurer selected by the player during a GIVE_CARD action
 
@@ -85,7 +87,7 @@ public class AdventurerController {
     public void handleAction(Message m) {
 
         switch (m.action) {
-            case START_GIVE_CARD:
+            case GIVE_CARD:
                 initGiveCard(currentAdventurer);
                 break;
 
@@ -151,10 +153,33 @@ public class AdventurerController {
         currentActionAdventurer = adventurer;
         Cell adventurerCell = controller.getGridController().getGrid().getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
-        if (nbOfAdventurersOnCell >= 2) {
-            ArrayList<Card> giverCards = currentAdventurer.getCards();
-            //adventurerView.showTradableCards(giverCards);
-            // TODO showTradableCards() method
+        if (nbOfAdventurersOnCell >= 2 && adventurer.getNumberOfCards() > 0) {
+            cardGivingView = new CardGivingView(this.controller);
+            ArrayList<Card> giverCards = new ArrayList<>();
+            giverCards.addAll(currentAdventurer.getCards());
+
+            cardGivingView.showTradableCards(giverCards);
+
+            String selectedCardName = cardGivingView.getSelectedCardName();
+            for (Card card : giverCards) {
+                if (card.getCardName().equals(selectedCardName)) {
+                    selectedCard = card;
+                }
+            }
+
+            String receiverName = cardGivingView.getReceiverName();
+            selectedAdventurer = getAdventurerFromName(receiverName);
+
+            int nbOfCardsInReceiverHand = selectedAdventurer.getNumberOfCards();
+            if (nbOfCardsInReceiverHand == 5) {
+                ArrayList<Card> tempAdventurerHandCards = new ArrayList<>();
+                tempAdventurerHandCards.addAll(selectedAdventurer.getCards());
+                selectedAdventurer.getHand().clearHand();
+                this.controller.getInterruptionController().initDiscard(selectedAdventurer,tempAdventurerHandCards);
+            }
+            giveCard(selectedAdventurer,selectedCard);
+            adventurer.getCards().remove(selectedCard);
+            this.controller.getActionController().reduceNbActions();
         }
     }
 
@@ -178,36 +203,6 @@ public class AdventurerController {
     public void movement(Tuple<Integer, Integer> pos, Adventurer adv) {
         adv.move(pos.x, pos.y);
         controller.getGridController().getGridView().updateAdventurer(adv);
-    }
-
-    /**
-     * Set the selected card for the GIVE_CARD action
-     * @param m The message received from the view
-     */
-    public void setSelectedCard(Message m) {
-        selectedCard = this.currentAdventurer.getHand().getCard(m.message);
-        if (selectedCard != null) {
-            //adventurerView.chooseCardReceiver();
-            // TODO chooseCardReceiver() method
-        }
-    }
-
-    /**
-     * Set the selected adventurer for the GIVE_CARD action
-     * @param m The message received from the view
-     */
-    public void setSelectedAdventurer(Message m) {
-        Adventurer receiver = this.getAdventurerFromName(m.message);
-        int nbOfCardsInReceiverHand = receiver.getNumberOfCards();
-        if (nbOfCardsInReceiverHand == 5 && selectedCard != null) {
-            controller.getInterruptionController().initDiscard(receiver,selectedCard);
-            // TODO method initDiscard() (already in feature-discard-treasure-cards
-        } else {
-            if (selectedCard != null) {
-                currentAdventurer.getCards().remove(selectedCard);
-                giveCard(receiver,selectedCard);
-            }
-        }
     }
 
     /**

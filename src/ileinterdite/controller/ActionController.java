@@ -50,17 +50,9 @@ public class ActionController implements IObserver<Message> {
                 cellStates = controller.getAdventurerController().startCellAction(message);
                 break;
 
-            case START_GIVE_CARD: case GET_TREASURE:
+            case GIVE_CARD:
                 setEngineerPower(false);
                 controller.startAdventurerAction(message);
-                break;
-
-            case GIVE_CARD_CARD_CHOICE:
-                controller.getAdventurerController().setSelectedCard(message);
-                break;
-
-            case GIVE_CARD_RECEIVER_CHOICE:
-                controller.getAdventurerController().setSelectedAdventurer(message);
                 break;
 
             case VALIDATE_ACTION:

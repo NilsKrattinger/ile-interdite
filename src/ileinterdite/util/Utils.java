@@ -30,7 +30,7 @@ public class Utils {
         GET_TREASURE,
 
         // More actions initialized by the player
-        START_GIVE_CARD,
+        GIVE_CARD,
         CANCEL_ACTION,
         END_TURN,
         USE_TREASURE_CARD,
@@ -41,9 +41,7 @@ public class Utils {
         // Interruptions
         NAVIGATOR_CHOICE,
         DISCARD,
-        VALIDATE_ACTION,
-        GIVE_CARD_RECEIVER_CHOICE,
-        GIVE_CARD_CARD_CHOICE
+        VALIDATE_ACTION
     }
  
     public enum State {
