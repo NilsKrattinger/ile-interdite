@@ -4,12 +4,15 @@ import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.IObserver;
 import ileinterdite.util.Message;
 import ileinterdite.view.AdventurerView;
+import ileinterdite.view.HandView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
 public class AdventurerControllerHelper {
+    private static HashMap<Adventurer, AdventurerView> adventurerViews; //< An association between adventurers and their view
+    private static HashMap<Adventurer, HandView> adventurerHandViews; //< An association between adventurers and their view representing their hand
 
     /**
      * Get the list of adventurers with their name for the game
@@ -41,17 +44,35 @@ public class AdventurerControllerHelper {
      * Associate all adventurers with their corresponding view
      * @param adventurers The list of adventurers in the game
      * @param observer The observer that will listen to all interactions
-     * @return A Hashmap linking adventurers with their views, with the observer listening to them
      */
-    public static HashMap<Adventurer, AdventurerView> createViews(ArrayList<Adventurer> adventurers, IObserver<Message> observer) {
-        HashMap<Adventurer, AdventurerView> views = new HashMap<>();
+    public static void createViews(ArrayList<Adventurer> adventurers, IObserver<Message> observer) {
+        adventurerViews = new HashMap<>();
+        adventurerHandViews = new HashMap<>();
 
         for (Adventurer adv : adventurers) {
-            AdventurerView view = new AdventurerView(adv);
-            views.put(adv, view);
+            HandView handview = new HandView(adv);
+            adventurerHandViews.put(adv, handview);
+            handview.addObserver(observer);
+
+            AdventurerView view = new AdventurerView(adv, handview);
+            adventurerViews.put(adv, view);
             view.addObserver(observer);
         }
+    }
 
-        return views;
+    /**
+     * Get the link between adventurers and their view
+     * @return A Hashmap linking adventurers with their views, with the observer listening to them
+     */
+    public static HashMap<Adventurer, AdventurerView> getAdventurerViews() {
+        return adventurerViews;
+    }
+
+    /**
+     * Get the link between adventurers and their hand view
+     * @return A Hashmap linking adventurers with their views, with the observer listening to them
+     */
+    public static HashMap<Adventurer, HandView> getAdventurerHandViews() {
+        return adventurerHandViews;
     }
 }

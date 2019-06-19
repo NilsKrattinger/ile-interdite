@@ -8,6 +8,7 @@ import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.helper.AdventurerControllerHelper;
 import ileinterdite.view.AdventurerView;
+import ileinterdite.view.HandView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,16 +20,18 @@ public class AdventurerController {
 
     // The lists containing all information about the adventurers
     private ArrayList<Adventurer> adventurers; //< The list of adventurers in the game (aka. players)
-    private HashMap<Adventurer, AdventurerView> adventurerViews; //< An association between adventurers and their views
+    private HashMap<Adventurer, AdventurerView> adventurerViews; //< An association between adventurers and their view
+    private HashMap<Adventurer, HandView> adventurerHandViews; //< An association between adventurers and their view representing their hand
 
     // The objects containing the information for the current turn
     private AdventurerView currentView; //< The view currently visible
+    private HandView currentHandView; //< The hand currently visible
     private Adventurer currentAdventurer; //< The adventurer acting during this turn
     private Adventurer currentActionAdventurer; //< The adventurer making the current action (may differ from currentAdventurer)
 
     // Action-specific variables
-    Card selectedCard; //< The card selected by the player during a GIVE_CARD action
-    Adventurer selectedAdventurer; //< The adventurer selected by the player during a GIVE_CARD action
+    private Card selectedCard; //< The card selected by the player during a GIVE_CARD action
+    private Adventurer selectedAdventurer; //< The adventurer selected by the player during a GIVE_CARD action
 
     /**
      * Creates the controller that handles everything the Adventurers do
@@ -39,7 +42,10 @@ public class AdventurerController {
     public AdventurerController(GameController c, ArrayList<Adventurer> adventurers, ArrayList<String> playerNames) {
         this.controller = c;
         this.adventurers = AdventurerControllerHelper.getPlayers(adventurers, playerNames);
-        this.adventurerViews = AdventurerControllerHelper.createViews(adventurers, controller.getActionController());
+
+        AdventurerControllerHelper.createViews(adventurers, controller.getActionController());
+        this.adventurerViews = AdventurerControllerHelper.getAdventurerViews();
+        this.adventurerHandViews = AdventurerControllerHelper.getAdventurerHandViews();
 
         nextAdventurer();
     }
@@ -57,13 +63,15 @@ public class AdventurerController {
     }
 
     /**
-     * Change the current adventurer with the new adventurer
+     * Change the current adventurer with the new adventurer and update views
      */
     private void changeCurrentAdventurer() {
         adventurers.add(adventurers.remove(0));
         currentAdventurer = adventurers.get(0);
         currentView = adventurerViews.get(currentAdventurer);
+        currentHandView = adventurerHandViews.get(currentAdventurer);
         controller.getWindow().setAdventurerView(currentView);
+        currentHandView.update(currentAdventurer);
     }
 
     /* **************** *
