@@ -11,6 +11,7 @@ import ileinterdite.model.DiscardPile;
 import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
+import ileinterdite.model.adventurers.Messager;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
 import ileinterdite.util.Utils.Action;
@@ -124,15 +125,15 @@ public class Controller implements IObserver<Message> {
 
 
     /**
-     *  Lance les actions pour le don d'une carte par l'aventurier adventurer (vérification qu'il y a
-     *  bien un autre aventurier sur sa tuile, et lancement du choix de la carte à donner
+     * Lance les actions pour le don d'une carte par l'aventurier adventurer (vérification qu'il y a
+     * bien un autre aventurier sur sa tuile, et lancement du choix de la carte à donner
      * @param adventurer : aventurier initiant le don de carte
      */
     public void initGiveCard(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
         Cell adventurerCell = grid.getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
-        if (nbOfAdventurersOnCell >= 2) {
+        if (nbOfAdventurersOnCell >= 2 || adventurer instanceof Messager) {
             ArrayList<Card> giverCards = currentAdventurer.getCards();
             //adventurerView.showTradableCards(giverCards);
             // TODO showTradableCards() method
@@ -504,7 +505,7 @@ public class Controller implements IObserver<Message> {
     private void collectTreasure(Adventurer adventurer) {
         Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
         if (collectableTreasure != null) {
-            String collectableTreasureName = collectableTreasure.getNom();
+            String collectableTreasureName = collectableTreasure.getName();
             this.grid.getTreasures().remove(collectableTreasure);
             int discardedCards = 0;
             for (Card card : adventurer.getCards()) {
