@@ -35,21 +35,12 @@ public class PawnsSelectionView  implements IObservable<Message> {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Message m = new Message(Utils.Action.CANCEL_ACTION, null);
-
                 window.setVisible(false);
                 notifyObservers(m);
             }
         });
-
-
-
-
         mainPanel.add(annulerButton,BorderLayout.SOUTH);
-
-
-
         this.initFrame();
-        this.window.setVisible(false);
     }
 
     public void update(ArrayList<Adventurer> adventurers) {
@@ -57,11 +48,7 @@ public class PawnsSelectionView  implements IObservable<Message> {
          ArrayList<JLabel> pawnsIco = new ArrayList<>();
          JPanel choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
 
-
-
-
         for (Adventurer adventuer : adventurers) {
-
 
             String path = adventuer.getPawn().toString();
             path = "pion" + path;
@@ -75,8 +62,6 @@ public class PawnsSelectionView  implements IObservable<Message> {
                 JLabel pawnIco = new JLabel("", SwingConstants.CENTER);
                 pawnIco.setIcon(icon);
                 pawnsIco.add(pawnIco);
-                tmp.add(pawnIco);
-                tmp.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
                 pawnIco.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
@@ -93,37 +78,23 @@ public class PawnsSelectionView  implements IObservable<Message> {
                         }
 
                     }
-
                     @Override
-                    public void mousePressed(MouseEvent mouseEvent) {
-
-                    }
-
+                    public void mousePressed(MouseEvent mouseEvent) {}
                     @Override
-                    public void mouseReleased(MouseEvent mouseEvent) {
-
-                    }
-
+                    public void mouseReleased(MouseEvent mouseEvent) {}
                     @Override
-                    public void mouseEntered(MouseEvent mouseEvent) {
-
-                    }
-
+                    public void mouseEntered(MouseEvent mouseEvent) {}
                     @Override
-                    public void mouseExited(MouseEvent mouseEvent) {
-
-                    }
+                    public void mouseExited(MouseEvent mouseEvent) {}
                 });
-
-
+                tmp.add(pawnIco);
+                tmp.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
                 choicePanel.add(tmp);
                 mainPanel.add(choicePanel,BorderLayout.CENTER);
                 window.add(mainPanel);
                 window.setVisible(true);
                 choicePanel.repaint();
-
             }
-
         }
     }
 
