@@ -93,4 +93,11 @@ public class Pilot extends Adventurer {
         this.powerAvailable = powerAvailable;
     }
 
+    public Utils.State[][] getRescueCells() {
+        Utils.State[][] cellsState = grid.getStateOfCells();
+        super.cellChoiceMoving(cellsState);
+
+        return cellsState;
+    }
+
 }

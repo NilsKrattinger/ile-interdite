@@ -14,22 +14,22 @@ La Caverne Des Ombres
 NORMAL
 Le Cristal ardent
 SPAWN
-La Porte de Fer
+La Porte De Fer
 NOIR
 NORMAL
 
 SPAWN
-La Porte D'or
+La Porte d'Or
 Jaune
 NORMAL
 
 SIMPLE
-Les Falaises de L'oubli
+Les Falaises De L'Oubli
 
 NORMAL
 
 TREASURE
-Le Palais de Corail
+Le Palais De Corail
 
 NORMAL
 Le Calice de l'onde
@@ -39,7 +39,7 @@ BLANC
 NORMAL
 
 SIMPLE
-Les Dunes De L'illusion
+Les Dunes De L'Illusion
 
 SUNKEN
 
@@ -99,7 +99,7 @@ Le Temple De La Lune
 SUNKEN
 La Pierre sacrée
 TREASURE
-Le Palais des Marees
+Le Palais Des Marees
 
 NORMAL
 Le Calice de l'onde

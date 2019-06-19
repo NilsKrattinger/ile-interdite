@@ -78,4 +78,13 @@ public class Grid {
 	public void setTreasures(ArrayList<Treasure> treasures) {
 		this.treasures = treasures;
 	}
+
+	public Treasure getTreasure(String treasureName) {
+		for (Treasure treasure : this.getTreasures()) {
+			if (treasure.getNom().equals(treasureName)) {
+				return treasure;
+			}
+		}
+		return null;
+	}
 }

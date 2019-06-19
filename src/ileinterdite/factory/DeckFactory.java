@@ -14,7 +14,7 @@ public class DeckFactory {
         if (type == Utils.CardType.Flood) {
             cards = FloodCardFactory.floodCardFactory(grid);
         } else {
-            //TODO IMPLEMENT TREASURE CARD FACTORY
+            cards = TreasureCardsFactory.treasureCardsFactory(grid);
         }
         return new Deck(cards, type);
     }
