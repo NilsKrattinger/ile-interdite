@@ -59,7 +59,15 @@ public abstract class Adventurer {
      */
     public Utils.State[][] getPowerNavigatorAccessibleCells() {
         Utils.State[][] cellsState = grid.getStateOfCells();
-        cellPowerNavigatorChoiceMoving(cellsState);
+        cellPowerNavigatorChoiceMoving(cellsState, x, y, 2);
+
+        for (int j = 0; j < cellsState.length; j++) {
+            for (int i = 0; i < cellsState[j].length; i++) {
+                if (cellsState[j][i] != Utils.State.ACCESSIBLE) {
+                    cellsState[j][i] = Utils.State.INACCESSIBLE;
+                }
+            }
+        }
 
         return cellsState;
     }
@@ -113,36 +121,25 @@ public abstract class Adventurer {
      * si elle est accessible ou non par l'aventurier déplacé par le Navigateur
      * @param tab
      */
-    public void cellPowerNavigatorChoiceMoving(Utils.State[][] tab) {
-        for (int j = 0; j < Grid.HEIGHT; j++) {
-            for (int i = 0; i < Grid.WIDTH; i++) {
-                Utils.State state = tab[j][i];
-                if ((state == Utils.State.FLOODED || state == Utils.State.NORMAL)
-                        && (this.getY() == j && (this.getX() == i-1
-                        || this.getX() == i+1) || this.getX() == i
-                        && (this.getY() == j-1 || this.getY() == j+1))) {
-                    tab[j][i] = Utils.State.ACCESSIBLE;
-
-                    for (int k = 0; k < Grid.HEIGHT; k++) {
-                        for (int l = 0; l < Grid.WIDTH; l++) {
-                            Utils.State state1 = tab[k][l];
-                            if ((state1 == Utils.State.FLOODED || state1 == Utils.State.NORMAL)
-                                    && (j == k && (i == l-1
-                                    || i == l+1) || i == l
-                                    && (j == k-1 || j == k+1))) {
-                                tab[k][l] = Utils.State.ACCESSIBLE;
-                            }
-                        }
-                    }
-                }
-            }
+    public void cellPowerNavigatorChoiceMoving(Utils.State[][] tab, int x, int y, int distance) {
+        if (x < 0 || y < 0 || x >= Grid.WIDTH || y >= Grid.HEIGHT) {
+            return;
         }
-        for (int j = 0; j < Grid.HEIGHT; j++) {
-            for (int i = 0; i < Grid.WIDTH; i++) {
-                Utils.State state = tab[j][i];
-                if (state != Utils.State.ACCESSIBLE) {
-                    tab[j][i] = Utils.State.INACCESSIBLE;
-                }
+        
+        Utils.State currState = tab[y][x];
+        if (currState == Utils.State.NORMAL || currState == Utils.State.FLOODED) {
+            if ((x != this.getX() || y != this.getY())) {
+                distance--;
+                tab[y][x] = Utils.State.ACCESSIBLE;
+            } else {
+                tab[y][x] = Utils.State.INACCESSIBLE;
+            }
+
+            if (distance > 0) {
+                cellPowerNavigatorChoiceMoving(tab, x - 1, y, distance);
+                cellPowerNavigatorChoiceMoving(tab, x + 1, y, distance);
+                cellPowerNavigatorChoiceMoving(tab, x, y - 1, distance);
+                cellPowerNavigatorChoiceMoving(tab, x, y + 1, distance);
             }
         }
     }
