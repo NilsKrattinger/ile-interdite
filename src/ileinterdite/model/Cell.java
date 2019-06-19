@@ -13,13 +13,13 @@ public class Cell {
 
 	public Cell() {
 		this.state = Utils.State.NORMAL;
-        this.adventurers = new ArrayList<>();
+        this.setAdventurers(new ArrayList<>());
 	}
 
 	public Cell(String name) {
 		this.state = Utils.State.NORMAL;
 		this.setName(name);
-		this.adventurers = new ArrayList<>();
+		this.setAdventurers(new ArrayList<>());
 	}
 
 	/**
@@ -27,7 +27,7 @@ public class Cell {
 	 * @param adv The adventurer to remove
 	 */
 	public void removeAdventurer(Adventurer adv) {
-	    adventurers.remove(adv);
+	    getAdventurers().remove(adv);
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class Cell {
 	 * @param adv The adventurer to add
 	 */
 	public void addAdventurer(Adventurer adv) {
-	    adventurers.add(adv);
+	    getAdventurers().add(adv);
 	}
 
     /**
@@ -44,7 +44,7 @@ public class Cell {
      * @return boolean
      */
 	public boolean isAdventurerOnCell(Adventurer adv) {
-	    return adventurers.contains(adv);
+	    return getAdventurers().contains(adv);
     }
 
     public void spawnAdventurer(int x, int y){}
@@ -81,4 +81,7 @@ public class Cell {
 		return adventurers;
 	}
 
+	public void setAdventurers(ArrayList<Adventurer> adventurers) {
+		this.adventurers = adventurers;
+	}
 }

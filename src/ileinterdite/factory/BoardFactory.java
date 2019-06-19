@@ -30,7 +30,7 @@ public class BoardFactory {
 
         Cell emptyCell = new Cell();
         emptyCell.setState(Utils.State.NON_EXISTENT);
-
+        treasures = TreasureFactory.treasureFactory();
         adventurers = AdventurersFactory.adventurerFactory();
 
         String filepath;
@@ -53,7 +53,7 @@ public class BoardFactory {
 
         builtStuff[0] = adventurers;
         builtStuff[1] = BoardFactory.convertToArray(boardCellList);
-        builtStuff[2] = TreasureFactory.treasureFactory();
+        builtStuff[2] = treasures;
 
         return builtStuff;
     }
