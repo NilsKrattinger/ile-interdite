@@ -3,10 +3,7 @@ package ileinterdite.view;
 import ileinterdite.model.Card;
 import ileinterdite.model.Hand;
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.util.Message;
-import ileinterdite.util.IObservable;
-import ileinterdite.util.IObserver;
-import ileinterdite.util.Utils;
+import ileinterdite.util.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +17,7 @@ public class HandView implements IObservable<Message> {
 
     private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
-    private JFrame windo;
+
     private JPanel mainPanel;
     private JPanel cardPanel;
     private ArrayList<JLabel> cards;
@@ -30,7 +27,6 @@ public class HandView implements IObservable<Message> {
         observers = new CopyOnWriteArrayList<>();
 
         cards = new ArrayList<>();
-        initFram(adventurer);
         initcards();
 
         mainPanel = new JPanel(new BorderLayout());
@@ -41,20 +37,8 @@ public class HandView implements IObservable<Message> {
         }
 
         mainPanel.add(cardPanel);
-        windo.add(mainPanel);
 
         this.update(adventurer);
-
-    }
-
-
-    private void initFram(Adventurer adv) {
-        windo = new JFrame();
-        windo.setTitle(adv.getName());
-        windo.setSize(420, 150);
-        windo.setLocationRelativeTo(null);
-        windo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        windo.setVisible(true);
 
     }
 
@@ -70,7 +54,9 @@ public class HandView implements IObservable<Message> {
                          if (hand.getCard(index) != null) {
                             Message m = new Message(Utils.Action.USE_TREASURE_CARD, Integer.toString(index));
 
-                            System.out.println(m.action);
+                            if (Parameters.LOGS){
+                                System.out.println(m.action);
+                            }
                             notifyObservers(m);
 
                          }
@@ -136,6 +122,10 @@ public class HandView implements IObservable<Message> {
         for (IObserver<Message> o : observers) {
             o.update(this, message);
         }
+    }
+
+    public JPanel getMainPanel(){
+        return this.mainPanel;
     }
 
 }

@@ -20,15 +20,40 @@ public class AdventurerView implements IObservable<Message> {
 
     private final JPanel mainPanel;
     private final JLabel nbActionsLabel;
+    private  JPanel adventurerPanel;
 
-    public AdventurerView(Adventurer ad) {
+    public AdventurerView(Adventurer ad, HandView handView) {
         observers = new CopyOnWriteArrayList<>();
+        mainPanel = new JPanel(new BorderLayout()) {
+            public Dimension getPreferredSize() {
+                Dimension d = super.getPreferredSize();
+                return new Dimension(getParent().getWidth(), (int) (d.getHeight()));
 
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+            }
+        };
 
-        JPanel cardPanel = new JPanel();
-        mainPanel.add(cardPanel);
+
+
+        adventurerPanel = new JPanel(new BorderLayout());
+        adventurerPanel.setLayout(new BoxLayout(adventurerPanel, BoxLayout.X_AXIS));
+
+        JPanel handMain = handView.getMainPanel();
+        handMain.setAlignmentX(Component.LEFT_ALIGNMENT);
+        adventurerPanel.add(handMain);
+
+
+        mainPanel.add(handMain,BorderLayout.WEST);
+
+
+
+        mainPanel.add(adventurerPanel, BorderLayout.CENTER);
+
+        mainPanel.add(new JLabel(""),BorderLayout.EAST);
+
+
+
+
+
 
         JPanel actionButtonPanel = new JPanel(new GridLayout(2, 2));
         JButton moveButton = new JButton("Bouger") ;
@@ -47,14 +72,14 @@ public class AdventurerView implements IObservable<Message> {
         actionButtonPanel.add(dryButton);
         actionButtonPanel.add(giveCardButton);
         actionButtonPanel.add(getTreasureButton);
-        mainPanel.add(actionButtonPanel);
+        adventurerPanel.add(actionButtonPanel);
 
         BufferedImage img = Utils.loadImage("personnages/" + ad.getClassName().toLowerCase() + ".png");
         if (img != null) {
             ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 2, img.getHeight() / 2, Image.SCALE_SMOOTH));
             JLabel adventurerCard = new JLabel();
             adventurerCard.setIcon(icon);
-            mainPanel.add(adventurerCard);
+            adventurerPanel.add(adventurerCard);
         }
 
         JPanel nbActionsPanel = new JPanel(new GridBagLayout());
@@ -83,7 +108,7 @@ public class AdventurerView implements IObservable<Message> {
         finishTurnButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.END_TURN)));
         nbActionsPanel.add(finishTurnButton, c);
 
-        mainPanel.add(nbActionsPanel);
+        adventurerPanel.add(nbActionsPanel);
     }
 
     public void showAdventurers(ArrayList<Adventurer> adventurers) {

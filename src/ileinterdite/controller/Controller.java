@@ -66,26 +66,23 @@ public class Controller implements IObserver<Message> {
         this.grid = new Grid((Cell[][]) builtStuff[1], (ArrayList<Treasure>) builtStuff[2]);
         this.definePlayer(players);
 
-        for (Adventurer adv : players) {
-            AdventurerView view = new AdventurerView(adv);
+             for (Adventurer adv : players) {
+            HandView handview = new HandView(adv);
+            adventurerHandViews.put(adv, handview);
+            handview.addObserver(this);
+            AdventurerView view = new AdventurerView(adv,handview);
             adventurerViews.put(adv, view);
             view.addObserver(this);
 
             if (currentAdventurerView == null) {
                 currentAdventurerView = view;
+                currentHandView = handview;
                 this.mainView.setAdventurerView(currentAdventurerView);
+
             }
         }
 
-        for (Adventurer adv : players) {
-            HandView view = new HandView(adv);
-            adventurerHandViews.put(adv, view);
-            view.addObserver(this);
 
-            if (currentHandView == null) {
-                currentHandView = view;
-            }
-        }
 
         this.initCard(this.grid);
         this.initBoard();
