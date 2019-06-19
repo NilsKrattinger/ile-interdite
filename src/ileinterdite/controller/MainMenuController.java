@@ -2,10 +2,12 @@ package ileinterdite.controller;
 
 import ileinterdite.util.IObservable;
 import ileinterdite.util.IObserver;
+import ileinterdite.util.Parameters;
+import ileinterdite.util.StartMessage;
 
 import java.util.ArrayList;
 
-public class MainMenuController implements IObserver<ArrayList<String>> {
+public class MainMenuController implements IObserver<StartMessage> {
 
     private ArrayList<String> playerName = new ArrayList<>();
 
@@ -14,9 +16,13 @@ public class MainMenuController implements IObserver<ArrayList<String>> {
     }
 
     @Override
-    public void update(IObservable<ArrayList<String>> o, ArrayList<String> message) {
-        playerName = message;
+    public void update(IObservable<StartMessage> o, StartMessage message) {
+        playerName = message.playerName;
+        Parameters.LOGS = message.logOption;
+        Parameters.DEMOMAP = message.demoOption;
+        Parameters.RANDOM = message.randomOption;
+        int difficulty = message.difficulty;
 
-        GameController c = new GameController(this);
+        GameController c = new GameController(this, difficulty);
     }
 }

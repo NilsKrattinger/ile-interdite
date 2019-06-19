@@ -27,11 +27,13 @@ public class GridController {
         GridControllerHelper.spawnAdventurers(c.getAdventurers(), grid);
         GridControllerHelper.initView(gridView, grid, controller.getAdventurers(), controller.getActionController());
 
-        if(!Parameters.DEMOMAP){
+        controller.getWindow().setGridView(gridView);
+    }
+
+    public void finishGridInit() {
+        if (!Parameters.DEMOMAP) {
             controller.getDeckController().drawFloodCards(6);
         }
-
-        controller.getWindow().setGridView(gridView);
     }
 
     /* ************* *
