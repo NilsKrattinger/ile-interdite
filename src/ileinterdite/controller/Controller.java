@@ -18,6 +18,7 @@ import ileinterdite.view.AdventurerView;
 import ileinterdite.view.GameView;
 import ileinterdite.view.GridView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -153,16 +154,17 @@ public class Controller implements IObserver<Message> {
     /**
      *
      * @param adventurer
-     * @param card
+     * @param cards
      */
-    public void initDiscard(Adventurer adventurer, Card card) {
-        ArrayList<Card> handCards = adventurer.getCards();
-        adventurer.getHand().clearHand();
-        if (card != null) {
-            handCards.add(card);
+    public void initDiscard(Adventurer adventurer, ArrayList<Card> cards) {
+        ArrayList<Card> cardsToDiscard = getCardsToDiscard(Hand.NB_MAX_CARDS - cards.size());
+        for (Card card : cardsToDiscard) {
+            discard(card);
+            cards.remove(card);
         }
-        //adventurerView.askCardToDiscard(handCards);
-        // TODO method askCardToDiscard()
+        for (Card card : cards) {
+            adventurer.getCards().add(card);
+        }
     }
 
     /**
@@ -198,15 +200,12 @@ public class Controller implements IObserver<Message> {
     /**
      *
      */
-    public void discard(Card card, Adventurer adventurer) {
-        DiscardPile discardTreasureCards;
+    public void discard(Card card) {
         if (card instanceof TreasureCard) {
-            discardTreasureCards = this.discardPiles.get(Utils.CardType.Treasure);
+            this.discardPiles.get(Utils.CardType.Treasure).addCard(card);
         } else {
-            discardTreasureCards = this.discardPiles.get(Utils.CardType.Flood);
+            this.discardPiles.get(Utils.CardType.Flood).addCard(card);
         }
-        discardTreasureCards.addCard(card);
-        adventurer.getCards().remove(card);
     }
 
 
@@ -316,14 +315,13 @@ public class Controller implements IObserver<Message> {
     }
 
     public void drawTreasureCards(int nbCard) {
-        int maximumNbCardFromHand = 5;
-        int nbCardsInHand = this.currentAdventurer.getNumberOfCards();
         ArrayList<Card> drawedCards = this.decks.get(Utils.CardType.Treasure).drawCards(nbCard);
-        for (Card card : drawedCards) {
-            if (card.getCardName() != "Montée des eaux") {
-                this.currentAdventurer.getCards().add(card);
-                nbCardsInHand++;
-            } else {
+        ArrayList<Card> tempAdventurerHandCards = currentAdventurer.getCards();
+        currentAdventurer.getHand().clearHand();
+        for (Card drawedCard : drawedCards) {
+            if (drawedCard.getCardName() != "Montée des eaux") {
+                tempAdventurerHandCards.add(drawedCard);
+            }  else {
                 this.increaseRisingScale();
                 if (!discardPiles.get(Utils.CardType.Flood).getCards().isEmpty()) {
                     this.discardPiles.get(Utils.CardType.Flood).shuffle();
@@ -331,12 +329,14 @@ public class Controller implements IObserver<Message> {
                     this.decks.get(Utils.CardType.Flood).addAtTheTop(discardFloodCards);
                     this.discardPiles.get(Utils.CardType.Flood).clearPile();
                 }
-                this.discardPiles.get(Utils.CardType.Treasure).addCard(card);
+                this.discardPiles.get(Utils.CardType.Treasure).addCard(drawedCard);
             }
         }
-        if (nbCardsInHand > maximumNbCardFromHand) {
-            for (int i = 0; i < nbCardsInHand - maximumNbCardFromHand; i++) {
-                initDiscard(this.currentAdventurer, (Card) null);
+        if (tempAdventurerHandCards.size() > Hand.NB_MAX_CARDS) {
+            initDiscard(currentAdventurer,tempAdventurerHandCards);
+        } else {
+            for (Card card : tempAdventurerHandCards) {
+                currentAdventurer.getCards().add(card);
             }
         }
     }
@@ -458,9 +458,6 @@ public class Controller implements IObserver<Message> {
             case CANCEL_ACTION:
                 selectedAction = null;
                 break;
-            case DISCARD:
-                this.discard(currentAdventurer.getHand().getCard(m.message), currentAdventurer);
-                break;
         }
 
         if (remainingActions == 0 && (!powerEngineer || selectedAction != Action.DRY && selectedAction != null)) {
@@ -504,7 +501,7 @@ public class Controller implements IObserver<Message> {
     private void collectTreasure(Adventurer adventurer) {
         Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
         if (collectableTreasure != null) {
-            String collectableTreasureName = collectableTreasure.getNom();
+            String collectableTreasureName = collectableTreasure.getName();
             this.grid.getTreasures().remove(collectableTreasure);
             int discardedCards = 0;
             for (Card card : adventurer.getCards()) {

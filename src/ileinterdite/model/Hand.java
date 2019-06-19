@@ -27,4 +27,6 @@ public class Hand {
 		this.cards.clear();
 	}
 
+	public static final int NB_MAX_CARDS = 5;
+
 }
