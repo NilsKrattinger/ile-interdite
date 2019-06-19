@@ -3,7 +3,7 @@ package ileinterdite.model;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class Grid {
 
@@ -14,7 +14,7 @@ public class Grid {
 
 	public Grid(Cell[][] cells, ArrayList<Treasure> treasures) {
 		this.cells = cells;
-		this.treasures = treasures;
+		this.setTreasures(treasures);
 	}
 
 	/**
@@ -72,12 +72,16 @@ public class Grid {
 	}
 
 	public ArrayList<Treasure> getTreasures() {
-		return this.treasures;
+		return treasures;
+	}
+
+	public void setTreasures(ArrayList<Treasure> treasures) {
+		this.treasures = treasures;
 	}
 
 	public Treasure getTreasure(String treasureName) {
 		for (Treasure treasure : this.getTreasures()) {
-			if (treasure.getNom().equals(treasureName)) {
+			if (treasure.getName().equals(treasureName)) {
 				return treasure;
 			}
 		}

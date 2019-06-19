@@ -24,8 +24,7 @@ public class Hand {
 	}
 
 	public Card getCard(int index) {
-				return cards.get(index);
-
+	    return cards.get(index);
 	}
 
 	public void clearHand() {
