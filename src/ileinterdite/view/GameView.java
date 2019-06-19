@@ -1,7 +1,10 @@
 package ileinterdite.view;
 
+import ileinterdite.model.adventurers.Adventurer;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class GameView {
     private final JFrame window;
@@ -10,6 +13,7 @@ public class GameView {
     private final JPanel advViewPanel;
 
     private final JPanel gridPanel;
+    private final JPanel handsPanel;
 
     public GameView(int width, int height) {
 
@@ -55,6 +59,9 @@ public class GameView {
         gridPanel.setLayout(new GridLayout(1, 1));
         gridContenant.add(gridPanel);
         window.add(gridContenant, BorderLayout.CENTER);
+
+        handsPanel = new JPanel();
+        window.add(handsPanel, BorderLayout.EAST);
     }
 
     public void setVisible() {
@@ -69,5 +76,18 @@ public class GameView {
 
     public void setGridView(GridView view) {
         gridPanel.add(view.getMainPanel());
+    }
+
+    public void setHandViews(HashMap<Adventurer, HandView> handViews) {
+        handsPanel.setLayout(new GridLayout(handViews.size(), 1));
+        for (Adventurer adv : handViews.keySet()) {
+            JPanel tempPanel = new JPanel();
+            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
+            tempPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+            tempPanel.add(new JLabel(adv.getName() + " (" + adv.getClassName() + ")"));
+            tempPanel.add(handViews.get(adv).getMinimizedPanel());
+            handsPanel.add(tempPanel);
+        }
     }
 }

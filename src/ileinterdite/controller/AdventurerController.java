@@ -49,6 +49,8 @@ public class AdventurerController {
         this.adventurerViews = AdventurerControllerHelper.getAdventurerViews();
         this.adventurerHandViews = AdventurerControllerHelper.getAdventurerHandViews();
 
+        controller.getWindow().setHandViews(this.adventurerHandViews);
+
         nextAdventurer();
     }
 
@@ -68,12 +70,15 @@ public class AdventurerController {
      * Change the current adventurer with the new adventurer and update views
      */
     private void changeCurrentAdventurer() {
+        if (currentAdventurer != null) {
+            currentHandView.update(currentAdventurer);
+        }
+
         adventurers.add(adventurers.remove(0));
         currentAdventurer = adventurers.get(0);
         currentView = adventurerViews.get(currentAdventurer);
         currentHandView = adventurerHandViews.get(currentAdventurer);
         controller.getWindow().setAdventurerView(currentView);
-        currentHandView.update(currentAdventurer);
     }
 
     /* **************** *
