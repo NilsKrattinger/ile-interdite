@@ -7,7 +7,7 @@ import ileinterdite.util.StartMessage;
 
 import java.util.ArrayList;
 
-public class ControllerMainMenu implements IObserver<StartMessage> {
+public class MainMenuController implements IObserver<StartMessage> {
 
     private ArrayList<String> playerName = new ArrayList<>();
 
@@ -23,7 +23,6 @@ public class ControllerMainMenu implements IObserver<StartMessage> {
         Parameters.RANDOM = message.randomOption;
         int difficulty = message.difficulty;
 
-        Controller c = new Controller(this, difficulty);
-
+        GameController c = new GameController(this, difficulty);
     }
 }

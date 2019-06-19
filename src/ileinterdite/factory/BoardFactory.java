@@ -14,6 +14,10 @@ import java.util.Collections;
 public class BoardFactory {
     private static final int[] EMPTYCELLINDEX = {0, 1, 4, 5, 6, 11, 24, 29, 30, 31, 34, 35};
     private static final String DEFAULTCELLFILE = "res/cell.txt";
+    private static ArrayList<Adventurer> adventurers;
+    private static Cell[][] cells;
+    private static ArrayList<Treasure> treasures;
+
     /**
      * initialise le plateau de jeu et créée :
      * les tuilles
@@ -21,16 +25,13 @@ public class BoardFactory {
      *
      * @return
      */
-    public static Object[] boardFactory() {
-        Object[] builtStuff = new Object[3];
+    public static void initBoardFactory() {
         ArrayList<Cell> boardCellList = new ArrayList<>();
-        ArrayList<Adventurer> adventurers;
-        ArrayList<Treasure> treasures = new ArrayList<>();
         Cell[] builtCells;
 
         Cell emptyCell = new Cell();
         emptyCell.setState(Utils.State.NON_EXISTENT);
-
+        treasures = TreasureFactory.treasureFactory();
         adventurers = AdventurersFactory.adventurerFactory();
 
         String filepath;
@@ -51,11 +52,20 @@ public class BoardFactory {
             boardCellList.add(i, emptyCell);
         }
 
-        builtStuff[0] = adventurers;
-        builtStuff[1] = BoardFactory.convertToArray(boardCellList);
-        builtStuff[2] = TreasureFactory.treasureFactory();
+        cells = BoardFactory.convertToArray(boardCellList);
+        treasures = TreasureFactory.treasureFactory();
+    }
 
-        return builtStuff;
+    public static ArrayList<Adventurer> getAdventurers() {
+        return adventurers;
+    }
+
+    public static Cell[][] getCells() {
+        return cells;
+    }
+
+    public static ArrayList<Treasure> getTreasures() {
+        return treasures;
     }
 
     /**
