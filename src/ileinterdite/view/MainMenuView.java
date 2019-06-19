@@ -6,6 +6,8 @@ import ileinterdite.util.StartMessage;
 import ileinterdite.util.Utils;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -95,26 +97,27 @@ public class MainMenuView implements IObservable<StartMessage> {
 
         //////////////////////////////////////////////
 
-        JSlider difficluty = new JSlider(JSlider.HORIZONTAL, 1, 4, 1);
+        JSlider difficulty = new JSlider(JSlider.HORIZONTAL, 1, 4, 1);
 
-        difficluty.setMajorTickSpacing(1);
-        difficluty.setPaintTicks(true);
+        difficulty.setMajorTickSpacing(1);
+        difficulty.setPaintTicks(true);
+        difficulty.setSnapToTicks(true);
 
         Hashtable labelTable = new Hashtable();
         labelTable.put(1, new JLabel("Novice"));
         labelTable.put(2, new JLabel("Normal"));
         labelTable.put(3, new JLabel("Elite"));
         labelTable.put(4, new JLabel("Légendaire"));
-        difficluty.setLabelTable(labelTable);
+        difficulty.setLabelTable(labelTable);
 
-        difficluty.setPaintLabels(true);
+        difficulty.setPaintLabels(true);
 
         JPanel difficultyPanel = new JPanel(new BorderLayout());
-        JLabel difficlutyLabel = new JLabel("Difficulté",SwingConstants.CENTER);
+        JLabel difficultyLabel = new JLabel("Difficulté",SwingConstants.CENTER);
 
 
-        difficultyPanel.add(difficlutyLabel,BorderLayout.NORTH);
-        difficultyPanel.add(difficluty);
+        difficultyPanel.add(difficultyLabel,BorderLayout.NORTH);
+        difficultyPanel.add(difficulty);
         centerPanel.add(difficultyPanel, BorderLayout.SOUTH);
 
         //////////////////////////////////////////////
@@ -136,7 +139,7 @@ public class MainMenuView implements IObservable<StartMessage> {
                 m.demoOption = demoOption.isSelected();
                 m.logOption = logOption.isSelected();
                 m.randomOption = randomOption.isSelected();
-                m.difficulty = difficluty.getValue();
+                m.difficulty = difficulty.getValue();
                 notifyObservers(m);
                 window.setVisible(false);
             } else {

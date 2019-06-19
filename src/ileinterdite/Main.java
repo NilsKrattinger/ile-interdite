@@ -2,13 +2,13 @@ package ileinterdite;
 
 import ileinterdite.controller.ControllerMainMenu;
 import ileinterdite.view.MainMenuView;
-import ileinterdite.view.MainMenuView2;
+import ileinterdite.view.MainMenuView;
 
 public class Main {
     public static void main(String [] args) {
-        MainMenuView2 mainMenuView2 = new MainMenuView2();
+        MainMenuView MainMenuView = new MainMenuView();
         ControllerMainMenu cm = new ControllerMainMenu();
-        mainMenuView2.addObserver(cm);
-        mainMenuView2.setVisible();
+        MainMenuView.addObserver(cm);
+        MainMenuView.setVisible();
     }
 }
