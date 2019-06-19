@@ -36,7 +36,7 @@ public class GameController {
         this.gridController = new GridController(this);
         this.deckController = new DeckController(this);
         this.interruptionController = new InterruptionController(this);
-        this.waterScaleController = new WaterScaleController(difficulty);
+        this.waterScaleController = new WaterScaleController(this, difficulty);
 
         this.gridController.finishGridInit();
         this.mainView.setVisible();
