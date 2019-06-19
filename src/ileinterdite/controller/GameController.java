@@ -41,7 +41,6 @@ public class GameController {
         this.deckController = new DeckController(this);
 
         this.mainView.setVisible();
-        actionController.choiceAdventuer(adventurerController.getAdventurers());
         this.newTurn();
     }
 
