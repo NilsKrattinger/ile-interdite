@@ -501,14 +501,18 @@ public class Controller implements IObserver<Message> {
         Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
         if (collectableTreasure != null) {
             String collectableTreasureName = collectableTreasure.getName();
-            this.grid.getTreasures().remove(collectableTreasure);
+            this.grid.getTreasures().remove(grid.getTreasure(collectableTreasureName));
             int discardedCards = 0;
+            ArrayList<Card> cardsToDiscard = new ArrayList<>();
             for (Card card : adventurer.getCards()) {
-                if (card.getCardName().equals(collectableTreasureName) && discardedCards <4 ) {
+                if (card.getCardName().equals(collectableTreasureName) && discardedCards < 4 ) {
                     this.discardPiles.get(Utils.CardType.Treasure).addCard(card);
-                    adventurer.getCards().remove(card);
+                    cardsToDiscard.add(card);
                     discardedCards++;
                 }
+            }
+            for (Card card : cardsToDiscard) {
+                adventurer.getCards().remove(card);
             }
             reduceNbActions();
             System.out.println("Le trésor " + collectableTreasureName + " a été récupéré");

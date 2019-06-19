@@ -171,11 +171,10 @@ public abstract class Adventurer {
         if (this.getNumberOfCards() < 4) {
             return null;
         } else {
-            boolean collectableTreasure = false;
             int nbTreasureCards;
             for (String treasureName : Treasure.TREASURE_NAMES) {
                 nbTreasureCards = 0;
-                for (Card card : this.getHand().getCards()) {
+                for (Card card : this.getCards()) {
                     if (card.getCardName().equals(treasureName)) {
                         nbTreasureCards++;
                     }
