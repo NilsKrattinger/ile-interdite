@@ -14,10 +14,6 @@ public class TreasureCell extends Cell {
         return this.treasure;
     }
 
-    public Treasure getTreasure() {
-        return treasure;
-    }
-
     public void setTreasure(Treasure treasure) {
         this.treasure = treasure;
     }

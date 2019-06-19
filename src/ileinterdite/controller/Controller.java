@@ -79,7 +79,6 @@ public class Controller implements IObserver<Message> {
         }
 
         this.initCard(this.grid);
-        initHands(this.players);
         this.initBoard();
         this.risingScale = 1;
         this.totalFlood = false;
@@ -521,7 +520,6 @@ public class Controller implements IObserver<Message> {
                 adventurer.getCards().remove(card);
             }
             reduceNbActions();
-            System.out.println("Le trésor " + collectableTreasureName + " a été récupéré");
             // TODO : methode pour montrer à l'utilisateur que le trésor a bien été récupéré / update de sa main
         }
     }
@@ -701,25 +699,6 @@ public class Controller implements IObserver<Message> {
         discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Treasure);
         deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
-    }
-
-    public void initHands(ArrayList<Adventurer> adventurers) {
-        for (int i = 0; i < 4; i++) {
-            adventurers.get(0).getCards().add(new TreasureCard("La Pierre sacrée",this.grid));
-        }
-        for (int i = 0; i < 4; i++) {
-            adventurers.get(1).getCards().add(new TreasureCard("La Statue du zéphyr",this.grid));
-        }
-        for (int i = 0; i < 4; i++) {
-            adventurers.get(2).getCards().add(new TreasureCard("Le Cristal ardent",this.grid));
-        }
-        for (int i = 0; i < 4; i++) {
-            adventurers.get(3).getCards().add(new TreasureCard("Le Calice de l'onde",this.grid));
-        }
-        System.out.println(adventurers.get(0) + " - La Pierre sacrée" );
-        System.out.println(adventurers.get(1) + " - La Statue du zéphyr" );
-        System.out.println(adventurers.get(2) + " - Le Cristal ardent" );
-        System.out.println(adventurers.get(3) + " - Le Calice de l'onde" );
     }
 
     public void endTurn() {
