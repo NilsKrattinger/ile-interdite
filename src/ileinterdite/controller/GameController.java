@@ -92,7 +92,7 @@ public class GameController {
      * TURN HANDLING *
      * ************* */
 
-    private void newTurn() {
+    public void newTurn() {
         testDefeat();
         adventurerController.nextAdventurer();
         gridController.newTurn();

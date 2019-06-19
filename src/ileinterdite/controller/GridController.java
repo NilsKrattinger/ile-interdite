@@ -58,13 +58,13 @@ public class GridController {
      * @param adventurer
      */
     public void collectTreasure(Adventurer adventurer) {
-        Treasure collectableTreasure = adventurer.isAbleToCollectTreasure();
-        if (collectableTreasure != null) {
-            String collectableTreasureName = collectableTreasure.getNom();
-            this.grid.getTreasures().remove(collectableTreasure);
+        Treasure collectibleTreasure = adventurer.isAbleToCollectTreasure();
+        if (collectibleTreasure != null) {
+            String collectibleTreasureName = collectibleTreasure.getName();
+            this.grid.getTreasures().remove(collectibleTreasure);
             int discardedCards = 0;
             for (Card card : adventurer.getCards()) {
-                if (card.getCardName().equals(collectableTreasureName) && discardedCards <4 ) {
+                if (card.getCardName().equals(collectibleTreasureName) && discardedCards <4 ) {
                     controller.getDeckController().getDiscardPile(Utils.CardType.Treasure).addCard(card);
                     adventurer.getCards().remove(card);
                     discardedCards++;

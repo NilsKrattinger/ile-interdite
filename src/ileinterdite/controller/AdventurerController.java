@@ -113,6 +113,14 @@ public class AdventurerController {
         return states;
     }
 
+    public Utils.State[][] initPowerNavigatorMovement(Adventurer adventurer) {
+        currentActionAdventurer = adventurer;
+        Utils.State[][] states = adventurer.getPowerNavigatorAccessibleCells();
+        controller.getGridController().getGridView().showSelectableCells(states);
+
+        return states;
+    }
+
     /**
      * Starts the action to dry a cell
      * @param adventurer The adventurer that will dry the cell

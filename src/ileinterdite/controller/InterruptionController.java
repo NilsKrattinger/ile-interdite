@@ -4,6 +4,7 @@ import ileinterdite.model.Card;
 import ileinterdite.model.DiscardPile;
 import ileinterdite.model.TreasureCard;
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
@@ -39,13 +40,25 @@ public class InterruptionController {
                 rescue(ActionControllerHelper.getPositionFromMessage(m.message));
                 break;
             case NAVIGATOR_CHOICE:
-                /*currentAction = Utils.Action.MOVE;
+                currentAction = Utils.Action.MOVE;
                 // The message contains a string with the format "ClassName (PlayerName)"
                 currentActionAdventurer = findAdventurerByClassName(m.message.substring(0, m.message.indexOf(' ')));
                 if (currentActionAdventurer != null) {
-                    initMovement(currentActionAdventurer);
+                    if (currentActionAdventurer instanceof Navigator) {
+                        cellStates = controller.getAdventurerController().initMove(currentActionAdventurer);
+                    } else {
+                        cellStates = controller.getAdventurerController().initPowerNavigatorMovement(currentActionAdventurer);
+                    }
                 }
-                break;*/
+                break;
+            case MOVE:
+                Tuple<Integer, Integer> pos = ActionControllerHelper.getPositionFromMessage(m.message);
+                if (ActionControllerHelper.checkPosition(pos, cellStates)) {
+                    controller.getAdventurerController().movement(pos, currentActionAdventurer);
+                    controller.getActionController().reduceNbActions();
+                    controller.getActionController().endInterruption();
+                }
+                break;
         }
     }
 
@@ -54,6 +67,22 @@ public class InterruptionController {
      * *************** */
     public void setRescueList(ArrayList<Adventurer> rescueList) {
         this.adventurersToRescue = rescueList;
+    }
+
+    /**
+     * Get the adventurer with the given class name.
+     *
+     * @return Null if not found
+     */
+    private Adventurer findAdventurerByClassName(String name) {
+        Adventurer adv;
+        int i = 0;
+        do {
+            adv = controller.getAdventurers().get(i);
+            i++;
+        } while (i < controller.getAdventurers().size() && !name.equalsIgnoreCase(adv.getClassName()));
+
+        return (name.equalsIgnoreCase(adv.getClassName())) ? adv : null;
     }
 
     /* ************ *
@@ -90,9 +119,8 @@ public class InterruptionController {
     }
 
     public void startNavigatorInterruption() {
-        //controller.getAdventurerController().getCurrentView().showAdventurers(controller.getAdventurers());
         currentAction = Utils.Action.NAVIGATOR_CHOICE;
-        controller.getActionController().endInterruption();
+        controller.getAdventurerController().getCurrentView().showAdventurers(controller.getAdventurers());
         // TODO implements navigator interaction
     }
 
@@ -128,6 +156,7 @@ public class InterruptionController {
         if (!adventurersToRescue.isEmpty()){
             initRescue();
         } else {
+            controller.newTurn();
             controller.getActionController().endInterruption();
         }
     }
