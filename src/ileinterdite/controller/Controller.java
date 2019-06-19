@@ -275,11 +275,13 @@ public class Controller implements IObserver<Message> {
                 if (msg != null) {
                     selectedCard = this.currentAdventurer.getHand().getCard(msg);
                     if (selectedCard != null) {
+                        ArrayList<Adventurer> advs = new ArrayList<>();
                         for (Adventurer adv : players) {
                             if (currentAdventurer instanceof Messager || (adv != currentAdventurer) && (adv.getY() == currentAdventurer.getY() && adv.getX() == currentAdventurer.getX())) {
+                                advs.add(adv);
+                            }
                             //adventurerView.chooseCardReceiver();
                             // TODO chooseCardReceiver(adv) method
-                        }
                         }
                     }
                 }
