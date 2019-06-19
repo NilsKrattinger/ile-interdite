@@ -93,6 +93,7 @@ public class GameController {
      * ************* */
 
     private void newTurn() {
+        testDefeat();
         adventurerController.nextAdventurer();
         gridController.newTurn();
         actionController.newTurn();
@@ -107,5 +108,78 @@ public class GameController {
         } else {
             this.newTurn();
         }
+    }
+
+    /* **************** *
+     * VICTORY & DEFEAT *
+     * **************** */
+
+    /**
+     * declenche la victoire
+     */
+    private void victory() {
+        //adventurerView.displayVictory()
+        //TODO adventurerView.displayVictory()
+
+        //this.endGame()
+        //TODO this.endGame()
+    }
+
+    /**
+     * declenche la défaite
+     */
+    private void defeat() {
+        //adventurerView.displayDefeat()
+        //TODO adventurerView.displayVictory()
+
+        //this.endGame()
+        //TODO this.endGame()
+    }
+
+    /**
+     * Check if its dead to win
+     */
+    public void testDefeat() {
+        if (waterScaleController.isDeadly() || this.treasureSink() || this.heliCellSink()) {
+            this.defeat();
+        }
+    }
+
+    /**
+     * Check si les tresors restants ont coulés
+     * @return
+     */
+    private boolean treasureSink() {
+        ArrayList<Treasure> treasuresNotFound = gridController.getGrid().getTreasures();
+        HashMap<Cell, Treasure> notFoundTreasureCells = new HashMap<>();
+        for (Cell[] cells : gridController.getGrid().getCells()) {
+            for (Cell cell : cells) {
+                if (cell instanceof TreasureCell && cell.getState() != Utils.State.SUNKEN && treasuresNotFound.contains(((TreasureCell) cell).getTreasure())) {
+                    notFoundTreasureCells.put(cell, ((TreasureCell) cell).getTreasure());
+                }
+            }
+        }
+        for (Treasure treasure : treasuresNotFound) {
+            if (!notFoundTreasureCells.containsValue(treasure)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check si l'heliport a coulé
+     * @return
+     */
+    private boolean heliCellSink() {
+        Cell heliCell = null;
+        for (Cell[] cells : gridController.getGrid().getCells()) {
+            for (Cell cell : cells) {
+                if (cell.getName() != null && cell.getName().equals("Heliport")) {
+                    heliCell = cell;
+                }
+            }
+        }
+        return heliCell.getState() == Utils.State.SUNKEN;
     }
 }

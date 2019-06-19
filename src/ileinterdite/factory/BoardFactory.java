@@ -27,12 +27,11 @@ public class BoardFactory {
      */
     public static void initBoardFactory() {
         ArrayList<Cell> boardCellList = new ArrayList<>();
-        ArrayList<Treasure> treasures = new ArrayList<>();
         Cell[] builtCells;
 
         Cell emptyCell = new Cell();
         emptyCell.setState(Utils.State.NON_EXISTENT);
-
+        treasures = TreasureFactory.treasureFactory();
         adventurers = AdventurersFactory.adventurerFactory();
 
         String filepath;

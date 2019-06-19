@@ -76,7 +76,7 @@ public class CellsFactory {
         Treasure result = null;
         // We only have 4 elements (at max) so we can go through the whole array each time for readability improvement
         for (Treasure t : treasures) {
-            if (t.getNom().equalsIgnoreCase(name)) {
+            if (t.getName().equalsIgnoreCase(name)) {
                 result = t;
             }
         }
