@@ -5,7 +5,7 @@ import ileinterdite.util.IObserver;
 
 import java.util.ArrayList;
 
-public class ControllerMainMenu implements IObserver<ArrayList<String>> {
+public class MainMenuController implements IObserver<ArrayList<String>> {
 
     private ArrayList<String> playerName = new ArrayList<>();
 
@@ -17,6 +17,6 @@ public class ControllerMainMenu implements IObserver<ArrayList<String>> {
     public void update(IObservable<ArrayList<String>> o, ArrayList<String> message) {
         playerName = message;
 
-        Controller c = new Controller(this);
+        GameController c = new GameController(this);
     }
 }

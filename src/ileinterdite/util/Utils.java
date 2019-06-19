@@ -24,18 +24,26 @@ import javax.swing.JOptionPane;
 public class Utils {
 
     public enum Action {
-        NAVIGATOR_CHOICE,
+        // Common actions for the player
         MOVE,
         DRY,
-        RESCUE,
-        START_GIVE_CARD,
-        GIVE_CARD_RECEIVER_CHOICE,
-        GIVE_CARD_CARD_CHOICE,
         GET_TREASURE,
-        VALIDATE_ACTION,
-        END_TURN,
+        GIVE_CARD,
+
+        // More actions initialized by the player
+        START_GIVE_CARD,
         CANCEL_ACTION,
-        DISCARD
+        END_TURN,
+
+        // Actions for the system only
+        RESCUE,
+
+        // Interruptions
+        NAVIGATOR_CHOICE,
+        DISCARD,
+        VALIDATE_ACTION,
+        GIVE_CARD_RECEIVER_CHOICE,
+        GIVE_CARD_CARD_CHOICE
     }
  
     public enum State {
