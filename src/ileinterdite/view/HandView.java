@@ -115,7 +115,6 @@ public class HandView implements IObservable<Message> {
         hand = currentAdventurer.getHand();
         for (Card card : hand.getCards()) {
             path = card.getCardName();
-            path = path.replaceAll("[\\s']", "");
             path = "cartes/" + path;
             BufferedImage img = Utils.loadImage(path + ".png");
             if (img != null) {

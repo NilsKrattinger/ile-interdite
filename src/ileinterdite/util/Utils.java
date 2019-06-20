@@ -177,6 +177,7 @@ public class Utils {
      */
     public static BufferedImage loadImage(String path) {
         path = "res/images/" + path;
+        path = path.replaceAll("[\\s']", "");
         try {
             return ImageIO.read(new File(path));
         } catch (IOException ex) {

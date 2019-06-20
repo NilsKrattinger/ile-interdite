@@ -36,7 +36,6 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
         this.y = y;
         this.cellState = state;
         if (path != null) {
-            path = path.replaceAll("[\\s']", "");
             path = "tuiles/" + path;
             image = Utils.loadImage(path + ".png");
             if (image != null) {
