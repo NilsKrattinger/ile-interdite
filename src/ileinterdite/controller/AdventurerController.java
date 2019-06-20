@@ -56,7 +56,7 @@ public class AdventurerController {
             ArrayList<Card> advCards = adv.getHand().getCards();
             while (advCards.size() != 2) {
                 Card card = treasureCardsDeck.drawCards(1).get(0);
-                if (card.getCardName().equalsIgnoreCase("Montée des eaux")) {
+                if (card.getCardName().equalsIgnoreCase("Montee des eaux")) {
                     ArrayList<Card> tempList = new ArrayList<>();
                     tempList.add(card);
                     treasureCardsDeck.addAtTheTop(tempList);
