@@ -1,6 +1,7 @@
 package ileinterdite.view;
 
 import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +15,7 @@ public class GameView {
 
     private final JPanel gridPanel;
     private final JPanel handsPanel;
+    private final JPanel waterScalePanel;
 
     public GameView(int width, int height) {
 
@@ -62,6 +64,10 @@ public class GameView {
 
         handsPanel = new JPanel();
         window.add(handsPanel, BorderLayout.EAST);
+        
+        waterScalePanel = new JPanel(new GridLayout(1, 1));
+        waterScalePanel.setBorder(BorderFactory.createLineBorder(Color.red));
+        window.add(waterScalePanel, BorderLayout.WEST);
     }
 
     public void setVisible() {
@@ -89,5 +95,16 @@ public class GameView {
             tempPanel.add(handViews.get(adv).getMinimizedPanel());
             handsPanel.add(tempPanel);
         }
+    }
+    
+    public void setWaterScaleView(WaterScaleView view) {
+        waterScalePanel.add(view.getMainPanel(), BorderLayout.WEST);
+    }
+    
+    public void showEndGame(JPanel panel) {
+        window.getContentPane().removeAll();
+        window.getContentPane().add(panel);
+        window.repaint();
+        panel.repaint();
     }
 }

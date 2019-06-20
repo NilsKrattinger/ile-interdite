@@ -40,6 +40,7 @@ public class Utils {
 
         // Interruptions
         NAVIGATOR_CHOICE,
+        ADVENTURER_CHOICE,
         DISCARD,
         VALIDATE_ACTION,
         GIVE_CARD_RECEIVER_CHOICE,
