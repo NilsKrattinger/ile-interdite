@@ -1,9 +1,11 @@
 package ileinterdite.view;
 
+import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class GameView {
     private final JFrame window;
@@ -12,6 +14,7 @@ public class GameView {
     private final JPanel advViewPanel;
 
     private final JPanel gridPanel;
+    private final JPanel handsPanel;
     private final JPanel waterScalePanel;
 
     public GameView(int width, int height) {
@@ -59,6 +62,9 @@ public class GameView {
         gridContenant.add(gridPanel);
         window.add(gridContenant, BorderLayout.CENTER);
 
+        handsPanel = new JPanel();
+        window.add(handsPanel, BorderLayout.EAST);
+        
         waterScalePanel = new JPanel(new GridLayout(1, 1));
         waterScalePanel.setBorder(BorderFactory.createLineBorder(Color.red));
         window.add(waterScalePanel, BorderLayout.WEST);
@@ -78,6 +84,19 @@ public class GameView {
         gridPanel.add(view.getMainPanel());
     }
 
+    public void setHandViews(HashMap<Adventurer, HandView> handViews) {
+        handsPanel.setLayout(new GridLayout(handViews.size(), 1));
+        for (Adventurer adv : handViews.keySet()) {
+            JPanel tempPanel = new JPanel();
+            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
+            tempPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+            tempPanel.add(new JLabel(adv.getName() + " (" + adv.getClassName() + ")"));
+            tempPanel.add(handViews.get(adv).getMinimizedPanel());
+            handsPanel.add(tempPanel);
+        }
+    }
+    
     public void setWaterScaleView(WaterScaleView view) {
         waterScalePanel.add(view.getMainPanel(), BorderLayout.WEST);
     }
