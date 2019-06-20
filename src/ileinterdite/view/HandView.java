@@ -35,8 +35,8 @@ public class HandView implements IObservable<Message> {
         cards = new ArrayList<>();
         littleCards = new ArrayList<>();
 
-        initCards(cards);
-        initCards(littleCards);
+        initCards(cards, false);
+        initCards(littleCards, true);
 
         mainPanel = new JPanel(new BorderLayout());
         cardPanel = new JPanel(new GridLayout(1, Hand.NB_MAX_CARDS));
@@ -55,7 +55,7 @@ public class HandView implements IObservable<Message> {
         this.update(adventurer);
     }
 
-    private void initCards(ArrayList<JLabel> cards) {
+    private void initCards(ArrayList<JLabel> cards, boolean rightToLeft) {
         for (int i = 0; i < Hand.NB_MAX_CARDS; i++) {
             cards.add(new JLabel());
             cards.get(i).setIcon(null);
@@ -63,6 +63,7 @@ public class HandView implements IObservable<Message> {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
                     int index = cards.indexOf((mouseEvent.getComponent()));
+                    index = (rightToLeft) ? Hand.NB_MAX_CARDS - index - 1 : index;
                     if (index < hand.getSize()){
                          if (hand.getCard(index) != null) {
                             Message m = new Message(Utils.Action.USE_TREASURE_CARD, Integer.toString(index));
