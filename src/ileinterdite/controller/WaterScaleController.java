@@ -1,11 +1,19 @@
 package ileinterdite.controller;
 
+import ileinterdite.view.WaterScaleView;
+
 public class WaterScaleController {
 
+    private GameController controller;
+    private WaterScaleView scaleView;
     private int waterScale; //< The number where the scale is at
 
-    public WaterScaleController(int startingScale) {
+    public WaterScaleController(GameController c, int startingScale) {
+        this.controller = c;
         waterScale = startingScale;
+        scaleView = new WaterScaleView();
+        scaleView.setScale(waterScale);
+        controller.getWindow().setWaterScaleView(scaleView);
     }
 
     public int getFloodedCardToPick() {
@@ -22,6 +30,7 @@ public class WaterScaleController {
 
     public void increaseWaterScale() {
         waterScale++;
+        scaleView.setScale(waterScale);
     }
 
     public int getWaterScale() {
@@ -31,5 +40,7 @@ public class WaterScaleController {
     public boolean isDeadly() {
         return waterScale >= 10;
     }
+
+
 
 }
