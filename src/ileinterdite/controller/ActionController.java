@@ -96,7 +96,9 @@ public class ActionController implements IObserver<Message> {
                 break;
 
         }
-        selectedAction = currentAction;
+        if (currentAction != Utils.Action.VALIDATE_ACTION) {
+            selectedAction = currentAction;
+        }
     }
 
     /**
