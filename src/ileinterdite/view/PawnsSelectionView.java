@@ -28,6 +28,7 @@ public class PawnsSelectionView implements IObservable<Message> {
     private ArrayList<JLabel> pawnsIco;
     private ArrayList<Integer> pawnsSelected;
     private ArrayList<Adventurer> adventurers;
+    private JPanel choicePanel;
 
 
     public PawnsSelectionView() {
@@ -42,7 +43,13 @@ public class PawnsSelectionView implements IObservable<Message> {
         validerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("Yolo");
+                Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
+
+                mainPanel.remove(choicePanel);
+                notifyObservers(m);
+                windowClose();
+
+
             }
         });
 
@@ -85,7 +92,7 @@ public class PawnsSelectionView implements IObservable<Message> {
 
         adventurers = avalibleAdventurers;
 
-        JPanel choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
+        choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
 
         for (Adventurer adventuer : adventurers) {
 

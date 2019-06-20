@@ -216,7 +216,7 @@ public class ActionController implements IObserver<Message> {
      * *********************** */
 
     public void choiceAdventuer(ArrayList<Adventurer> adventurers){
-        pawnsSelectionView.update(adventurers,1);
+        pawnsSelectionView.update(adventurers,3);
 
     }
 
