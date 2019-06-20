@@ -1,5 +1,6 @@
 package ileinterdite.controller;
 
+import ileinterdite.model.Card;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
@@ -58,7 +59,7 @@ public class ActionController implements IObserver<Message> {
                 setEngineerPower(false);
                 if (controller.getCurrentAdventurer() instanceof Navigator) {
                     startInterruption();
-                    controller.getInterruptionController().startNavigatorInterruption();
+                    //TODO UNCOMMENT THIS //controller.getInterruptionController().startNavigatorInterruption();
                     break; // In case the adventurer is a navigator, interrupts the action
                 }
             case DRY: // MOVE case comes also here if the current adventurer is not a Navigator
@@ -225,5 +226,11 @@ public class ActionController implements IObserver<Message> {
         pawnsSelectionView.update(adventurers,1);
 
     }
+
+    public void choiceCard(ArrayList<Card> cards, int nbCartesMax,String action){
+        cardSelectionView.update(cards,cards.size()-nbCartesMax);
+
+    }
+
 
 }
