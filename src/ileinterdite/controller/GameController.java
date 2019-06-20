@@ -9,7 +9,9 @@ import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
 import ileinterdite.util.Utils.Action;
+import ileinterdite.view.DefeatView;
 import ileinterdite.view.GameView;
+import ileinterdite.view.VictoryView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +42,6 @@ public class GameController {
 
         this.gridController.finishGridInit();
         this.mainView.setVisible();
-
         this.newTurn();
     }
 
@@ -117,8 +118,7 @@ public class GameController {
      * declenche la victoire
      */
     private void victory() {
-        //adventurerView.displayVictory()
-        //TODO adventurerView.displayVictory()
+        mainView.showEndGame(new VictoryView().getMainPanel());
 
         //this.endGame()
         //TODO this.endGame()
@@ -127,9 +127,8 @@ public class GameController {
     /**
      * declenche la défaite
      */
-    private void defeat() {
-        //adventurerView.displayDefeat()
-        //TODO adventurerView.displayVictory()
+    public void defeat() {
+        mainView.showEndGame(new DefeatView().getMainPanel());
 
         //this.endGame()
         //TODO this.endGame()

@@ -1,5 +1,7 @@
 package ileinterdite.view;
 
+import ileinterdite.util.Utils;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -78,5 +80,12 @@ public class GameView {
 
     public void setWaterScaleView(WaterScaleView view) {
         waterScalePanel.add(view.getMainPanel(), BorderLayout.WEST);
+    }
+    
+    public void showEndGame(JPanel panel) {
+        window.getContentPane().removeAll();
+        window.getContentPane().add(panel);
+        window.repaint();
+        panel.repaint();
     }
 }

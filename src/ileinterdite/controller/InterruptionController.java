@@ -44,15 +44,20 @@ public class InterruptionController {
                 rescue(ActionControllerHelper.getPositionFromMessage(m.message));
                 break;
             case NAVIGATOR_CHOICE:
-                currentAction = Utils.Action.MOVE;
-                // The message contains a string with the format "ClassName (PlayerName)"
-                currentActionAdventurer = findAdventurerByClassName(m.message.substring(0, m.message.indexOf(' ')));
-                if (currentActionAdventurer != null) {
-                    if (currentActionAdventurer instanceof Navigator) {
-                        cellStates = controller.getAdventurerController().initMove(currentActionAdventurer);
-                    } else {
-                        cellStates = controller.getAdventurerController().initPowerNavigatorMovement(currentActionAdventurer);
+                if(m.action != Utils.Action.CANCEL_ACTION) {
+                    currentAction = Utils.Action.MOVE;
+                    String[] adventurerClass = InterruptionControllerHelper.splitAdventurerClassName(m.message);
+                    currentActionAdventurer = findAdventurerByClassName(adventurerClass[0]);
+                    if (currentActionAdventurer != null) {
+                        if (currentActionAdventurer instanceof Navigator) {
+                            cellStates = controller.getAdventurerController().initMove(currentActionAdventurer);
+                        } else {
+                            cellStates = controller.getAdventurerController().initPowerNavigatorMovement(currentActionAdventurer);
+                        }
                     }
+                } else {
+                    controller.getActionController().stopInterruption();
+
                 }
                 break;
             case MOVE:
@@ -101,7 +106,7 @@ public class InterruptionController {
             Utils.showInformation("ATTENTION l'aventurier " + currentActionAdventurer.getName() + " boit la tasse, Choisissez vite une case jusqu'à laquelle il va nager !");
             controller.getGridController().getGridView().showSelectableCells(cellStates);
         } else {
-            //TODO FONCTION PERDUUUUUUU T'es NULLLLL
+            controller.defeat();
         }
     }
 
@@ -110,13 +115,14 @@ public class InterruptionController {
      * @param adventurer
      */
     public void initDiscard(Adventurer adventurer, ArrayList<Card> cards) {
+
         ArrayList<String> cardNamesToDiscard = discardView.getCardsToDiscard(cards,cards.size() - Hand.NB_MAX_CARDS);
         ArrayList<Card> cardsToDiscard = new ArrayList<>();
         boolean cardAdded;
         for (String cardName : cardNamesToDiscard) {
             cardAdded = false;
             for (Card card : cards) {
-                if (card.getCardName().equals(cardName) && cardAdded == false) {
+                if (card.getCardName().equals(cardName) && !cardAdded) {
                     cardsToDiscard.add(card);
                     cardAdded = true;
                 }
@@ -136,8 +142,7 @@ public class InterruptionController {
 
     public void startNavigatorInterruption() {
         currentAction = Utils.Action.NAVIGATOR_CHOICE;
-        controller.getAdventurerController().getCurrentView().showAdventurers(controller.getAdventurers());
-        // TODO implements navigator interaction
+        controller.getActionController().choiceAdventuer(controller.getAdventurers());
     }
 
     /* ************** *

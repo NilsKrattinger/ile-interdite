@@ -10,6 +10,7 @@ import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.helper.AdventurerControllerHelper;
 import ileinterdite.view.AdventurerView;
+import ileinterdite.view.PawnsSelectionView;
 import ileinterdite.view.HandView;
 
 import java.util.ArrayList;
@@ -74,6 +75,7 @@ public class AdventurerController {
         currentHandView = adventurerHandViews.get(currentAdventurer);
         controller.getWindow().setAdventurerView(currentView);
         currentHandView.update(currentAdventurer);
+
     }
 
     /* **************** *
