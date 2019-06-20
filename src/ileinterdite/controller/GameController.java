@@ -40,7 +40,6 @@ public class GameController {
 
         this.gridController.finishGridInit();
         this.mainView.setVisible();
-
         this.newTurn();
     }
 

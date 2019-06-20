@@ -44,15 +44,20 @@ public class InterruptionController {
                 rescue(ActionControllerHelper.getPositionFromMessage(m.message));
                 break;
             case NAVIGATOR_CHOICE:
-                currentAction = Utils.Action.MOVE;
-                // The message contains a string with the format "ClassName (PlayerName)"
-                currentActionAdventurer = findAdventurerByClassName(m.message.substring(0, m.message.indexOf(' ')));
-                if (currentActionAdventurer != null) {
-                    if (currentActionAdventurer instanceof Navigator) {
-                        cellStates = controller.getAdventurerController().initMove(currentActionAdventurer);
-                    } else {
-                        cellStates = controller.getAdventurerController().initPowerNavigatorMovement(currentActionAdventurer);
+                if(m.action != Utils.Action.CANCEL_ACTION) {
+                    currentAction = Utils.Action.MOVE;
+                    String[] adventurerClass = InterruptionControllerHelper.splitAdventurerClassName(m.message);
+                    currentActionAdventurer = findAdventurerByClassName(adventurerClass[0]);
+                    if (currentActionAdventurer != null) {
+                        if (currentActionAdventurer instanceof Navigator) {
+                            cellStates = controller.getAdventurerController().initMove(currentActionAdventurer);
+                        } else {
+                            cellStates = controller.getAdventurerController().initPowerNavigatorMovement(currentActionAdventurer);
+                        }
                     }
+                } else {
+                    controller.getActionController().stopInterruption();
+
                 }
                 break;
             case MOVE:
@@ -136,8 +141,7 @@ public class InterruptionController {
 
     public void startNavigatorInterruption() {
         currentAction = Utils.Action.NAVIGATOR_CHOICE;
-        controller.getAdventurerController().getCurrentView().showAdventurers(controller.getAdventurers());
-        // TODO implements navigator interaction
+        controller.getActionController().choiceAdventuer(controller.getAdventurers());
     }
 
     /* ************** *
