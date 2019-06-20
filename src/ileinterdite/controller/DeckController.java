@@ -32,26 +32,26 @@ public class DeckController {
         Deck deckTmp;
         DiscardPile discardPileTmp;
         this.decks = new HashMap<>();
-        deckTmp = DeckFactory.deckFactory(Utils.CardType.Flood, grid);
+        deckTmp = DeckFactory.deckFactory(Utils.CardType.FLOOD, grid);
         deckTmp.shuffle();
         decks.put(deckTmp.getCardType(), deckTmp);
 
         this.discardPiles = new HashMap<>();
-        discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Flood);
+        discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.FLOOD);
         deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
 
-        deckTmp = DeckFactory.deckFactory(Utils.CardType.Treasure, grid);
+        deckTmp = DeckFactory.deckFactory(Utils.CardType.TREASURE, grid);
         deckTmp.shuffle();
         decks.put(deckTmp.getCardType(), deckTmp);
 
-        discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.Treasure);
+        discardPileTmp = DiscardPileFactory.discardPileFactory(Utils.CardType.TREASURE);
         deckTmp.setDiscardPile(discardPileTmp);
         discardPiles.put(discardPileTmp.getCardType(), discardPileTmp);
     }
 
     public void drawTreasureCards(int nbCard, Adventurer adv) {
-        ArrayList<Card> drawedCards = this.decks.get(Utils.CardType.Treasure).drawCards(nbCard);
+        ArrayList<Card> drawedCards = this.decks.get(Utils.CardType.TREASURE).drawCards(nbCard);
         ArrayList<Card> tempAdventurerHandCards = new ArrayList<>(adv.getCards());
         adv.getHand().clearHand();
         for (Card drawedCard : drawedCards) {
@@ -59,13 +59,13 @@ public class DeckController {
                 tempAdventurerHandCards.add(drawedCard);
             } else {
                 controller.getWaterScaleController().increaseWaterScale();
-                if (!discardPiles.get(Utils.CardType.Flood).getCards().isEmpty()) {
-                    this.discardPiles.get(Utils.CardType.Flood).shuffle();
-                    ArrayList<Card> discardFloodCards = this.discardPiles.get(Utils.CardType.Flood).getCards();
-                    this.decks.get(Utils.CardType.Flood).addAtTheTop(discardFloodCards);
-                    this.discardPiles.get(Utils.CardType.Flood).clearPile();
+                if (!discardPiles.get(Utils.CardType.FLOOD).getCards().isEmpty()) {
+                    this.discardPiles.get(Utils.CardType.FLOOD).shuffle();
+                    ArrayList<Card> discardFloodCards = this.discardPiles.get(Utils.CardType.FLOOD).getCards();
+                    this.decks.get(Utils.CardType.FLOOD).addAtTheTop(discardFloodCards);
+                    this.discardPiles.get(Utils.CardType.FLOOD).clearPile();
                 }
-                this.discardPiles.get(Utils.CardType.Treasure).addCard(drawedCard);
+                this.discardPiles.get(Utils.CardType.TREASURE).addCard(drawedCard);
             }
         }
         if (tempAdventurerHandCards.size() > Hand.NB_MAX_CARDS) {
@@ -82,7 +82,7 @@ public class DeckController {
      * @param nbCard
      */
     public void drawFloodCards(int nbCard) {
-        ArrayList<Card> drawedCard = decks.get(Utils.CardType.Flood).drawCards(nbCard);
+        ArrayList<Card> drawedCard = decks.get(Utils.CardType.FLOOD).drawCards(nbCard);
         ArrayList<Adventurer> rescueList = new ArrayList<>();
         Utils.State state;
         for (Card card : drawedCard) {
@@ -93,7 +93,7 @@ public class DeckController {
             switch (state) {
                 case NORMAL:
                     floodCard.getLinkedCell().setState(Utils.State.FLOODED);
-                    discardPiles.get(Utils.CardType.Flood).addCard(floodCard);
+                    discardPiles.get(Utils.CardType.FLOOD).addCard(floodCard);
                     break;
                 case FLOODED:
                     floodCard.getLinkedCell().setState(Utils.State.SUNKEN);
@@ -113,6 +113,10 @@ public class DeckController {
             }
             controller.getGridController().getGridView().updateCell(linkedCell.getName(), linkedCell.getState());
         }
+    }
+
+    public Deck getDeck(Utils.CardType type) {
+        return decks.get(type);
     }
 
     public DiscardPile getDiscardPile(Utils.CardType type) {

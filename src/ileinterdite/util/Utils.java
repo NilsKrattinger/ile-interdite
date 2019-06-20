@@ -68,8 +68,8 @@ public class Utils {
 
 
     public enum CardType{
-        Flood("Inondation"),
-        Treasure("Trésor");
+        FLOOD("Inondation"),
+        TREASURE("Trésor");
 
         String label;
 
