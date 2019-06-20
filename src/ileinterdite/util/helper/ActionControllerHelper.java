@@ -34,7 +34,7 @@ public class ActionControllerHelper {
      * @return true if the position is in bounds and the cell at the given coordinates is accessible
      */
     public static boolean checkPosition(Tuple<Integer, Integer> pos, Utils.State[][] states) {
-        return pos.x >= 0 && pos.y >= 0
+        return pos != null && pos.x >= 0 && pos.y >= 0
                 && pos.x < Grid.WIDTH && pos.y < Grid.HEIGHT // Position in bounds
                 && states[pos.y][pos.x] == Utils.State.ACCESSIBLE; // && cell accessible
     }

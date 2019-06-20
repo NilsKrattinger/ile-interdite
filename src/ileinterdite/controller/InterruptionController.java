@@ -165,17 +165,16 @@ public class InterruptionController {
     }
 
     public void rescue(Tuple<Integer, Integer> pos) {
-        if (pos != null) {
-            if (ActionControllerHelper.checkPosition(pos, cellStates)) {
-                controller.getAdventurerController().movement(pos, currentActionAdventurer);
+        if (ActionControllerHelper.checkPosition(pos, cellStates)) {
+            controller.getAdventurerController().movement(pos, currentActionAdventurer);
+
+            adventurersToRescue.remove(0);
+            if (!adventurersToRescue.isEmpty()){
+                initRescue();
+            } else {
+                controller.newTurn();
+                controller.getActionController().endInterruption();
             }
-        }
-        adventurersToRescue.remove(0);
-        if (!adventurersToRescue.isEmpty()){
-            initRescue();
-        } else {
-            controller.newTurn();
-            controller.getActionController().endInterruption();
         }
     }
 
