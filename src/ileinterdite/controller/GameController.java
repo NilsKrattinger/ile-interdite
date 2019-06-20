@@ -118,7 +118,7 @@ public class GameController {
     /**
      * declenche la victoire
      */
-    private void victory() {
+    public void victory() {
         mainView.showEndGame(new VictoryView().getMainPanel());
 
         //this.endGame()

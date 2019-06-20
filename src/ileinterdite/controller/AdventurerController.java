@@ -65,6 +65,7 @@ public class AdventurerController {
                     advCards.add(card);
                 }
             }
+            adventurerHandViews.get(adv).update(adv);
         }
 
         controller.getWindow().setHandViews(this.adventurerHandViews);
@@ -276,5 +277,9 @@ public class AdventurerController {
 
     public AdventurerView getCurrentView() {
         return currentView;
+    }
+
+    public HandView getHandViewFor(Adventurer adv) {
+        return adventurerHandViews.get(adv);
     }
 }
