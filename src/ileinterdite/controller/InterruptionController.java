@@ -158,9 +158,9 @@ public class InterruptionController {
     public void discard(Card card) {
         DiscardPile discardTreasureCards;
         if (card instanceof TreasureCard) {
-            discardTreasureCards = controller.getDeckController().getDiscardPile(Utils.CardType.Treasure);
+            discardTreasureCards = controller.getDeckController().getDiscardPile(Utils.CardType.TREASURE);
         } else {
-            discardTreasureCards = controller.getDeckController().getDiscardPile(Utils.CardType.Flood);
+            discardTreasureCards = controller.getDeckController().getDiscardPile(Utils.CardType.FLOOD);
         }
     }
 

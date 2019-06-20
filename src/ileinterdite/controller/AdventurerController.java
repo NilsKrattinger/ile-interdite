@@ -1,8 +1,6 @@
 package ileinterdite.controller;
 
-import ileinterdite.model.Card;
-import ileinterdite.model.Cell;
-import ileinterdite.model.Hand;
+import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Messager;
 import ileinterdite.util.Message;
@@ -49,6 +47,25 @@ public class AdventurerController {
         AdventurerControllerHelper.createViews(adventurers, controller.getActionController());
         this.adventurerViews = AdventurerControllerHelper.getAdventurerViews();
         this.adventurerHandViews = AdventurerControllerHelper.getAdventurerHandViews();
+    }
+
+    public void finishAdventurerInit() {
+        Deck treasureCardsDeck = controller.getDeckController().getDeck(Utils.CardType.TREASURE);
+
+        for (Adventurer adv : adventurers) {
+            ArrayList<Card> advCards = adv.getHand().getCards();
+            while (advCards.size() != 2) {
+                Card card = treasureCardsDeck.drawCards(1).get(0);
+                if (card.getCardName().equalsIgnoreCase("Montée des eaux")) {
+                    ArrayList<Card> tempList = new ArrayList<>();
+                    tempList.add(card);
+                    treasureCardsDeck.addAtTheTop(tempList);
+                    treasureCardsDeck.shuffle();
+                } else {
+                    advCards.add(card);
+                }
+            }
+        }
 
         controller.getWindow().setHandViews(this.adventurerHandViews);
 
