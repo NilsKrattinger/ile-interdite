@@ -140,6 +140,7 @@ public class ActionController implements IObserver<Message> {
             }
 
             currentAction = null;
+            selectedAction = null;
         }
     }
 

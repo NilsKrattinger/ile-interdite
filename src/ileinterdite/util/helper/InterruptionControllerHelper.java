@@ -21,7 +21,22 @@ public class InterruptionControllerHelper {
         return availableCellFound;
     }
 
-    public static String[] splitAdventurerClassName(String message){
+    public static boolean isMovementPossible(Utils.State[][] cellStates) {
+        boolean availability = false;
+        int j = 0;
+        while (!availability && j < cellStates.length) {
+            int i = 0;
+            while (!availability && i < cellStates[j].length) {
+                availability = cellStates[j][i] == Utils.State.ACCESSIBLE;
+                i++;
+            }
+            j++;
+        }
+
+        return availability;
+    }
+    
+    public static String[] splitAdventurerClassName(String message) {
         String[] strings;
        ArrayList<String> finalString = new ArrayList<>();
         strings = message.split("/");
@@ -32,8 +47,7 @@ public class InterruptionControllerHelper {
             
         }
         String[] adventurerClass = new String[finalString.size()];
-       return  finalString.toArray(adventurerClass);
-
+        return  finalString.toArray(adventurerClass);
     }
 
 }
