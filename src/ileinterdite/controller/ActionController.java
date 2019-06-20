@@ -56,7 +56,7 @@ public class ActionController implements IObserver<Message> {
                     controller.getInterruptionController().startNavigatorInterruption();
                     break; // In case the adventurer is a navigator, interrupts the action
                 }
-            case DRY: // MOVE case comes also here if the current adventurer is not a Navigator
+            case DRY: // MOVE case comes also here if the current adventurer is not a Navigator (no break)
                 cellStates = controller.getAdventurerController().startCellAction(message);
                 break;
 
@@ -86,8 +86,13 @@ public class ActionController implements IObserver<Message> {
             case CANCEL_ACTION:
                 currentAction = null;
                 break;
+
             case ADVENTURER_CHOICE:
                 validateAction(message);
+                break;
+
+            case USE_TREASURE_CARD:
+                controller.getInterruptionController().startCardInterruption(message);
                 break;
 
         }
@@ -216,8 +221,8 @@ public class ActionController implements IObserver<Message> {
      * PAWN CHOICE METHODS     *
      * *********************** */
 
-    public void choiceAdventuer(ArrayList<Adventurer> adventurers){
-        pawnsSelectionView.update(adventurers,3);
+    public void chooseAdventurers(ArrayList<Adventurer> adventurers, int nbadventurers, boolean showValidation, boolean showCancel){
+        pawnsSelectionView.update(adventurers, nbadventurers, showValidation, showCancel);
 
     }
 

@@ -278,4 +278,8 @@ public class AdventurerController {
     public AdventurerView getCurrentView() {
         return currentView;
     }
+
+    public HandView getHandViewFor(Adventurer adv) {
+        return adventurerHandViews.get(adv);
+    }
 }
