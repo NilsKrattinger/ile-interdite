@@ -59,7 +59,7 @@ public class ActionController implements IObserver<Message> {
                 setEngineerPower(false);
                 if (controller.getCurrentAdventurer() instanceof Navigator) {
                     startInterruption();
-                    //TODO UNCOMMENT THIS //controller.getInterruptionController().startNavigatorInterruption();
+                    controller.getInterruptionController().startNavigatorInterruption();
                     break; // In case the adventurer is a navigator, interrupts the action
                 }
             case DRY: // MOVE case comes also here if the current adventurer is not a Navigator

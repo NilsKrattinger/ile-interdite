@@ -139,7 +139,7 @@ public class GameController {
      */
     public void testDefeat() {
         if (waterScaleController.isDeadly() || this.treasureSink() || this.heliCellSink()) {
-            //this.defeat();
+            this.defeat();
         }
     }
 
