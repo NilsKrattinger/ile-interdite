@@ -20,9 +20,9 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
 
     private int x; private int y;
     private BufferedImage image;
-    private BufferedImage translucentImage;
+    private BufferedImage transparentImage;
     private BufferedImage floodedImage;
-    private BufferedImage translucentFloodedImage;
+    private BufferedImage transparentFloodedImage;
     private Utils.State cellState;
     private Utils.State accessible;
     private Rectangle positionInWindow;
@@ -40,14 +40,14 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
             path = "tuiles/" + path;
             image = Utils.loadImage(path + ".png");
             if (image != null) {
-                translucentImage = Utils.deepCopy(image);
-                Utils.setOpacity(translucentImage, 50);
+                transparentImage = Utils.deepCopy(image);
+                Utils.setOpacity(transparentImage, 50);
             }
 
             floodedImage = Utils.loadImage(path + "_Inonde.png");
             if (floodedImage != null) {
-                translucentFloodedImage = Utils.deepCopy(floodedImage);
-                Utils.setOpacity(translucentFloodedImage, 50);
+                transparentFloodedImage = Utils.deepCopy(floodedImage);
+                Utils.setOpacity(transparentFloodedImage, 50);
             }
         }
 
@@ -85,9 +85,9 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
         if (cellState == Utils.State.NORMAL || cellState == Utils.State.FLOODED) {
             BufferedImage img;
             if (cellState == Utils.State.NORMAL) {
-                img = (accessible != Utils.State.INACCESSIBLE) ? image : translucentImage;
+                img = (accessible != Utils.State.INACCESSIBLE) ? image : transparentImage;
             } else {
-                img = (accessible != Utils.State.INACCESSIBLE) ? floodedImage : translucentFloodedImage;
+                img = (accessible != Utils.State.INACCESSIBLE) ? floodedImage : transparentFloodedImage;
             }
 
             g.drawImage(img, 0, 0, g.getClipBounds().width, g.getClipBounds().height, this);

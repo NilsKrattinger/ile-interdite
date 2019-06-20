@@ -204,7 +204,9 @@ public class Utils {
         for (int i = 0; i < raster.getWidth(); i++) {
             for (int j = 0; j < raster.getHeight(); j++) {
                 int[] pixel = raster.getPixel(i, j, (int[]) null);
-                pixel[3] = opacity;
+                if (pixel[3] != 0) {
+                    pixel[3] = opacity;
+                }
                 raster.setPixel(i, j, pixel);
             }
         }

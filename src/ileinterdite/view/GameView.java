@@ -83,6 +83,10 @@ public class GameView {
         gridPanel.add(view.getMainPanel());
     }
 
+    public void setTreasureView(TreasureView treasureView) {
+        bottomPanel.add(treasureView.getMainPanel());
+    }
+    
     public void setHandViews(HashMap<Adventurer, HandView> handViews) {
         handsPanel.setLayout(new GridLayout(handViews.size(), 1));
         for (Adventurer adv : handViews.keySet()) {
