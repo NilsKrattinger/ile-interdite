@@ -75,7 +75,7 @@ public class GridController {
             ArrayList<Card> cardsToDiscard = new ArrayList<>();
             for (Card card : adventurer.getCards()) {
                 if (card.getCardName().equals(collectibleTreasureName) && discardedCards < 4) {
-                    controller.getDeckController().getDiscardPile(Utils.CardType.Treasure).addCard(card);
+                    controller.getDeckController().getDiscardPile(Utils.CardType.TREASURE).addCard(card);
                     cardsToDiscard.add(card);
                     discardedCards++;
                 }
