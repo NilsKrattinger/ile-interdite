@@ -12,6 +12,7 @@ public class GameView {
     private final JPanel advViewPanel;
 
     private final JPanel gridPanel;
+    private final JPanel waterScalePanel;
 
     public GameView(int width, int height) {
 
@@ -57,6 +58,10 @@ public class GameView {
         gridPanel.setLayout(new GridLayout(1, 1));
         gridContenant.add(gridPanel);
         window.add(gridContenant, BorderLayout.CENTER);
+
+        waterScalePanel = new JPanel(new GridLayout(1, 1));
+        waterScalePanel.setBorder(BorderFactory.createLineBorder(Color.red));
+        window.add(waterScalePanel, BorderLayout.WEST);
     }
 
     public void setVisible() {
@@ -73,6 +78,10 @@ public class GameView {
         gridPanel.add(view.getMainPanel());
     }
 
+    public void setWaterScaleView(WaterScaleView view) {
+        waterScalePanel.add(view.getMainPanel(), BorderLayout.WEST);
+    }
+    
     public void showEndGame(JPanel panel) {
         window.getContentPane().removeAll();
         window.getContentPane().add(panel);
