@@ -70,4 +70,8 @@ public class GameView {
     public void setGridView(GridView view) {
         gridPanel.add(view.getMainPanel());
     }
+
+    public void setTreasureView(TreasureView treasureView) {
+        bottomPanel.add(treasureView.getMainPanel());
+    }
 }

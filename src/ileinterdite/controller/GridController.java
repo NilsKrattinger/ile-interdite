@@ -10,6 +10,7 @@ import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.helper.GridControllerHelper;
 import ileinterdite.view.GridView;
+import ileinterdite.view.TreasureView;
 
 import java.util.ArrayList;
 
@@ -19,17 +20,20 @@ public class GridController {
 
     // Necessary elements to make the controller work
     private GridView gridView; //< The visual representation of the grid
+    private TreasureView treasureView; //< The visual representation of the collected treasures
     private Grid grid; //< The object representing the grid
 
     public GridController(GameController c) {
         this.controller = c;
         this.gridView = new GridView();
         this.grid = new Grid(BoardFactory.getCells(), BoardFactory.getTreasures());
+        this.treasureView = new TreasureView(BoardFactory.getTreasures());
 
         GridControllerHelper.spawnAdventurers(c.getAdventurers(), grid);
         GridControllerHelper.initView(gridView, grid, controller.getAdventurers(), controller.getActionController());
 
         controller.getWindow().setGridView(gridView);
+        controller.getWindow().setTreasureView(treasureView);
     }
 
     public void finishGridInit() {
@@ -65,7 +69,8 @@ public class GridController {
         Treasure collectibleTreasure = adventurer.isAbleToCollectTreasure();
         if (collectibleTreasure != null) {
             String collectibleTreasureName = collectibleTreasure.getName();
-            this.grid.getTreasures().remove(grid.getTreasure(collectibleTreasureName));
+            Treasure treasure = grid.getTreasure(collectibleTreasureName);
+            this.grid.getTreasures().remove(treasure);
             int discardedCards = 0;
             ArrayList<Card> cardsToDiscard = new ArrayList<>();
             for (Card card : adventurer.getCards()) {
@@ -80,7 +85,7 @@ public class GridController {
                 adventurer.getCards().remove(card);
             }
             controller.getActionController().reduceNbActions();
-            // TODO : methode pour montrer à l'utilisateur que le trésor a bien été récupéré / update de sa main
+            treasureView.collectTreasure(treasure);
         }
     }
 
