@@ -1,5 +1,6 @@
 package ileinterdite.model;
 
+import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
 import java.util.*;
 
@@ -30,6 +31,8 @@ public class DiscardPile {
 	}
 
 	public void shuffle() {
-	    Collections.shuffle(cards);
+	    if (Parameters.RANDOM) {
+            Collections.shuffle(cards);
+        }
     }
 }
