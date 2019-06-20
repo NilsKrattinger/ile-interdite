@@ -92,10 +92,6 @@ public class ActionController implements IObserver<Message> {
 
         }
         selectedAction = currentAction;
-
-        if (remainingActions == 0) {
-            controller.endTurn();
-        }
     }
 
     /**
@@ -166,6 +162,10 @@ public class ActionController implements IObserver<Message> {
     public void reduceNbActions() {
         this.remainingActions--;
         controller.getAdventurerController().getCurrentView().setNbActions(this.remainingActions);
+
+        if (remainingActions == 0) {
+            controller.endTurn();
+        }
     }
 
     /* ************* *

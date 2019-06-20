@@ -64,8 +64,8 @@ public class InterruptionController {
                 Tuple<Integer, Integer> pos = ActionControllerHelper.getPositionFromMessage(m.message);
                 if (ActionControllerHelper.checkPosition(pos, cellStates)) {
                     controller.getAdventurerController().movement(pos, currentActionAdventurer);
-                    controller.getActionController().reduceNbActions();
                     controller.getActionController().endInterruption();
+                    controller.getActionController().reduceNbActions();
                 }
                 break;
         }
