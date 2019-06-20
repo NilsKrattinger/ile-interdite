@@ -14,6 +14,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import javax.swing.JOptionPane;
 
@@ -173,7 +174,14 @@ public class Utils {
     public static BufferedImage loadImage(String path) {
         path = "res/images/" + path;
         try {
-            return ImageIO.read(new File(path));
+            BufferedImage newImg = ImageUtils.getCachedImage(path);
+
+            if (newImg == null) {
+                newImg = ImageIO.read(new File(path));
+                ImageUtils.cacheImage(path, newImg);
+            }
+
+            return newImg;
         } catch (IOException ex) {
             if (Parameters.LOGS) {
                 System.err.println("File " + path + " could not be opened. More information below.");
