@@ -41,10 +41,12 @@ public class Utils {
         // Interruptions
         NAVIGATOR_CHOICE,
         ADVENTURER_CHOICE,
+        CARD_CHOICE,
         DISCARD,
         VALIDATE_ACTION,
         GIVE_CARD_RECEIVER_CHOICE,
-        GIVE_CARD_CARD_CHOICE
+        GIVE_CARD_CARD_CHOICE;
+
     }
  
     public enum State {

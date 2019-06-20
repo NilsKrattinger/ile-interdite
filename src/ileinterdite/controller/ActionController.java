@@ -5,6 +5,7 @@ import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
 import ileinterdite.util.helper.ActionControllerHelper;
+import ileinterdite.view.CardSelectionView;
 import ileinterdite.view.PawnsSelectionView;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class ActionController implements IObserver<Message> {
 
     // View specific Variables
     private PawnsSelectionView pawnsSelectionView;
+    private CardSelectionView cardSelectionView;
 
     // Variables used to handle all actions
     private Utils.Action currentAction; //< The action being processed
@@ -38,6 +40,9 @@ public class ActionController implements IObserver<Message> {
 
         pawnsSelectionView = new PawnsSelectionView();
         pawnsSelectionView.addObserver(this);
+
+        cardSelectionView = new CardSelectionView();
+        cardSelectionView.addObserver(this);
     }
 
     @Override
