@@ -3,6 +3,7 @@ package ileinterdite.util.helper;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.IObserver;
 import ileinterdite.util.Message;
+import ileinterdite.util.Parameters;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.HandView;
 
@@ -22,6 +23,7 @@ public class AdventurerControllerHelper {
      */
     public static ArrayList<Adventurer> getPlayers(ArrayList<Adventurer> players, ArrayList<String> names) {
         randomPlayer(players, names.size());
+
         for (int i = 0; i < names.size(); i++) {
             players.get(i).setName(names.get(i));
         }
@@ -34,7 +36,9 @@ public class AdventurerControllerHelper {
      * @param nbPlayers The number of players in the game
      */
     private static void randomPlayer(ArrayList<Adventurer> adventurers, int nbPlayers) {
-        Collections.shuffle(adventurers);
+        if (Parameters.RANDOM) {
+            Collections.shuffle(adventurers);
+        }
         while (adventurers.size() > nbPlayers) {
             adventurers.remove(adventurers.size() - 1);
         }
