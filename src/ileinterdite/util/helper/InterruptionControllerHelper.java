@@ -41,7 +41,8 @@ public class InterruptionControllerHelper {
        ArrayList<String> finalString = new ArrayList<>();
         strings = message.split("/");
         for (int i = 0; i < strings.length; i++) {
-            if( !strings[i].isBlank() && !strings[i].isEmpty()){
+            strings[i] = strings[i].replaceAll("\\s", "");
+            if(!strings[i].isEmpty()){
                 finalString.add(strings[i]);
             }
             
