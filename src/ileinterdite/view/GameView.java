@@ -66,7 +66,6 @@ public class GameView {
         window.add(handsPanel, BorderLayout.EAST);
         
         waterScalePanel = new JPanel(new GridLayout(1, 1));
-        waterScalePanel.setBorder(BorderFactory.createLineBorder(Color.red));
         window.add(waterScalePanel, BorderLayout.WEST);
     }
 
