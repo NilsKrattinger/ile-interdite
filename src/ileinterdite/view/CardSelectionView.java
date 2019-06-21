@@ -5,7 +5,6 @@ import ileinterdite.util.IObservable;
 import ileinterdite.util.IObserver;
 import ileinterdite.util.Message;
 import ileinterdite.util.Utils;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;

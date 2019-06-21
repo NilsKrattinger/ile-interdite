@@ -212,6 +212,10 @@ public class ActionController implements IObserver<Message> {
         this.isInterrupted = false;
     }
 
+    public boolean isInterrupted() {
+        return isInterrupted;
+    }
+
     /* *********************** *
      * ACTION SPECIFIC METHODS *
      * *********************** */

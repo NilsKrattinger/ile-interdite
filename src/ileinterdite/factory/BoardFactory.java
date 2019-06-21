@@ -68,6 +68,10 @@ public class BoardFactory {
         return treasures;
     }
 
+    public static void setAdventurers(ArrayList<Adventurer> adventurers) {
+        BoardFactory.adventurers = adventurers;
+    }
+
     /**
      * Convertie une liste de Cell de taille 36 en
      * tableau 6 x 6 de cell
