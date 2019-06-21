@@ -116,7 +116,7 @@ public class InterruptionController {
             Utils.showInformation("ATTENTION l'aventurier " + currentActionAdventurer.getName() + " boit la tasse, Choisissez vite une case jusqu'à laquelle il va nager !");
             controller.getGridController().getGridView().showSelectableCells(cellStates);
         } else {
-            controller.defeat();
+            controller.defeat(false, false, false, true);
         }
     }
 
