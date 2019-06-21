@@ -2,7 +2,9 @@ package ileinterdite.controller;
 
 import ileinterdite.model.Card;
 import ileinterdite.model.Cell;
+import ileinterdite.model.adventurers.*;
 import ileinterdite.model.Hand;
+import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Messager;
 import ileinterdite.util.Message;
@@ -10,6 +12,7 @@ import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.helper.AdventurerControllerHelper;
 import ileinterdite.view.AdventurerView;
+import ileinterdite.view.CardGivingView;
 import ileinterdite.view.PawnsSelectionView;
 import ileinterdite.view.HandView;
 
@@ -33,6 +36,7 @@ public class AdventurerController {
     private Adventurer currentActionAdventurer; //< The adventurer making the current action (may differ from currentAdventurer)
 
     // Action-specific variables
+    private CardGivingView cardGivingView;
     private Card selectedCard; //< The card selected by the player during a GIVE_CARD action
     private Adventurer selectedAdventurer; //< The adventurer selected by the player during a GIVE_CARD action
 
@@ -49,6 +53,26 @@ public class AdventurerController {
         AdventurerControllerHelper.createViews(adventurers, controller.getActionController());
         this.adventurerViews = AdventurerControllerHelper.getAdventurerViews();
         this.adventurerHandViews = AdventurerControllerHelper.getAdventurerHandViews();
+    }
+
+    public void finishAdventurerInit() {
+        Deck treasureCardsDeck = controller.getDeckController().getDeck(Utils.CardType.TREASURE);
+
+        for (Adventurer adv : adventurers) {
+            ArrayList<Card> advCards = adv.getHand().getCards();
+            while (advCards.size() != 2) {
+                Card card = treasureCardsDeck.drawCards(1).get(0);
+                if (card.getCardName().equalsIgnoreCase("Montee des eaux")) {
+                    ArrayList<Card> tempList = new ArrayList<>();
+                    tempList.add(card);
+                    treasureCardsDeck.addAtTheTop(tempList);
+                    treasureCardsDeck.shuffle();
+                } else {
+                    advCards.add(card);
+                }
+            }
+            adventurerHandViews.get(adv).update(adv);
+        }
 
         controller.getWindow().setHandViews(this.adventurerHandViews);
 
@@ -93,7 +117,7 @@ public class AdventurerController {
     public void handleAction(Message m) {
 
         switch (m.action) {
-            case START_GIVE_CARD:
+            case GIVE_CARD:
                 initGiveCard(currentAdventurer);
                 break;
 
@@ -159,10 +183,46 @@ public class AdventurerController {
         currentActionAdventurer = adventurer;
         Cell adventurerCell = controller.getGridController().getGrid().getCell(adventurer.getX(),adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
-        if (nbOfAdventurersOnCell >= 2 || adventurer instanceof Messager) {
-            ArrayList<Card> giverCards = currentAdventurer.getCards();
-            //adventurerView.showTradableCards(giverCards);
-            // TODO showTradableCards() method
+        if ((nbOfAdventurersOnCell >= 2 && adventurer.getNumberOfCards() > 0) || (adventurer instanceof Messager && adventurer.getNumberOfCards() > 0)) {
+            cardGivingView = new CardGivingView(this.controller);
+            ArrayList<Card> giverCards = new ArrayList<>();
+            giverCards.addAll(currentAdventurer.getCards());
+
+            cardGivingView.showTradableCards(giverCards);
+
+            String selectedCardName = cardGivingView.getSelectedCardName();
+            for (Card card : giverCards) {
+                if (card.getCardName().equals(selectedCardName)) {
+                    selectedCard = card;
+                }
+            }
+
+            ArrayList<Adventurer> potentialAdventurers = new ArrayList<>();
+            for (Adventurer adv : adventurers) {
+                if ((currentAdventurer instanceof Messager && adv != currentAdventurer)
+                    || (adv != currentAdventurer
+                        && adv.getY() == currentAdventurer.getY()
+                        && adv.getX() == currentAdventurer.getX())) {
+                    potentialAdventurers.add(adv);
+                }
+            }
+            cardGivingView.showPotentialReceivers(potentialAdventurers);
+
+            String receiverName = cardGivingView.getReceiverName();
+            selectedAdventurer = getAdventurerFromName(receiverName);
+
+            if (potentialAdventurers.contains(selectedAdventurer)) {
+                int nbOfCardsInReceiverHand = selectedAdventurer.getNumberOfCards();
+                if (nbOfCardsInReceiverHand == 5) {
+                    ArrayList<Card> tempAdventurerHandCards = new ArrayList<>();
+                    tempAdventurerHandCards.addAll(selectedAdventurer.getCards());
+                    selectedAdventurer.getHand().clearHand();
+                    this.controller.getInterruptionController().initDiscard(selectedAdventurer, tempAdventurerHandCards);
+                }
+                giveCard(selectedAdventurer, selectedCard);
+                adventurer.getCards().remove(selectedCard);
+                this.controller.getActionController().reduceNbActions();
+            }
         }
     }
 
@@ -188,43 +248,7 @@ public class AdventurerController {
         controller.getGridController().getGridView().updateAdventurer(adv);
     }
 
-    /**
-     * Set the selected card for the GIVE_CARD action
-     * @param m The message received from the view
-     */
-    public void setSelectedCard(Message m) {
-        selectedCard = this.currentAdventurer.getHand().getCard(m.message);
-        if (selectedCard != null) {
-            ArrayList<Adventurer> advs = new ArrayList<>();
-            for (Adventurer adv : adventurers) {
-                if (currentAdventurer instanceof Messager || (adv != currentAdventurer && adv.getY() == currentAdventurer.getY() && adv.getX() == currentAdventurer.getX())) {
-                    advs.add(adv);
-                }
-                //adventurerView.chooseCardReceiver();
-                // TODO chooseCardReceiver(adv) method
-            }
-        }
-    }
 
-    /**
-     * Set the selected adventurer for the GIVE_CARD action
-     * @param m The message received from the view
-     */
-    public void setSelectedAdventurer(Message m) {
-        Adventurer receiver = this.getAdventurerFromName(m.message);
-        int nbOfCardsInReceiverHand = receiver.getNumberOfCards();
-        if (nbOfCardsInReceiverHand == Hand.NB_MAX_CARDS && selectedCard != null) {
-            ArrayList<Card> cards = new ArrayList<>(receiver.getHand().getCards());
-            receiver.getHand().clearHand();
-            cards.add(selectedCard);
-            controller.getInterruptionController().initDiscard(receiver, cards);
-        } else {
-            if (selectedCard != null) {
-                currentAdventurer.getCards().remove(selectedCard);
-                giveCard(receiver,selectedCard);
-            }
-        }
-    }
 
     /**
      * Ajoute la carte card à la main de aventurier adventurer s'il a moins du nombre max de cartes dans sa main
@@ -259,5 +283,9 @@ public class AdventurerController {
 
     public AdventurerView getCurrentView() {
         return currentView;
+    }
+
+    public HandView getHandViewFor(Adventurer adv) {
+        return adventurerHandViews.get(adv);
     }
 }

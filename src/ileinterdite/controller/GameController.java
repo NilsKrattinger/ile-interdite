@@ -41,6 +41,7 @@ public class GameController {
         this.waterScaleController = new WaterScaleController(this, difficulty);
 
         this.gridController.finishGridInit();
+        this.adventurerController.finishAdventurerInit();
         this.mainView.setVisible();
         this.newTurn();
     }
@@ -100,7 +101,7 @@ public class GameController {
     }
 
     public void endTurn() {
-        deckController.drawTreasureCards(2);
+        deckController.drawTreasureCards(2, getCurrentAdventurer());
         deckController.drawFloodCards(waterScaleController.getFloodedCardToPick());
         if (!interruptionController.getAdventurersToRescue().isEmpty()){
             interruptionController.initRescue();
@@ -117,7 +118,7 @@ public class GameController {
     /**
      * declenche la victoire
      */
-    private void victory() {
+    public void victory() {
         mainView.showEndGame(new VictoryView().getMainPanel());
 
         //this.endGame()

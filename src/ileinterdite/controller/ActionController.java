@@ -62,21 +62,14 @@ public class ActionController implements IObserver<Message> {
                     controller.getInterruptionController().startNavigatorInterruption();
                     break; // In case the adventurer is a navigator, interrupts the action
                 }
-            case DRY: // MOVE case comes also here if the current adventurer is not a Navigator
+            case DRY: // MOVE case comes also here if the current adventurer is not a Navigator (no break)
                 cellStates = controller.getAdventurerController().startCellAction(message);
                 break;
 
-            case START_GIVE_CARD: case GET_TREASURE:
+            case GIVE_CARD:
+                currentAction = Utils.Action.GIVE_CARD;
                 setEngineerPower(false);
                 controller.startAdventurerAction(message);
-                break;
-
-            case GIVE_CARD_CARD_CHOICE:
-                controller.getAdventurerController().setSelectedCard(message);
-                break;
-
-            case GIVE_CARD_RECEIVER_CHOICE:
-                controller.getAdventurerController().setSelectedAdventurer(message);
                 break;
 
             case VALIDATE_ACTION:
@@ -92,12 +85,19 @@ public class ActionController implements IObserver<Message> {
             case CANCEL_ACTION:
                 currentAction = null;
                 break;
+
             case ADVENTURER_CHOICE:
                 validateAction(message);
                 break;
 
+            case USE_TREASURE_CARD:
+                controller.getInterruptionController().startCardInterruption(message);
+                break;
+
         }
-        selectedAction = currentAction;
+        if (currentAction != Utils.Action.VALIDATE_ACTION) {
+            selectedAction = currentAction;
+        }
     }
 
     /**
@@ -222,8 +222,8 @@ public class ActionController implements IObserver<Message> {
      * PAWN CHOICE METHODS     *
      * *********************** */
 
-    public void choiceAdventuer(ArrayList<Adventurer> adventurers){
-        pawnsSelectionView.update(adventurers,1);
+    public void chooseAdventurers(ArrayList<Adventurer> adventurers, int nbadventurers, boolean showValidation, boolean showCancel){
+        pawnsSelectionView.update(adventurers, nbadventurers, showValidation, showCancel);
 
     }
 

@@ -22,8 +22,8 @@ public class PawnsSelectionView implements IObservable<Message> {
 
     private JFrame window;
     private JPanel mainPanel;
-    private JButton annulerButton;
-    private JButton validerButton;
+    private JButton cancelButton;
+    private JButton validateButton;
     private JPanel buttonPanel;
     private ArrayList<JLabel> pawnsIco;
     private ArrayList<Integer> pawnsSelected;
@@ -39,8 +39,8 @@ public class PawnsSelectionView implements IObservable<Message> {
         pawnsIco = new ArrayList<>();
 
         this.initFrame();
-        validerButton = new JButton("Valider");
-        validerButton.addActionListener(new ActionListener() {
+        validateButton = new JButton("Valider");
+        validateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
@@ -53,8 +53,8 @@ public class PawnsSelectionView implements IObservable<Message> {
             }
         });
 
-        annulerButton = new JButton("Annuler");
-        annulerButton.addActionListener(new ActionListener() {
+        cancelButton = new JButton("Annuler");
+        cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Message m = new Message(Utils.Action.CANCEL_ACTION, null);
@@ -68,34 +68,27 @@ public class PawnsSelectionView implements IObservable<Message> {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
-        buttonPanel.add(validerButton,c);
+        buttonPanel.add(validateButton,c);
         c.gridx = 2;
         c.gridy = 0;
-        buttonPanel.add(annulerButton,c);
+        buttonPanel.add(cancelButton,c);
 
-        //mainPanel.add(annulerButton, BorderLayout.SOUTH);
+        //mainPanel.add(cancelButton, BorderLayout.SOUTH);
         window.add(mainPanel);
 
     }
 
-    /**
-     * Make a pop window with list of pawns , can be multi choice
-     * @param avalibleAdventurers list of Adventurer to chose pawns to display
-     * @param nbAdveturer number of needed adventuer
-     */
-    public void update(ArrayList<Adventurer> avalibleAdventurers, int nbAdveturer) {
+    public void update(ArrayList<Adventurer> availableAdventurers, int nbAdventurers, boolean showValidation, boolean showCancel) {
         windowLoad();
 
-        if(nbAdveturer > 1){
-            validerButton.setEnabled(true);
-            validerButton.setVisible(true);
-        } else {
-            validerButton.setEnabled(false);
-            validerButton.setVisible(false);
-        }
+        validateButton.setEnabled(showValidation);
+        validateButton.setVisible(showValidation);
+
+        cancelButton.setEnabled(showCancel);
+        cancelButton.setVisible(showCancel);
 
 
-        adventurers = avalibleAdventurers;
+        adventurers = availableAdventurers;
 
         choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
 
@@ -128,7 +121,7 @@ public class PawnsSelectionView implements IObservable<Message> {
                             }
                         }
 
-                        if (pawnsSelected.size() == nbAdveturer) {
+                        if (pawnsSelected.size() == nbAdventurers) {
                             Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
 
                             mainPanel.remove(choicePanel);

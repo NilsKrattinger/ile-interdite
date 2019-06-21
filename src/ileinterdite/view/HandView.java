@@ -35,8 +35,8 @@ public class HandView implements IObservable<Message> {
         cards = new ArrayList<>();
         littleCards = new ArrayList<>();
 
-        initCards(cards);
-        initCards(littleCards);
+        initCards(cards, adventurer, false);
+        initCards(littleCards, adventurer, true);
 
         mainPanel = new JPanel(new BorderLayout());
         cardPanel = new JPanel(new GridLayout(1, Hand.NB_MAX_CARDS));
@@ -55,23 +55,24 @@ public class HandView implements IObservable<Message> {
         this.update(adventurer);
     }
 
-    private void initCards(ArrayList<JLabel> cards) {
+    private void initCards(ArrayList<JLabel> cards, Adventurer adv, boolean rightToLeft) {
         for (int i = 0; i < Hand.NB_MAX_CARDS; i++) {
             cards.add(new JLabel());
             cards.get(i).setIcon(null);
             cards.get(i).addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
-                    int index = cards.indexOf((mouseEvent.getComponent()));
+                    int index = cards.indexOf(mouseEvent.getComponent());
+                    index = (rightToLeft) ? Hand.NB_MAX_CARDS - index - 1 : index;
                     if (index < hand.getSize()){
                          if (hand.getCard(index) != null) {
-                            Message m = new Message(Utils.Action.USE_TREASURE_CARD, Integer.toString(index));
+                            Message m = new Message(Utils.Action.USE_TREASURE_CARD, Integer.toString(index), adv);
 
                             if (Parameters.LOGS){
                                 System.out.println(m.action);
                             }
-                            notifyObservers(m);
 
+                            notifyObservers(m);
                          }
                     }
                 }
@@ -114,7 +115,6 @@ public class HandView implements IObservable<Message> {
         hand = currentAdventurer.getHand();
         for (Card card : hand.getCards()) {
             path = card.getCardName();
-            path = path.replaceAll("[\\s']", "");
             path = "cartes/" + path;
             BufferedImage img = Utils.loadImage(path + ".png");
             if (img != null) {
@@ -123,6 +123,11 @@ public class HandView implements IObservable<Message> {
                 cards.get(index).setIcon(icon);
             }
             i++;
+        }
+
+        for (; i < Hand.NB_MAX_CARDS; i++) {
+            int index = rightToLeft ? cards.size() - i - 1 : i;
+            cards.get(index).setIcon(null);
         }
     }
 

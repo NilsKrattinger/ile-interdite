@@ -11,7 +11,7 @@ public class DeckFactory {
     private static Stack<Card> cards;
 
     public static Deck deckFactory(Utils.CardType type, Grid grid) {
-        if (type == Utils.CardType.Flood) {
+        if (type == Utils.CardType.FLOOD) {
             cards = FloodCardFactory.floodCardFactory(grid);
         } else {
             cards = TreasureCardsFactory.treasureCardsFactory(grid);

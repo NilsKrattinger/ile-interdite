@@ -66,7 +66,6 @@ public class GameView {
         window.add(handsPanel, BorderLayout.EAST);
         
         waterScalePanel = new JPanel(new GridLayout(1, 1));
-        waterScalePanel.setBorder(BorderFactory.createLineBorder(Color.red));
         window.add(waterScalePanel, BorderLayout.WEST);
     }
 
@@ -84,6 +83,10 @@ public class GameView {
         gridPanel.add(view.getMainPanel());
     }
 
+    public void setTreasureView(TreasureView treasureView) {
+        bottomPanel.add(treasureView.getMainPanel());
+    }
+    
     public void setHandViews(HashMap<Adventurer, HandView> handViews) {
         handsPanel.setLayout(new GridLayout(handViews.size(), 1));
         for (Adventurer adv : handViews.keySet()) {
