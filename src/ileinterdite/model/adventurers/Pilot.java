@@ -81,6 +81,12 @@ public class Pilot extends Adventurer {
     }
 
     @Override
+    public Utils.State[][] getRescueCells() {
+        setPowerAvailable(true);
+        return super.getRescueCells();
+    }
+
+    @Override
     public String getClassName() {
         return CLASS_NAME;
     }
