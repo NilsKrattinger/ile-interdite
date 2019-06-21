@@ -78,13 +78,13 @@ public class Diver extends Adventurer {
 
     private void setClosestCellAvailable(Utils.State[][] states, int x, int y, ArrayList<Tuple<Integer, Tuple<Integer, Integer>>> nextPos, int distance, int maxDistance) {
         if ((distance <= maxDistance || maxDistance == -1) && x >= 0 && y >= 0 && x < Grid.WIDTH && y < Grid.HEIGHT) {
-            distance++;
             Utils.State cellState = states[y][x];
             if (cellState == Utils.State.NORMAL || cellState == Utils.State.FLOODED) {
                 states[y][x] = Utils.State.ACCESSIBLE;
                 maxDistance = distance;
             } else if (cellState == Utils.State.SUNKEN) {
                 states[y][x] = Utils.State.INACCESSIBLE;
+                distance++;
                 nextPos.add(new Tuple<>(distance, new Tuple<>(x + 1, y)));
                 nextPos.add(new Tuple<>(distance, new Tuple<>(x - 1, y)));
                 nextPos.add(new Tuple<>(distance, new Tuple<>(x, y + 1)));
@@ -94,7 +94,9 @@ public class Diver extends Adventurer {
         }
 
         if (!nextPos.isEmpty()) {
-            Tuple<Integer, Integer> pos = nextPos.remove(0).y;
+            Tuple<Integer, Tuple<Integer, Integer>> nextAction = nextPos.remove(0);
+            distance = nextAction.x;
+            Tuple<Integer, Integer> pos = nextAction.y;
             setClosestCellAvailable(states, pos.x, pos.y, nextPos, distance, maxDistance);
         }
     }
