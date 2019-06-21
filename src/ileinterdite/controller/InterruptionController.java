@@ -8,7 +8,6 @@ import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.helper.ActionControllerHelper;
 import ileinterdite.util.helper.InterruptionControllerHelper;
-import ileinterdite.view.DiscardView;
 
 import java.util.ArrayList;
 import java.util.Arrays;

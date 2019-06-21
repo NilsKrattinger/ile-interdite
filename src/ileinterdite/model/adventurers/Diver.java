@@ -1,8 +1,12 @@
 package ileinterdite.model.adventurers;
 
 import ileinterdite.model.Grid;
+import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Diver extends Adventurer {
 
@@ -32,13 +36,7 @@ public class Diver extends Adventurer {
 
     public void cellChoiceMoving(Utils.State[][] tab) {
         treatBoard(this.getX(), this.getY(), tab);
-        for (int j = 0; j < Grid.HEIGHT; j++) {
-            for (int i = 0; i < Grid.WIDTH; i++) {
-                if (tab[j][i] != Utils.State.ACCESSIBLE) {
-                    tab[j][i] = Utils.State.INACCESSIBLE;
-                }
-            }
-        }
+        setRemainingCellsUnavailable(tab);
     }
 
     public void treatBoard(int x, int y, Utils.State[][] tab) {
@@ -61,10 +59,44 @@ public class Diver extends Adventurer {
     }
 
     public Utils.State[][] getRescueCells() {
-        Utils.State[][] cellsState = grid.getStateOfCells();
-        super.cellChoiceMoving(cellsState);
+        Utils.State[][] cellStates = grid.getStateOfCells();
 
-        return cellsState;
+        setClosestCellAvailable(cellStates, getX(), getY(), new ArrayList<>(), 0, -1);
+        setRemainingCellsUnavailable(cellStates);
+        return cellStates;
+    }
+
+    private void setRemainingCellsUnavailable(Utils.State[][] cellStates) {
+        for (int j = 0; j < Grid.HEIGHT; j++) {
+            for (int i = 0; i < Grid.WIDTH; i++) {
+                if (cellStates[j][i] != Utils.State.ACCESSIBLE) {
+                    cellStates[j][i] = Utils.State.INACCESSIBLE;
+                }
+            }
+        }
+    }
+
+    private void setClosestCellAvailable(Utils.State[][] states, int x, int y, ArrayList<Tuple<Integer, Tuple<Integer, Integer>>> nextPos, int distance, int maxDistance) {
+        if ((distance <= maxDistance || maxDistance == -1) && x >= 0 && y >= 0 && x < Grid.WIDTH && y < Grid.HEIGHT) {
+            distance++;
+            Utils.State cellState = states[y][x];
+            if (cellState == Utils.State.NORMAL || cellState == Utils.State.FLOODED) {
+                states[y][x] = Utils.State.ACCESSIBLE;
+                maxDistance = distance;
+            } else if (cellState == Utils.State.SUNKEN) {
+                states[y][x] = Utils.State.INACCESSIBLE;
+                nextPos.add(new Tuple<>(distance, new Tuple<>(x + 1, y)));
+                nextPos.add(new Tuple<>(distance, new Tuple<>(x - 1, y)));
+                nextPos.add(new Tuple<>(distance, new Tuple<>(x, y + 1)));
+                nextPos.add(new Tuple<>(distance, new Tuple<>(x, y - 1)));
+
+            }
+        }
+
+        if (!nextPos.isEmpty()) {
+            Tuple<Integer, Integer> pos = nextPos.remove(0).y;
+            setClosestCellAvailable(states, pos.x, pos.y, nextPos, distance, maxDistance);
+        }
     }
 
     @Override
