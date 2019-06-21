@@ -1,14 +1,9 @@
 package ileinterdite.controller;
 
 import ileinterdite.factory.BoardFactory;
-import ileinterdite.factory.DeckFactory;
-import ileinterdite.factory.DiscardPileFactory;
 import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.model.adventurers.Engineer;
-import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
-import ileinterdite.util.Utils.Action;
 import ileinterdite.view.DefeatView;
 import ileinterdite.view.GameView;
 import ileinterdite.view.VictoryView;
@@ -102,15 +97,14 @@ public class GameController {
     public void endTurn() {
         deckController.drawTreasureCards(2, getCurrentAdventurer());
         if(!actionController.isInterrupted()){
-            this.drawnFloodCards();
+            this.drawFloodCards();
         }
     }
 
-    public void drawnFloodCards(){
+    public void drawFloodCards(){
         deckController.drawFloodCards(waterScaleController.getFloodedCardToPick());
         if (!interruptionController.getAdventurersToRescue().isEmpty()){
             interruptionController.initRescue();
-            actionController.startInterruption();
         } else {
             this.newTurn();
         }
