@@ -6,6 +6,7 @@ import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
+import ileinterdite.view.DrawView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +18,11 @@ public class DeckController {
     private HashMap<Utils.CardType, Deck> decks;
     private HashMap<Utils.CardType, DiscardPile> discardPiles;
 
+    private DrawView drawView;
+
     public DeckController(GameController c) {
         this.controller = c;
+        drawView = new DrawView();
 
         initDecks(controller.getGridController().getGrid());
     }
@@ -55,7 +59,7 @@ public class DeckController {
         ArrayList<Card> tempAdventurerHandCards = new ArrayList<>(adv.getCards());
         adv.getHand().clearHand();
         for (Card drawedCard : drawedCards) {
-            if (!drawedCard.getCardName().equalsIgnoreCase("Montée des eaux")) {
+            if (!drawedCard.getCardName().equalsIgnoreCase("Montee des eaux")) {
                 tempAdventurerHandCards.add(drawedCard);
             } else {
                 controller.getWaterScaleController().increaseWaterScale();
@@ -75,6 +79,8 @@ public class DeckController {
                 controller.getAdventurerController().giveCard(adv, card);
             }
         }
+
+        drawView.setCardsToShow(drawedCards);
     }
 
     /**
@@ -113,6 +119,7 @@ public class DeckController {
             }
             controller.getGridController().getGridView().updateCell(linkedCell.getName(), linkedCell.getState());
         }
+        drawView.setCardsToShow(drawedCard);
     }
 
     public Deck getDeck(Utils.CardType type) {

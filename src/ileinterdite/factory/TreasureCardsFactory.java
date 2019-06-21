@@ -24,7 +24,7 @@ public class TreasureCardsFactory {
         }
 
         for (int i=0; i<3; i++) {
-            treasureCards.add(new TreasureCard("Montée des eaux", grid));
+            treasureCards.add(new TreasureCard("Montee des eaux", grid));
         }
 
         for (int i=0; i<5; i++) {

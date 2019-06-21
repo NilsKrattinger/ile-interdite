@@ -19,8 +19,7 @@ public class TreasureComponent extends JPanel {
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
         collected = false;
-        String path = treasure.getName().replaceAll("[\\s']", "");
-        path = "tresors/" + path + ".png";
+        String path = "tresors/" + treasure.getName() + ".png";
         image = Utils.loadImage(path);
 
         if (image != null) {
