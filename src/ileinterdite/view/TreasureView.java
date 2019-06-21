@@ -2,8 +2,6 @@ package ileinterdite.view;
 
 import ileinterdite.components.TreasureComponent;
 import ileinterdite.model.Treasure;
-import javafx.scene.layout.Border;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

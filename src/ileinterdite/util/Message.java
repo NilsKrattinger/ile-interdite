@@ -8,6 +8,9 @@ public class Message {
     public String message;
     public Adventurer adventurer;
 
+    public Message() {
+    }
+
     public Message(Utils.Action action) {
         this(action, "");
     }
@@ -21,4 +24,6 @@ public class Message {
         this.message = message;
         this.adventurer = adventurer;
     }
+
+
 }

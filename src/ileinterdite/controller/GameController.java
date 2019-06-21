@@ -29,7 +29,6 @@ public class GameController {
     private GameView mainView;
 
     public GameController(MainMenuController cm, int difficulty) {
-        BoardFactory.initBoardFactory();
         this.mainView = new GameView(1280, 720);
 
         this.mainMenuController = cm;
