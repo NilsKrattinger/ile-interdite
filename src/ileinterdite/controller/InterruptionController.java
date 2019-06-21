@@ -147,6 +147,8 @@ public class InterruptionController {
         }
 
         controller.getActionController().endInterruption();
+        
+        controller.drawnFloodCards();
     }
 
     public void startNavigatorInterruption() {
