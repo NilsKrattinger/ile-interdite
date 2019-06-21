@@ -4,12 +4,16 @@ import ileinterdite.model.Card;
 import ileinterdite.model.Cell;
 import ileinterdite.model.adventurers.*;
 import ileinterdite.model.Hand;
+import ileinterdite.model.*;
+import ileinterdite.model.adventurers.Adventurer;
+import ileinterdite.model.adventurers.Messager;
 import ileinterdite.util.Message;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
 import ileinterdite.util.helper.AdventurerControllerHelper;
 import ileinterdite.view.AdventurerView;
 import ileinterdite.view.CardGivingView;
+import ileinterdite.view.PawnsSelectionView;
 import ileinterdite.view.HandView;
 
 import java.util.ArrayList;
@@ -49,6 +53,28 @@ public class AdventurerController {
         AdventurerControllerHelper.createViews(adventurers, controller.getActionController());
         this.adventurerViews = AdventurerControllerHelper.getAdventurerViews();
         this.adventurerHandViews = AdventurerControllerHelper.getAdventurerHandViews();
+    }
+
+    public void finishAdventurerInit() {
+        Deck treasureCardsDeck = controller.getDeckController().getDeck(Utils.CardType.TREASURE);
+
+        for (Adventurer adv : adventurers) {
+            ArrayList<Card> advCards = adv.getHand().getCards();
+            while (advCards.size() != 2) {
+                Card card = treasureCardsDeck.drawCards(1).get(0);
+                if (card.getCardName().equalsIgnoreCase("Montee des eaux")) {
+                    ArrayList<Card> tempList = new ArrayList<>();
+                    tempList.add(card);
+                    treasureCardsDeck.addAtTheTop(tempList);
+                    treasureCardsDeck.shuffle();
+                } else {
+                    advCards.add(card);
+                }
+            }
+            adventurerHandViews.get(adv).update(adv);
+        }
+
+        controller.getWindow().setHandViews(this.adventurerHandViews);
 
         nextAdventurer();
     }
@@ -69,12 +95,15 @@ public class AdventurerController {
      * Change the current adventurer with the new adventurer and update views
      */
     private void changeCurrentAdventurer() {
+        if (currentAdventurer != null) {
+            currentHandView.update(currentAdventurer);
+        }
+
         adventurers.add(adventurers.remove(0));
         currentAdventurer = adventurers.get(0);
         currentView = adventurerViews.get(currentAdventurer);
         currentHandView = adventurerHandViews.get(currentAdventurer);
         controller.getWindow().setAdventurerView(currentView);
-        currentHandView.update(currentAdventurer);
     }
 
     /* **************** *
@@ -254,5 +283,9 @@ public class AdventurerController {
 
     public AdventurerView getCurrentView() {
         return currentView;
+    }
+
+    public HandView getHandViewFor(Adventurer adv) {
+        return adventurerHandViews.get(adv);
     }
 }

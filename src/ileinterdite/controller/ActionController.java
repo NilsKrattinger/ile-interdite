@@ -1,13 +1,20 @@
 package ileinterdite.controller;
 
+import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Engineer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
 import ileinterdite.util.helper.ActionControllerHelper;
+import ileinterdite.view.PawnsSelectionView;
+
+import java.util.ArrayList;
 
 public class ActionController implements IObserver<Message> {
 
     private GameController controller; //< A reference to the main controller
+
+    // View specific Variables
+    private PawnsSelectionView pawnsSelectionView;
 
     // Variables used to handle all actions
     private Utils.Action currentAction; //< The action being processed
@@ -28,6 +35,9 @@ public class ActionController implements IObserver<Message> {
         this.controller = c;
         this.isInterrupted = false;
         this.engineerPower = false;
+
+        pawnsSelectionView = new PawnsSelectionView();
+        pawnsSelectionView.addObserver(this);
     }
 
     @Override
@@ -46,7 +56,7 @@ public class ActionController implements IObserver<Message> {
                     controller.getInterruptionController().startNavigatorInterruption();
                     break; // In case the adventurer is a navigator, interrupts the action
                 }
-            case DRY: // MOVE case comes also here if the current adventurer is not a Navigator
+            case DRY: // MOVE case comes also here if the current adventurer is not a Navigator (no break)
                 cellStates = controller.getAdventurerController().startCellAction(message);
                 break;
 
@@ -69,11 +79,18 @@ public class ActionController implements IObserver<Message> {
             case CANCEL_ACTION:
                 currentAction = null;
                 break;
-        }
-        selectedAction = currentAction;
 
-        if (remainingActions == 0) {
-            controller.endTurn();
+            case ADVENTURER_CHOICE:
+                validateAction(message);
+                break;
+
+            case USE_TREASURE_CARD:
+                controller.getInterruptionController().startCardInterruption(message);
+                break;
+
+        }
+        if (currentAction != Utils.Action.VALIDATE_ACTION) {
+            selectedAction = currentAction;
         }
     }
 
@@ -94,6 +111,8 @@ public class ActionController implements IObserver<Message> {
         switch (selectedAction) {
             case MOVE: case DRY:
                 validateCellAction(message, selectedAction);
+                break;
+            case START_GIVE_CARD: //TODO Donner la carte
                 break;
         }
     }
@@ -121,6 +140,7 @@ public class ActionController implements IObserver<Message> {
             }
 
             currentAction = null;
+            selectedAction = null;
         }
     }
 
@@ -143,6 +163,10 @@ public class ActionController implements IObserver<Message> {
     public void reduceNbActions() {
         this.remainingActions--;
         controller.getAdventurerController().getCurrentView().setNbActions(this.remainingActions);
+
+        if (remainingActions == 0) {
+            controller.endTurn();
+        }
     }
 
     /* ************* *
@@ -155,6 +179,14 @@ public class ActionController implements IObserver<Message> {
     public void startInterruption() {
         this.isInterrupted = true;
     }
+
+    /**
+     * Stop an interruption action.
+     */
+    public void stopInterruption() {
+        this.isInterrupted = false;
+    }
+
 
     /**
      * End an interruption action. Everything is back at normal
@@ -179,4 +211,14 @@ public class ActionController implements IObserver<Message> {
 
         engineerPower = power;
     }
+
+    /* *********************** *
+     * PAWN CHOICE METHODS     *
+     * *********************** */
+
+    public void chooseAdventurers(ArrayList<Adventurer> adventurers, int nbadventurers, boolean showValidation, boolean showCancel){
+        pawnsSelectionView.update(adventurers, nbadventurers, showValidation, showCancel);
+
+    }
+
 }

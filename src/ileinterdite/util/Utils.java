@@ -14,6 +14,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import javax.swing.JOptionPane;
 
@@ -40,8 +41,13 @@ public class Utils {
 
         // Interruptions
         NAVIGATOR_CHOICE,
+        ADVENTURER_CHOICE,
         DISCARD,
-        VALIDATE_ACTION
+        VALIDATE_ACTION,
+
+        SAND_CARD_ACTION,
+        HELICOPTER_CARD_CELL_CHOICE,
+        HELICOPTER_CARD_ADVENTURER_CHOICE
     }
  
     public enum State {
@@ -66,8 +72,8 @@ public class Utils {
 
 
     public enum CardType{
-        Flood("Inondation"),
-        Treasure("Trésor");
+        FLOOD("Inondation"),
+        TREASURE("Trésor");
 
         String label;
 
@@ -169,8 +175,16 @@ public class Utils {
      */
     public static BufferedImage loadImage(String path) {
         path = "res/images/" + path;
+        path = path.replaceAll("[\\s']", "");
         try {
-            return ImageIO.read(new File(path));
+            BufferedImage newImg = ImageUtils.getCachedImage(path);
+
+            if (newImg == null) {
+                newImg = ImageIO.read(new File(path));
+                ImageUtils.cacheImage(path, newImg);
+            }
+
+            return newImg;
         } catch (IOException ex) {
             if (Parameters.LOGS) {
                 System.err.println("File " + path + " could not be opened. More information below.");
@@ -201,7 +215,9 @@ public class Utils {
         for (int i = 0; i < raster.getWidth(); i++) {
             for (int j = 0; j < raster.getHeight(); j++) {
                 int[] pixel = raster.getPixel(i, j, (int[]) null);
-                pixel[3] = opacity;
+                if (pixel[3] != 0) {
+                    pixel[3] = opacity;
+                }
                 raster.setPixel(i, j, pixel);
             }
         }
