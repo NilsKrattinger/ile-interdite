@@ -214,7 +214,7 @@ public abstract class Adventurer {
      * @return le trésor qu'il peut récupérer ou null s'il ne peut en récupérer aucun (moins de 4 cartes, pas 4 cartes
      * du même trésor ou pas sur la tuile associée à ses 4 cartes
      */
-    public Treasure isAbleToCollectTreasure() {
+    public Treasure getAvailableTreasure() {
         if (this.getNumberOfCards() < 4) {
             return null;
         } else {
