@@ -93,6 +93,7 @@ public class GridController {
                 adventurer.getCards().remove(card);
             }
             controller.getActionController().reduceNbActions();
+            controller.getAdventurerController().getHandViewFor(adventurer).update(adventurer);
             treasureView.collectTreasure(treasure);
         }
     }
