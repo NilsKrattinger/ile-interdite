@@ -128,8 +128,8 @@ public class GameController {
     /**
      * declenche la défaite
      */
-    public void defeat() {
-        mainView.showEndGame(new DefeatView().getMainPanel());
+    public void defeat(boolean waterScale, boolean treasure, boolean heliport, boolean drown) {
+        mainView.showEndGame(new DefeatView(waterScale, treasure, heliport, drown).getMainPanel());
 
         //this.endGame()
         //TODO this.endGame()
@@ -139,8 +139,11 @@ public class GameController {
      * Check if its dead to win
      */
     public void testDefeat() {
-        if (waterScaleController.isDeadly() || this.treasureSink() || this.heliCellSink()) {
-            this.defeat();
+        boolean waterScale = waterScaleController.isDeadly();
+        boolean treasureLost = this.treasureSink();
+        boolean heliportLost = this.heliCellSink();
+        if (waterScale || treasureLost || heliportLost) {
+            this.defeat(waterScale, treasureLost, heliportLost, false);
         }
     }
 
