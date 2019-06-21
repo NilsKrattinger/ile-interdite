@@ -118,8 +118,6 @@ public class ActionController implements IObserver<Message> {
             case MOVE: case DRY:
                 validateCellAction(message, selectedAction);
                 break;
-            case START_GIVE_CARD: //TODO Donner la carte
-                break;
         }
     }
 
@@ -227,8 +225,8 @@ public class ActionController implements IObserver<Message> {
 
     }
 
-    public void choiceCard(ArrayList<Card> cards, int nbCartesMax,String action){
-        cardSelectionView.update(cards,cards.size()-nbCartesMax);
+    public void choiceCard(ArrayList<Card> cards, int nbCartesMax, String action){
+        cardSelectionView.update(cards,cards.size()-nbCartesMax,action);
 
     }
 
