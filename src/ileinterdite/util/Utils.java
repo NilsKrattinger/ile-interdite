@@ -31,7 +31,7 @@ public class Utils {
         GET_TREASURE,
 
         // More actions initialized by the player
-        START_GIVE_CARD,
+        GIVE_CARD,
         CANCEL_ACTION,
         END_TURN,
         USE_TREASURE_CARD,
@@ -47,10 +47,7 @@ public class Utils {
 
         SAND_CARD_ACTION,
         HELICOPTER_CARD_CELL_CHOICE,
-        HELICOPTER_CARD_ADVENTURER_CHOICE,
-
-        GIVE_CARD_RECEIVER_CHOICE,
-        GIVE_CARD_CARD_CHOICE
+        HELICOPTER_CARD_ADVENTURER_CHOICE
     }
  
     public enum State {
