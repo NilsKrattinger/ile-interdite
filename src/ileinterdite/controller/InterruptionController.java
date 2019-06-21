@@ -25,8 +25,9 @@ public class InterruptionController {
     private ArrayList<Adventurer> adventurersToRescue; //< The list of adventurers that are drowning and must be moved before next turn
     private Utils.State[][] cellStates; //< The state of all states, if needed by the action
 
-    private ArrayList<Adventurer> helicopterList;
-    private ArrayList<Card> cardsToDiscard;
+    private ArrayList<Adventurer> selectableAdventurers; //< The list of adventurers that can be chosen for the helicopter group
+    private ArrayList<Adventurer> helicopterList; //< The list of passengers in the helicopter
+    private ArrayList<Card> cardsToDiscard; //< The cards chosen to discard
 
 
     public InterruptionController(GameController c) {
@@ -150,8 +151,7 @@ public class InterruptionController {
             if (InterruptionControllerHelper.checkVictory(controller.getGridController().getGrid(), m.adventurer, controller.getAdventurers())) {
                 controller.victory();
             } else {
-                startHelicopterCardInterruption(m.adventurer,
-                        controller.getGridController().getGrid().getCell(m.adventurer.getX(), m.adventurer.getY()).getAdventurers());
+                startHelicopterCardInterruption(controller.getGridController().getGrid().getCell(m.adventurer.getX(), m.adventurer.getY()).getAdventurers());
             }
         }
 
@@ -167,18 +167,12 @@ public class InterruptionController {
         controller.getGridController().getGridView().showSelectableCells(cellStates);
     }
 
-    private void startHelicopterCardInterruption(Adventurer currAdv, ArrayList<Adventurer> adventurersOnCell) {
+    private void startHelicopterCardInterruption(ArrayList<Adventurer> adventurersOnCell) {
         helicopterList.clear();
-        helicopterList.add(currAdv);
 
         currentAction = Utils.Action.HELICOPTER_CARD_ADVENTURER_CHOICE;
-        ArrayList<Adventurer> selectableAdventurers = new ArrayList<>(adventurersOnCell);
-        selectableAdventurers.remove(currAdv);
-        if (selectableAdventurers.size() > 0) {
-            controller.getActionController().chooseAdventurers(selectableAdventurers, selectableAdventurers.size(), true, false);
-        } else {
-            showHelicopterCells();
-        }
+        selectableAdventurers = new ArrayList<>(adventurersOnCell);
+        controller.getActionController().chooseAdventurers(selectableAdventurers, selectableAdventurers.size(), true, false);
     }
 
     /* ************** *
@@ -225,11 +219,15 @@ public class InterruptionController {
 
     private void selectHelicopterPassengers(Message m) {
         String[] names = ActionControllerHelper.splitSelectionViewNames(m.message);
-        for (String name : names) {
-            helicopterList.add(findAdventurerByClassName(name));
-        }
+        if (names.length > 0) {
+            for (String name : names) {
+                helicopterList.add(findAdventurerByClassName(name));
+            }
 
-        showHelicopterCells();
+            showHelicopterCells();
+        } else {
+            controller.getActionController().chooseAdventurers(selectableAdventurers, selectableAdventurers.size(), true, false);
+        }
     }
 
     private void showHelicopterCells() {

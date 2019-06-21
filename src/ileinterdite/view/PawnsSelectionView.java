@@ -49,8 +49,8 @@ public class PawnsSelectionView implements IObservable<Message> {
             Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
 
             mainPanel.remove(choicePanel);
-            notifyObservers(m);
             windowClose();
+            notifyObservers(m);
 
 
         });
@@ -58,7 +58,7 @@ public class PawnsSelectionView implements IObservable<Message> {
         cancelButton = new JButton("Annuler");
         cancelButton.addActionListener(actionEvent -> {
             Message m = new Message(Utils.Action.CANCEL_ACTION, null);
-            window.setVisible(false);
+            windowClose();
             notifyObservers(m);
         });
 
@@ -125,8 +125,8 @@ public class PawnsSelectionView implements IObservable<Message> {
                             Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
 
                             mainPanel.remove(choicePanel);
-                            notifyObservers(m);
                             windowClose();
+                            notifyObservers(m);
 
                         }
                     }
