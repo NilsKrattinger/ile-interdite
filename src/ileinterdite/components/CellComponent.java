@@ -23,6 +23,8 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
     private BufferedImage transparentImage;
     private BufferedImage floodedImage;
     private BufferedImage transparentFloodedImage;
+    private BufferedImage sunkedImage;
+    private BufferedImage transparentSunkedImage;
     private Utils.State cellState;
     private Utils.State accessible;
     private Rectangle positionInWindow;
@@ -47,6 +49,12 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
             if (floodedImage != null) {
                 transparentFloodedImage = Utils.deepCopy(floodedImage);
                 Utils.setOpacity(transparentFloodedImage, 50);
+            }
+
+            sunkedImage = Utils.loadImage("tuiles/Coule.png");
+            if (sunkedImage != null) {
+                transparentSunkedImage = Utils.deepCopy(sunkedImage);
+                Utils.setOpacity(transparentSunkedImage, 50);
             }
         }
 
@@ -81,12 +89,14 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (cellState == Utils.State.NORMAL || cellState == Utils.State.FLOODED) {
+        if (cellState == Utils.State.NORMAL || cellState == Utils.State.FLOODED || cellState == Utils.State.SUNKEN) {
             BufferedImage img;
             if (cellState == Utils.State.NORMAL) {
                 img = (accessible != Utils.State.INACCESSIBLE) ? image : transparentImage;
-            } else {
+            } else if (cellState == Utils.State.FLOODED) {
                 img = (accessible != Utils.State.INACCESSIBLE) ? floodedImage : transparentFloodedImage;
+            } else {
+                img = (accessible != Utils.State.INACCESSIBLE) ? sunkedImage : transparentSunkedImage;
             }
 
             g.drawImage(img, 0, 0, g.getClipBounds().width, g.getClipBounds().height, this);
