@@ -39,6 +39,14 @@ public class GridController {
     public void finishGridInit() {
         if (!Parameters.DEMOMAP) {
             controller.getDeckController().drawFloodCards(6);
+        } else {
+            Treasure t = grid.getTreasure("La pierre sacrée");
+            grid.getTreasures().remove(t);
+            treasureView.collectTreasure(t);
+
+            t = grid.getTreasure("La statue du zéphyr");
+            grid.getTreasures().remove(t);
+            treasureView.collectTreasure(t);
         }
     }
 

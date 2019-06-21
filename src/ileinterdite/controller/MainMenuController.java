@@ -27,7 +27,7 @@ public class MainMenuController implements IObserver<StartMessage> {
             Parameters.DEMOMAP = message.demoOption;
             Parameters.RANDOM = message.randomOption;
             difficulty = message.difficulty;
-            
+
             BoardFactory.initBoardFactory();
             if (!Parameters.RANDOM) {
                 new PlayerSelectionView(BoardFactory.getAdventurers(), playerName.size(), this);

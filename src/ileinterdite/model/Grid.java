@@ -81,7 +81,7 @@ public class Grid {
 
 	public Treasure getTreasure(String treasureName) {
 		for (Treasure treasure : this.getTreasures()) {
-			if (treasure.getName().equals(treasureName)) {
+			if (treasure.getName().equalsIgnoreCase(treasureName)) {
 				return treasure;
 			}
 		}
