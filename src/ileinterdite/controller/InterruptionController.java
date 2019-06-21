@@ -11,6 +11,9 @@ import ileinterdite.util.helper.InterruptionControllerHelper;
 import ileinterdite.view.DiscardView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class InterruptionController {
 
@@ -20,25 +23,23 @@ public class InterruptionController {
     private Adventurer currentActionAdventurer; //< The adventurer doing the current action
 
     // Interruption specific variables
-    private DiscardView discardView; //< The view to show when a discard action is going
-
     private ArrayList<Adventurer> adventurersToRescue; //< The list of adventurers that are drowning and must be moved before next turn
     private Utils.State[][] cellStates; //< The state of all states, if needed by the action
 
     private ArrayList<Adventurer> helicopterList;
+    private ArrayList<Card> cardsToDiscard;
 
 
     public InterruptionController(GameController c) {
         this.controller = c;
         adventurersToRescue = new ArrayList<>();
         helicopterList = new ArrayList<>();
-        discardView = new DiscardView();
     }
 
     public void handleMessage(Message m) {
         switch (currentAction) {
             case DISCARD:
-                discard(currentActionAdventurer.getHand().getCard(m.message));
+                discard(m);
                 break;
             case RESCUE:
                 rescue(ActionControllerHelper.getPositionFromMessage(m.message));
@@ -60,7 +61,7 @@ public class InterruptionController {
                         controller.getActionController().endInterruption();
                     }
                 } else {
-                    controller.getActionController().stopInterruption();
+                    controller.getActionController().endInterruption();
                 }
                 break;
             case MOVE:
@@ -124,29 +125,13 @@ public class InterruptionController {
      * @param adventurer
      */
     public void initDiscard(Adventurer adventurer, ArrayList<Card> cards) {
+        currentAction = Utils.Action.DISCARD;
+        controller.getActionController().startInterruption();
 
-        ArrayList<String> cardNamesToDiscard = discardView.getCardsToDiscard(cards,cards.size() - Hand.NB_MAX_CARDS);
-        ArrayList<Card> cardsToDiscard = new ArrayList<>();
-        boolean cardAdded;
-        for (String cardName : cardNamesToDiscard) {
-            cardAdded = false;
-            for (Card card : cards) {
-                if (card.getCardName().equals(cardName) && !cardAdded) {
-                    cardsToDiscard.add(card);
-                    cardAdded = true;
-                }
-            }
-        }
-        for (Card card : cardsToDiscard) {
-            discard(card);
-            cards.remove(card);
-        }
+        currentActionAdventurer = adventurer;
 
-        for (Card card : cards) {
-            controller.getAdventurerController().giveCard(adventurer,card);
-        }
-
-        controller.getActionController().endInterruption();
+        cardsToDiscard = cards;
+        controller.getActionController().chooseCards(cards, cards.size() - Hand.NB_MAX_CARDS, "défausser");
     }
 
     public void startNavigatorInterruption() {
@@ -155,7 +140,6 @@ public class InterruptionController {
     }
 
     public void startCardInterruption(Message m) {
-        controller.getActionController().startInterruption();
         cellStates = controller.getGridController().getGrid().getStateOfCells();
         currentActionAdventurer = m.adventurer;
 
@@ -171,6 +155,7 @@ public class InterruptionController {
             }
         }
 
+        controller.getActionController().startInterruption();
         controller.getDeckController().getDiscardPile(Utils.CardType.TREASURE).addCard(c);
     }
 
@@ -203,13 +188,24 @@ public class InterruptionController {
     /**
      *
      */
-    public void discard(Card card) {
-        DiscardPile discardTreasureCards;
-        if (card instanceof TreasureCard) {
-            discardTreasureCards = controller.getDeckController().getDiscardPile(Utils.CardType.TREASURE);
-        } else {
-            discardTreasureCards = controller.getDeckController().getDiscardPile(Utils.CardType.FLOOD);
+    public void discard(Message m) {
+        DiscardPile discardTreasureCards = controller.getDeckController().getDiscardPile(Utils.CardType.TREASURE);
+
+        ArrayList<Card> cardsInHand = new ArrayList<>(cardsToDiscard);
+        List<String> cardNames = new LinkedList<>(Arrays.asList(ActionControllerHelper.splitSelectionViewNames(m.message)));
+
+        for (Card card : cardsInHand) {
+            int index = cardNames.indexOf(card.getCardName());
+            if (index != -1) {
+                cardNames.remove(index);
+                cardsToDiscard.remove(card);
+                discardTreasureCards.addCard(card);
+            }
         }
+
+        currentActionAdventurer.getCards().addAll(cardsToDiscard);
+        controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
+        controller.getActionController().endInterruption();
     }
 
     public void rescue(Tuple<Integer, Integer> pos) {

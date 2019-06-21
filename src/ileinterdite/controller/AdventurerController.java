@@ -183,7 +183,7 @@ public class AdventurerController {
         if ((nbOfAdventurersOnCell >= 2 || adventurer instanceof Messager) && adventurer.getNumberOfCards() > 0) {
             giveCardList = new ArrayList<>((adventurer instanceof Messager) ? getAdventurers() : adventurerCell.getAdventurers());
             giveCardList.remove(adventurer);
-            controller.getActionController().choiceCard(currentAdventurer.getCards(), 1, "donner");
+            controller.getActionController().chooseCards(currentAdventurer.getCards(), 1, "donner");
         }
     }
 
