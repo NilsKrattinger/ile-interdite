@@ -184,6 +184,12 @@ public class AdventurerController {
             giveCardList = new ArrayList<>((adventurer instanceof Messager) ? getAdventurers() : adventurerCell.getAdventurers());
             giveCardList.remove(adventurer);
             controller.getActionController().chooseCards(currentAdventurer.getCards(), 1, "donner");
+        } else {
+            if (adventurer.getNumberOfCards() == 0) {
+                Utils.showInformation("Vous n'avez pas assez de cartes");
+            } else {
+                Utils.showInformation("Aucun aventurier ne peut recevoir de carte ici");
+            }
         }
     }
 
