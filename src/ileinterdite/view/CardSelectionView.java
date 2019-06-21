@@ -49,13 +49,13 @@ public class CardSelectionView implements IObservable<Message> {
      * @param playerCards
      * @param nbCard nb card to remove
      */
-    public void update(ArrayList<Card> playerCards, int nbCard) {
+    public void update(ArrayList<Card> playerCards, int nbCard, String action) {
         windowLoad();
 
 
         cards = playerCards;
         labelPanel = new JPanel();
-        labelPanel.add(new JLabel(textbuilder(nbCard, "deffausser"), SwingConstants.CENTER));
+        labelPanel.add(new JLabel(textbuilder(nbCard, action), SwingConstants.CENTER));
         choicePanel = new JPanel(new GridLayout(1, cards.size() - 1));
 
         for (Card card : cards) {
