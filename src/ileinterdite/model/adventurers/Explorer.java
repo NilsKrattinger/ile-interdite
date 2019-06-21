@@ -76,11 +76,4 @@ public class Explorer extends Adventurer {
         return CLASS_NAME;
     }
 
-    public Utils.State[][] getRescueCells() {
-        Utils.State[][] cellsState = grid.getStateOfCells();
-        super.cellChoiceMoving(cellsState);
-
-        return cellsState;
-    }
-
 }

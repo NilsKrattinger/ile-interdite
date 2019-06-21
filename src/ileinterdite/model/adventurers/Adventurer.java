@@ -202,10 +202,7 @@ public abstract class Adventurer {
     }
 
     public Utils.State[][] getRescueCells() {
-        Utils.State[][] cellsState = grid.getStateOfCells();
-        this.cellChoiceMoving(cellsState);
-
-        return cellsState;
+        return getAccessibleCells();
     }
 
     /**

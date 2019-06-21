@@ -28,6 +28,8 @@ public class PawnsSelectionView implements IObservable<Message> {
     private ArrayList<JLabel> pawnsIco;
     private ArrayList<Integer> pawnsSelected;
     private ArrayList<Adventurer> adventurers;
+    private ArrayList<BufferedImage> normalIco;
+    private ArrayList<BufferedImage> selectedIco;
     private JPanel choicePanel;
 
 
@@ -38,14 +40,17 @@ public class PawnsSelectionView implements IObservable<Message> {
         mainPanel = new JPanel(new BorderLayout());
         pawnsIco = new ArrayList<>();
 
+        normalIco = new ArrayList<>();
+        selectedIco = new ArrayList<>();
+
         this.initFrame();
         validateButton = new JButton("Valider");
         validateButton.addActionListener(actionEvent -> {
             Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
 
             mainPanel.remove(choicePanel);
-            notifyObservers(m);
             windowClose();
+            notifyObservers(m);
 
 
         });
@@ -53,7 +58,7 @@ public class PawnsSelectionView implements IObservable<Message> {
         cancelButton = new JButton("Annuler");
         cancelButton.addActionListener(actionEvent -> {
             Message m = new Message(Utils.Action.CANCEL_ACTION, null);
-            window.setVisible(false);
+            windowClose();
             notifyObservers(m);
         });
 
@@ -94,6 +99,7 @@ public class PawnsSelectionView implements IObservable<Message> {
 
             BufferedImage img = Utils.loadImage(path + ".png");
             if (img != null) {
+                selectedIco.add(img);
                 ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 2, img.getHeight() / 2, Image.SCALE_SMOOTH));
                 JLabel pawnIco = new JLabel("", SwingConstants.CENTER);
                 pawnIco.setIcon(icon);
@@ -107,10 +113,10 @@ public class PawnsSelectionView implements IObservable<Message> {
                         if (pawnIndex != -1) {
                             JLabel pawn = pawnsIco.get(pawnIndex);
                             if (pawnsSelected.contains(pawnIndex)){
-                                pawn.getParent().setBackground(Color.lightGray);
+                                pawn.setIcon(new ImageIcon(normalIco.get(pawnIndex).getScaledInstance(normalIco.get(pawnIndex).getWidth() / 2, normalIco.get(pawnIndex).getHeight() / 2, Image.SCALE_SMOOTH)));
                                 pawnsSelected.remove(pawnsSelected.indexOf(pawnIndex));
                             } else {
-                                pawn.getParent().setBackground(Color.WHITE);
+                                pawn.setIcon(new ImageIcon(selectedIco.get(pawnIndex).getScaledInstance(selectedIco.get(pawnIndex).getWidth() / 2, selectedIco.get(pawnIndex).getHeight() / 2, Image.SCALE_SMOOTH)));
                                 pawnsSelected.add(pawnIndex);
                             }
                         }
@@ -119,8 +125,8 @@ public class PawnsSelectionView implements IObservable<Message> {
                             Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
 
                             mainPanel.remove(choicePanel);
-                            notifyObservers(m);
                             windowClose();
+                            notifyObservers(m);
 
                         }
                     }
@@ -148,7 +154,7 @@ public class PawnsSelectionView implements IObservable<Message> {
 
                 pawnPanel.add(pawnIco);
                 pawnPanel.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
-                pawnPanel.setBackground(Color.lightGray);
+
 
                 choicePanel.add(pawnPanel);
                 mainPanel.add(choicePanel, BorderLayout.CENTER);
@@ -156,6 +162,13 @@ public class PawnsSelectionView implements IObservable<Message> {
                 choicePanel.repaint();
                 window.setVisible(true);
             }
+        }
+
+        this.createIcons();
+
+        for (int i = 0; i < pawnsIco.size(); i++) {
+            pawnsIco.get(i).setIcon(new ImageIcon(normalIco.get(i).getScaledInstance(normalIco.get(i).getWidth() /2, normalIco.get(i).getHeight() /2 , Image.SCALE_SMOOTH)));
+
         }
     }
 
@@ -193,6 +206,14 @@ public class PawnsSelectionView implements IObservable<Message> {
 
         window.setVisible(false);
 
+    }
+
+    private void createIcons() {
+        for (BufferedImage img : selectedIco) {
+            normalIco.add(Utils.deepCopy(img));
+            Utils.setOpacity(normalIco.get(normalIco.size() - 1), 128);
+
+        }
     }
 
     /**

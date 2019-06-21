@@ -1,14 +1,9 @@
 package ileinterdite.controller;
 
 import ileinterdite.factory.BoardFactory;
-import ileinterdite.factory.DeckFactory;
-import ileinterdite.factory.DiscardPileFactory;
 import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.model.adventurers.Engineer;
-import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.*;
-import ileinterdite.util.Utils.Action;
 import ileinterdite.view.DefeatView;
 import ileinterdite.view.GameView;
 import ileinterdite.view.VictoryView;
@@ -102,15 +97,14 @@ public class GameController {
     public void endTurn() {
         deckController.drawTreasureCards(2, getCurrentAdventurer());
         if(!actionController.isInterrupted()){
-            this.drawnFloodCards();
+            this.drawFloodCards();
         }
     }
 
-    public void drawnFloodCards(){
+    public void drawFloodCards(){
         deckController.drawFloodCards(waterScaleController.getFloodedCardToPick());
         if (!interruptionController.getAdventurersToRescue().isEmpty()){
             interruptionController.initRescue();
-            actionController.startInterruption();
         } else {
             this.newTurn();
         }
@@ -134,8 +128,8 @@ public class GameController {
     /**
      * declenche la défaite
      */
-    public void defeat() {
-        mainView.showEndGame(new DefeatView().getMainPanel());
+    public void defeat(boolean waterScale, boolean treasure, boolean heliport, boolean drown) {
+        mainView.showEndGame(new DefeatView(waterScale, treasure, heliport, drown).getMainPanel());
 
         //this.endGame()
         //TODO this.endGame()
@@ -145,8 +139,11 @@ public class GameController {
      * Check if its dead to win
      */
     public void testDefeat() {
-        if (waterScaleController.isDeadly() || this.treasureSink() || this.heliCellSink()) {
-            this.defeat();
+        boolean waterScale = waterScaleController.isDeadly();
+        boolean treasureLost = this.treasureSink();
+        boolean heliportLost = this.heliCellSink();
+        if (waterScale || treasureLost || heliportLost) {
+            this.defeat(waterScale, treasureLost, heliportLost, false);
         }
     }
 

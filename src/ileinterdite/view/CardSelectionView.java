@@ -101,8 +101,8 @@ public class CardSelectionView implements IObservable<Message> {
                             Message m = new Message(Utils.Action.CARD_CHOICE, buildStringMessage(cardSelected));
 
                             mainPanel.remove(choicePanel);
-                            notifyObservers(m);
                             windowClose();
+                            notifyObservers(m);
 
                         }
                     }
