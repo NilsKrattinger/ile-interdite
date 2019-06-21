@@ -40,27 +40,21 @@ public class PawnsSelectionView implements IObservable<Message> {
 
         this.initFrame();
         validateButton = new JButton("Valider");
-        validateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
+        validateButton.addActionListener(actionEvent -> {
+            Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
 
-                mainPanel.remove(choicePanel);
-                notifyObservers(m);
-                windowClose();
+            mainPanel.remove(choicePanel);
+            notifyObservers(m);
+            windowClose();
 
 
-            }
         });
 
         cancelButton = new JButton("Annuler");
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Message m = new Message(Utils.Action.CANCEL_ACTION, null);
-                window.setVisible(false);
-                notifyObservers(m);
-            }
+        cancelButton.addActionListener(actionEvent -> {
+            Message m = new Message(Utils.Action.CANCEL_ACTION, null);
+            window.setVisible(false);
+            notifyObservers(m);
         });
 
         buttonPanel = new JPanel();
@@ -185,11 +179,11 @@ public class PawnsSelectionView implements IObservable<Message> {
      * @return
      */
     private String buildStringMessage(ArrayList<Integer> pawnsSelected) {
-        String stringMessage = "";
+        StringBuilder stringMessage = new StringBuilder();
         for (Integer i : pawnsSelected) {
-            stringMessage = stringMessage + "/" + adventurers.get(i).getClassName();
+            stringMessage.append("/").append(adventurers.get(i).getClassName());
         }
-        return stringMessage;
+        return stringMessage.toString();
     }
 
     /**

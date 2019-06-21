@@ -26,13 +26,13 @@ public class CardSelectionView implements IObservable<Message> {
     private ArrayList<JLabel> cardLabel;
     private ArrayList<Integer> cardSelected;
     private ArrayList<Card> cards;
-    private ArrayList<BufferedImage> normalIco;
     private ArrayList<BufferedImage> selectedIco;
+    private ArrayList<BufferedImage> normalIco;
 
 
     public CardSelectionView() {
-        selectedIco = new ArrayList<>();
         normalIco = new ArrayList<>();
+        selectedIco = new ArrayList<>();
         cardSelected = new ArrayList<>();
         cards = new ArrayList<>();
         observers = new CopyOnWriteArrayList<>();
@@ -60,12 +60,12 @@ public class CardSelectionView implements IObservable<Message> {
 
         for (Card card : cards) {
 
-            String path = "cartes/" + card.getCardName().replaceAll("[\\s']", "");
+            String path = "cartes/" + card.getCardName();
 
             BufferedImage img = Utils.loadImage(path + ".png");
             if (img != null) {
 
-                normalIco.add(img);
+                selectedIco.add(img);
                 ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 4, img.getHeight() / 4, Image.SCALE_SMOOTH));
                 JLabel cardlLabel = new JLabel("", SwingConstants.CENTER);
                 cardlLabel.setIcon(icon);
@@ -95,9 +95,10 @@ public class CardSelectionView implements IObservable<Message> {
                         }
 
                         if (cardSelected.size() == nbCard) {
-                            Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(cardSelected));
+                            Message m = new Message(Utils.Action.CARD_CHOICE, buildStringMessage(cardSelected));
 
                             mainPanel.remove(choicePanel);
+                            notifyObservers(m);
                             windowClose();
 
                         }
@@ -178,18 +179,18 @@ public class CardSelectionView implements IObservable<Message> {
      * @return
      */
     private String buildStringMessage(ArrayList<Integer> cardSelected) {
-        String stringMessage = "";
+        StringBuilder stringMessage = new StringBuilder();
         for (Integer i : cardSelected) {
-            stringMessage = stringMessage + "/" + cards.get(i).getCardName();
+            stringMessage.append("/").append(cards.get(i).getCardName());
         }
-        return stringMessage;
+        return stringMessage.toString();
     }
 
 
     private void creaateSelectedIcons() {
-        for (BufferedImage img : normalIco) {
-            selectedIco.add(Utils.deepCopy(img));
-            Utils.setOpacity(selectedIco.get(selectedIco.size() - 1), 128);
+        for (BufferedImage img : selectedIco) {
+            normalIco.add(Utils.deepCopy(img));
+            Utils.setOpacity(normalIco.get(normalIco.size() - 1), 128);
 
         }
     }
@@ -209,8 +210,8 @@ public class CardSelectionView implements IObservable<Message> {
     private void windowLoad() {
         cardLabel.clear();
         cardSelected.clear();
-        selectedIco.clear();
         normalIco.clear();
+        selectedIco.clear();
     }
 
     @Override

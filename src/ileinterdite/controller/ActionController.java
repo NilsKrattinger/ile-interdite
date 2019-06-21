@@ -66,8 +66,7 @@ public class ActionController implements IObserver<Message> {
                 cellStates = controller.getAdventurerController().startCellAction(message);
                 break;
 
-            case GIVE_CARD:
-                currentAction = Utils.Action.GIVE_CARD;
+            case GIVE_CARD: case GET_TREASURE:
                 setEngineerPower(false);
                 controller.startAdventurerAction(message);
                 break;
@@ -86,7 +85,7 @@ public class ActionController implements IObserver<Message> {
                 currentAction = null;
                 break;
 
-            case ADVENTURER_CHOICE:
+            case ADVENTURER_CHOICE: case CARD_CHOICE:
                 validateAction(message);
                 break;
 
@@ -95,7 +94,12 @@ public class ActionController implements IObserver<Message> {
                 break;
 
         }
-        if (currentAction != Utils.Action.VALIDATE_ACTION) {
+
+        ArrayList<Utils.Action> actionsWithoutUpdate = new ArrayList<>();
+        actionsWithoutUpdate.add(Utils.Action.VALIDATE_ACTION);
+        actionsWithoutUpdate.add(Utils.Action.ADVENTURER_CHOICE);
+        actionsWithoutUpdate.add(Utils.Action.CARD_CHOICE);
+        if (!actionsWithoutUpdate.contains(currentAction)) {
             selectedAction = currentAction;
         }
     }
@@ -117,6 +121,9 @@ public class ActionController implements IObserver<Message> {
         switch (selectedAction) {
             case MOVE: case DRY:
                 validateCellAction(message, selectedAction);
+                break;
+            case GIVE_CARD:
+                validateCardGiving(message);
                 break;
         }
     }
@@ -145,6 +152,19 @@ public class ActionController implements IObserver<Message> {
 
             currentAction = null;
             selectedAction = null;
+        }
+    }
+
+    private void validateCardGiving(Message message) {
+        switch (message.action) {
+            case CARD_CHOICE:
+                controller.getAdventurerController().selectGiveCard(message);
+                break;
+            case ADVENTURER_CHOICE:
+                controller.getAdventurerController().selectGiveAdventurer(message);
+                currentAction = null;
+                selectedAction = null;
+                break;
         }
     }
 
@@ -225,8 +245,8 @@ public class ActionController implements IObserver<Message> {
 
     }
 
-    public void choiceCard(ArrayList<Card> cards, int nbCartesMax, String action){
-        cardSelectionView.update(cards,cards.size()-nbCartesMax,action);
+    public void choiceCard(ArrayList<Card> cards, int nbCartes, String action){
+        cardSelectionView.update(cards,nbCartes,action);
 
     }
 
