@@ -165,7 +165,9 @@ public class PawnsSelectionView implements IObservable<Message> {
         }
     }
 
-
+    /**
+     * window Initalisation set the look, the size, ect
+     */
     private void initFrame() {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -177,6 +179,11 @@ public class PawnsSelectionView implements IObservable<Message> {
 
     }
 
+    /**
+     * Convert a index ArrayList to String with adventurer separated by /
+     * @param pawnsSelected
+     * @return
+     */
     private String buildStringMessage(ArrayList<Integer> pawnsSelected) {
         String stringMessage = "";
         for (Integer i : pawnsSelected) {
@@ -185,12 +192,18 @@ public class PawnsSelectionView implements IObservable<Message> {
         return stringMessage;
     }
 
+    /**
+     * Hide the window
+     */
     private void windowClose() {
 
         window.setVisible(false);
 
     }
 
+    /**
+     * clear window last usage
+     */
     private void  windowLoad(){
         pawnsIco.clear();
         pawnsSelected.clear();
