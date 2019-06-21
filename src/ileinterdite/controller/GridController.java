@@ -94,6 +94,15 @@ public class GridController {
             }
             controller.getActionController().reduceNbActions();
             treasureView.collectTreasure(treasure);
+
+            String congratMessage = "Félicitation ! Vous avez collecté " + treasure.getName() + ". ";
+            int nbTreasuresRemaining = grid.getTreasures().size();
+            if (nbTreasuresRemaining > 0) {
+                congratMessage += "Plus que " + nbTreasuresRemaining + ((nbTreasuresRemaining == 1) ? " trésor" : " trésors") + " à collecter !" ;
+            } else {
+                congratMessage += "Vous avez collecté tous les trésors, rendez-vous sur l'héliport avant qu'il ne soit trop tard !";
+            }
+            Utils.showInformation(congratMessage);
         }
     }
 
