@@ -21,13 +21,14 @@ public class MainMenuController implements IObserver<StartMessage> {
 
     @Override
     public void update(IObservable<StartMessage> o, StartMessage message) {
-        BoardFactory.initBoardFactory();
         if (!playerSlection) {
             playerName = message.playerName;
             Parameters.LOGS = message.logOption;
             Parameters.DEMOMAP = message.demoOption;
             Parameters.RANDOM = message.randomOption;
             difficulty = message.difficulty;
+            
+            BoardFactory.initBoardFactory();
             if (!Parameters.RANDOM) {
                 new PlayerSelectionView(BoardFactory.getAdventurers(), playerName.size(), this);
                 playerSlection = true;
