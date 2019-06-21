@@ -112,6 +112,7 @@ public class InterruptionController {
         currentActionAdventurer = adventurersToRescue.get(0);
         currentAction = Utils.Action.RESCUE;
         cellStates = currentActionAdventurer.getRescueCells();
+        controller.getActionController().startInterruption();
         if(InterruptionControllerHelper.isSavePossible(cellStates)) {
             Utils.showInformation("ATTENTION l'aventurier " + currentActionAdventurer.getName() + " boit la tasse, Choisissez vite une case jusqu'à laquelle il va nager !");
             controller.getGridController().getGridView().showSelectableCells(cellStates);
@@ -205,8 +206,8 @@ public class InterruptionController {
 
         currentActionAdventurer.getCards().addAll(cardsToDiscard);
         controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
-        controller.drawnFloodCards();
         controller.getActionController().endInterruption();
+        controller.drawFloodCards();
     }
 
     public void rescue(Tuple<Integer, Integer> pos) {

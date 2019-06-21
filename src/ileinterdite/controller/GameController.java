@@ -102,15 +102,14 @@ public class GameController {
     public void endTurn() {
         deckController.drawTreasureCards(2, getCurrentAdventurer());
         if(!actionController.isInterrupted()){
-            this.drawnFloodCards();
+            this.drawFloodCards();
         }
     }
 
-    public void drawnFloodCards(){
+    public void drawFloodCards(){
         deckController.drawFloodCards(waterScaleController.getFloodedCardToPick());
         if (!interruptionController.getAdventurersToRescue().isEmpty()){
             interruptionController.initRescue();
-            actionController.startInterruption();
         } else {
             this.newTurn();
         }
