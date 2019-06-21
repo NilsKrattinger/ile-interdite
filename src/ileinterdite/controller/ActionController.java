@@ -68,6 +68,7 @@ public class ActionController implements IObserver<Message> {
 
             case GIVE_CARD: case GET_TREASURE:
                 setEngineerPower(false);
+                updateGrid();
                 controller.startAdventurerAction(message);
                 break;
 
@@ -82,7 +83,7 @@ public class ActionController implements IObserver<Message> {
                 break;
 
             case CANCEL_ACTION:
-                currentAction = null;
+                resetAction();
                 break;
 
             case ADVENTURER_CHOICE: case CARD_CHOICE:
@@ -102,6 +103,16 @@ public class ActionController implements IObserver<Message> {
         if (!actionsWithoutUpdate.contains(currentAction)) {
             selectedAction = currentAction;
         }
+    }
+
+    private void resetAction() {
+        currentAction = null;
+        selectedAction = null;
+        updateGrid();
+    }
+
+    private void updateGrid() {
+        controller.getGridController().getGridView().resetCells();
     }
 
     /**
@@ -162,8 +173,7 @@ public class ActionController implements IObserver<Message> {
                 break;
             case ADVENTURER_CHOICE:
                 controller.getAdventurerController().selectGiveAdventurer(message);
-                currentAction = null;
-                selectedAction = null;
+                resetAction();
                 break;
         }
     }
