@@ -58,8 +58,8 @@ public class ActionController implements IObserver<Message> {
             case MOVE:
                 setEngineerPower(false);
                 if (controller.getCurrentAdventurer() instanceof Navigator) {
-                    startInterruption();
                     controller.getInterruptionController().startNavigatorInterruption();
+                    startInterruption();
                     break; // In case the adventurer is a navigator, interrupts the action
                 }
             case DRY: // MOVE case comes also here if the current adventurer is not a Navigator (no break)
@@ -204,13 +204,6 @@ public class ActionController implements IObserver<Message> {
         this.isInterrupted = true;
     }
 
-    /**
-     * Stop an interruption action.
-     */
-    public void stopInterruption() {
-        this.isInterrupted = false;
-    }
-
 
     /**
      * End an interruption action. Everything is back at normal
@@ -245,7 +238,7 @@ public class ActionController implements IObserver<Message> {
 
     }
 
-    public void choiceCard(ArrayList<Card> cards, int nbCartes, String action){
+    public void chooseCards(ArrayList<Card> cards, int nbCartes, String action){
         cardSelectionView.update(cards,nbCartes,action);
 
     }
