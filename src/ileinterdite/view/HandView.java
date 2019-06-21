@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HandView implements IObservable<Message> {
@@ -26,6 +27,8 @@ public class HandView implements IObservable<Message> {
 
     private ArrayList<JLabel> cards;
     private ArrayList<JLabel> littleCards;
+
+    private BufferedImage hiddenCard;
 
     private Hand hand;
 
@@ -51,6 +54,8 @@ public class HandView implements IObservable<Message> {
 
         mainPanel.add(cardPanel);
         minimizedMainPanel.add(minimizedCardPanel);
+
+        hiddenCard = Utils.loadImage("cartes/Fondrouge.png");
 
         this.update(adventurer);
     }
@@ -125,9 +130,10 @@ public class HandView implements IObservable<Message> {
             i++;
         }
 
+        ImageIcon hiddenIcon = new ImageIcon(hiddenCard.getScaledInstance(hiddenCard.getWidth() / reducedSize, hiddenCard.getHeight() / reducedSize, Image.SCALE_SMOOTH));
         for (; i < Hand.NB_MAX_CARDS; i++) {
             int index = rightToLeft ? cards.size() - i - 1 : i;
-            cards.get(index).setIcon(null);
+            cards.get(index).setIcon(hiddenIcon);
         }
     }
 

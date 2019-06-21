@@ -38,21 +38,6 @@ public class InterruptionControllerHelper {
 
         return availability;
     }
-    
-    public static String[] splitAdventurerClassName(String message) {
-        String[] strings;
-        ArrayList<String> finalString = new ArrayList<>();
-        strings = message.split("/");
-        for (int i = 0; i < strings.length; i++) {
-            strings[i] = strings[i].replaceAll("\\s", "");
-            if(!strings[i].isEmpty()){
-                finalString.add(strings[i]);
-            }
-            
-        }
-        String[] adventurerClass = new String[finalString.size()];
-        return  finalString.toArray(adventurerClass);
-    }
 
     public static Card getTreasureCard(Adventurer adv, int index) {
         return adv.getHand().getCards().remove(index);
@@ -60,7 +45,6 @@ public class InterruptionControllerHelper {
 
     public static boolean checkVictory(Grid grid, Adventurer adv, ArrayList<Adventurer> adventurers) {
         Cell cell = grid.getCell(adv.getX(), adv.getY());
-        // And all the adventurers are on the cell
         return cell.getName().equalsIgnoreCase("Heliport")         // Current adventurer is on the winning cell
                 && grid.getTreasures().size() == 0                              // And all treasures has been found
                 && cell.getAdventurers().size() == adventurers.size();          // And all the adventurers are on the cell

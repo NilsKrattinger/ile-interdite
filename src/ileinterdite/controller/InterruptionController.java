@@ -46,7 +46,7 @@ public class InterruptionController {
             case NAVIGATOR_CHOICE:
                 if(m.action != Utils.Action.CANCEL_ACTION) {
                     currentAction = Utils.Action.MOVE;
-                    String[] adventurerClass = InterruptionControllerHelper.splitAdventurerClassName(m.message);
+                    String[] adventurerClass = ActionControllerHelper.splitSelectionViewNames(m.message);
                     currentActionAdventurer = findAdventurerByClassName(adventurerClass[0]);
                     if (currentActionAdventurer != null) {
                         if (currentActionAdventurer instanceof Navigator) {
@@ -227,7 +227,7 @@ public class InterruptionController {
     }
 
     private void selectHelicopterPassengers(Message m) {
-        String[] names = InterruptionControllerHelper.splitAdventurerClassName(m.message);
+        String[] names = ActionControllerHelper.splitSelectionViewNames(m.message);
         for (String name : names) {
             helicopterList.add(findAdventurerByClassName(name));
         }

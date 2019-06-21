@@ -3,6 +3,8 @@ package ileinterdite.util.helper;
 import ileinterdite.model.Grid;
 import ileinterdite.util.Tuple;
 import ileinterdite.util.Utils;
+
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,5 +38,20 @@ public class ActionControllerHelper {
         return pos != null && pos.x >= 0 && pos.y >= 0
                 && pos.x < Grid.WIDTH && pos.y < Grid.HEIGHT // Position in bounds
                 && states[pos.y][pos.x] == Utils.State.ACCESSIBLE; // && cell accessible
+    }
+
+    public static String[] splitSelectionViewNames(String message) {
+        String[] strings;
+        ArrayList<String> finalString = new ArrayList<>();
+        strings = message.split("/");
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = strings[i].replaceFirst("^\\s+$", "");
+            if(!strings[i].isEmpty()){
+                finalString.add(strings[i]);
+            }
+
+        }
+        String[] adventurerClass = new String[finalString.size()];
+        return  finalString.toArray(adventurerClass);
     }
 }
