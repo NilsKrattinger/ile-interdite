@@ -51,6 +51,8 @@ public class CardSelectionView implements IObservable<Message> {
     public void update(ArrayList<Card> playerCards, int nbCard, String action) {
         windowLoad();
 
+        mainPanel.removeAll();
+        mainPanel.revalidate();
 
         cards = playerCards;
         labelPanel = new JPanel();
