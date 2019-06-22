@@ -289,7 +289,7 @@ public class InterruptionController {
                 controller.getDeckController().updatePiles();
                 controller.getActionController().endInterruption();
 
-                if (!specialCardsToUse.isEmpty()) {
+                if (specialCardsToUse != null && !specialCardsToUse.isEmpty()) {
                     startCardInterruption(currentActionAdventurer, specialCardsToUse.remove(0));
                 } else if (isTurnEnd) {
                     controller.drawFloodCards();
