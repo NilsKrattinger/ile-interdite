@@ -124,6 +124,7 @@ public class ActionController implements IObserver<Message> {
     public void newTurn() {
         currentAction = null;
         selectedAction = null;
+        engineerPower = false;
         setNbActions();
     }
 
