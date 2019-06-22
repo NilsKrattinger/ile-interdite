@@ -24,7 +24,7 @@ public class TreasureComponent extends JPanel {
 
         if (image != null) {
             transparentImage = Utils.deepCopy(image);
-            Utils.setOpacity(transparentImage, 100);
+            Utils.setOpacity(transparentImage, 70);
         }
     }
 
