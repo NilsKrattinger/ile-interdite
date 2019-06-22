@@ -51,7 +51,12 @@ public class CardSelectionView implements IObservable<Message> {
      * @param nbCard nb card to remove
      */
     public void update(ArrayList<Card> playerCards, int nbCard, String action) {
-        SwingUtilities.invokeLater(this::windowLoad);
+        SwingUtilities.invokeLater(() -> {
+            windowLoad();
+    
+            mainPanel.removeAll();
+            mainPanel.revalidate();
+        });
 
         cards = playerCards;
         final int cardsSize = cards.size();

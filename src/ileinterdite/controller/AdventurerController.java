@@ -247,7 +247,7 @@ public class AdventurerController {
                     ArrayList<Card> tempAdventurerHandCards = new ArrayList<>(adv.getCards());
                     tempAdventurerHandCards.add(selectedCard);
                     adv.getHand().clearHand();
-                    this.controller.getInterruptionController().initDiscard(adv, tempAdventurerHandCards);
+                    this.controller.getInterruptionController().initDiscard(adv, tempAdventurerHandCards, false);
                 } else {
                     giveCard(adv, selectedCard);
                     adventurerHandViews.get(adv).update(adv);
