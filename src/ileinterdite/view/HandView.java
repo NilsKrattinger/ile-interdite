@@ -18,7 +18,6 @@ public class HandView implements IObservable<Message> {
 
     private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
-
     private JPanel mainPanel;
     private JPanel cardPanel;
 
@@ -38,26 +37,28 @@ public class HandView implements IObservable<Message> {
         cards = new ArrayList<>();
         littleCards = new ArrayList<>();
 
-        initCards(cards, adventurer, false);
-        initCards(littleCards, adventurer, true);
+        SwingUtilities.invokeLater(() -> {
+            initCards(cards, adventurer, false);
+            initCards(littleCards, adventurer, true);
 
-        mainPanel = new JPanel(new BorderLayout());
-        cardPanel = new JPanel(new GridLayout(1, Hand.NB_MAX_CARDS));
+            mainPanel = new JPanel(new BorderLayout());
+            cardPanel = new JPanel(new GridLayout(1, Hand.NB_MAX_CARDS));
 
-        minimizedMainPanel = new JPanel(new BorderLayout());
-        minimizedCardPanel = new JPanel(new GridLayout(1, Hand.NB_MAX_CARDS));
+            minimizedMainPanel = new JPanel(new BorderLayout());
+            minimizedCardPanel = new JPanel(new GridLayout(1, Hand.NB_MAX_CARDS));
 
-        for (int i = 0; i < Hand.NB_MAX_CARDS; i++) {
-            cardPanel.add(cards.get(i));
-            minimizedCardPanel.add(littleCards.get(i));
-        }
+            for (int i = 0; i < Hand.NB_MAX_CARDS; i++) {
+                cardPanel.add(cards.get(i));
+                minimizedCardPanel.add(littleCards.get(i));
+            }
 
-        mainPanel.add(cardPanel);
-        minimizedMainPanel.add(minimizedCardPanel);
+            mainPanel.add(cardPanel);
+            minimizedMainPanel.add(minimizedCardPanel);
 
-        hiddenCard = Utils.loadImage("cartes/Fondrouge.png");
+            hiddenCard = Utils.loadImage("cartes/Fondrouge.png");
 
-        this.update(adventurer);
+            this.update(adventurer);
+        });
     }
 
     private void initCards(ArrayList<JLabel> cards, Adventurer adv, boolean rightToLeft) {
@@ -108,10 +109,12 @@ public class HandView implements IObservable<Message> {
 
 
     public void update(Adventurer currentAdventurer) {
-        updateLabels(currentAdventurer, cards, 6, false);
-        updateLabels(currentAdventurer, littleCards, 10, true);
-        this.cardPanel.repaint();
-        this.minimizedCardPanel.repaint();
+        SwingUtilities.invokeLater(() -> {
+            updateLabels(currentAdventurer, cards, 6, false);
+            updateLabels(currentAdventurer, littleCards, 10, true);
+            this.cardPanel.repaint();
+            this.minimizedCardPanel.repaint();
+        });
     }
 
     private void updateLabels(Adventurer currentAdventurer, ArrayList<JLabel> cards, int reducedSize, boolean rightToLeft) {
