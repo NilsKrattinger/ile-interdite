@@ -87,6 +87,7 @@ public class GameView {
             advViewPanel.removeAll();
             advViewPanel.add(view.getMainPanel());
             advViewPanel.revalidate();
+            advViewPanel.repaint();
         });
     }
 
