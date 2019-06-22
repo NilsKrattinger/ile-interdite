@@ -25,6 +25,7 @@ public class InterruptionController {
     private ArrayList<Adventurer> adventurersToRescue; //< The list of adventurers that are drowning and must be moved before next turn
     private Utils.State[][] cellStates; //< The state of all states, if needed by the action
 
+    private boolean isTurnEnd; //< Check if the discard action is called at the end of a turn
     private ArrayList<Adventurer> selectableAdventurers; //< The list of adventurers that can be chosen for the helicopter group
     private ArrayList<Adventurer> helicopterList; //< The list of passengers in the helicopter
     private ArrayList<Card> cardsToDiscard; //< The cards chosen to discard
@@ -125,7 +126,8 @@ public class InterruptionController {
      *
      * @param adventurer
      */
-    public void initDiscard(Adventurer adventurer, ArrayList<Card> cards) {
+    public void initDiscard(Adventurer adventurer, ArrayList<Card> cards, boolean endTurn) {
+        this.isTurnEnd = endTurn;
         currentAction = Utils.Action.DISCARD;
         controller.getActionController().startInterruption();
 
@@ -201,7 +203,9 @@ public class InterruptionController {
             currentActionAdventurer.getCards().addAll(cardsToDiscard);
             controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
             controller.getActionController().endInterruption();
-            controller.drawFloodCards();
+            if (isTurnEnd) {
+                controller.drawFloodCards();
+            }
         }
     }
 

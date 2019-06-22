@@ -73,7 +73,7 @@ public class DeckController {
             }
         }
         if (tempAdventurerHandCards.size() > Hand.NB_MAX_CARDS) {
-            controller.getInterruptionController().initDiscard(adv, tempAdventurerHandCards);
+            controller.getInterruptionController().initDiscard(adv, tempAdventurerHandCards, true);
         } else {
             for (Card card : tempAdventurerHandCards) {
                 controller.getAdventurerController().giveCard(adv, card);
