@@ -61,7 +61,7 @@ public class ActionController implements IObserver<Message> {
                 if (controller.getCurrentAdventurer() instanceof Navigator) {
                     controller.getInterruptionController().startNavigatorInterruption();
                     startInterruption();
-                    break; // In case the adventurer is a navigator, interrupts the action
+                    return; // In case the adventurer is a navigator, interrupts the action
                 }
             case DRY: // MOVE case comes also here if the current adventurer is not a Navigator (no break)
                 cellStates = controller.getAdventurerController().startCellAction(message);
