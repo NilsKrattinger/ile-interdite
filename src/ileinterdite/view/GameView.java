@@ -119,13 +119,19 @@ public class GameView {
             waterScalePanel.revalidate();
         });
     }
+
+    public void showVictory(VictoryView view) {
+        SwingUtilities.invokeLater(() -> showEndGame(view.getMainPanel()));
+    }
+
+    public void showDefeat(DefeatView view) {
+        SwingUtilities.invokeLater(() -> showEndGame(view.getMainPanel()));
+    }
     
-    public void showEndGame(JPanel panel) {
-        SwingUtilities.invokeLater(() -> {
-            window.getContentPane().removeAll();
-            window.getContentPane().add(panel);
-            window.revalidate();
-            panel.repaint();
-        });
+    private void showEndGame(JPanel panel) {
+        window.getContentPane().removeAll();
+        window.getContentPane().add(panel);
+        window.revalidate();
+        panel.repaint();
     }
 }
