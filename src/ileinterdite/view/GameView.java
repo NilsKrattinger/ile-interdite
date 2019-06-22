@@ -14,6 +14,7 @@ public class GameView {
 
     private JPanel gridPanel;
     private JPanel handsPanel;
+    private JPanel pilesPanel;
     private JPanel waterScalePanel;
 
     public GameView() {
@@ -73,8 +74,15 @@ public class GameView {
         handsPanel = new JPanel();
         window.add(handsPanel, BorderLayout.EAST);
 
+        JPanel leftPanel = new JPanel(new BorderLayout());
+
+        pilesPanel = new JPanel(new GridLayout(1, 1));
+        leftPanel.add(pilesPanel, BorderLayout.NORTH);
+
         waterScalePanel = new JPanel(new GridLayout(1, 1));
-        window.add(waterScalePanel, BorderLayout.WEST);
+        leftPanel.add(waterScalePanel, BorderLayout.CENTER);
+
+        window.add(leftPanel, BorderLayout.WEST);
     }
 
     public void setVisible() {
@@ -121,8 +129,15 @@ public class GameView {
 
     public void setWaterScaleView(WaterScaleView view) {
         SwingUtilities.invokeLater(() -> {
-            waterScalePanel.add(view.getMainPanel(), BorderLayout.WEST);
+            waterScalePanel.add(view.getMainPanel());
             waterScalePanel.revalidate();
+        });
+    }
+
+    public void setPilesView(PilesView pilesView) {
+        SwingUtilities.invokeLater(() -> {
+            pilesPanel.add(pilesView.getMiniaturesPanel());
+            pilesPanel.revalidate();
         });
     }
 

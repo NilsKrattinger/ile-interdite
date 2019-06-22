@@ -206,6 +206,7 @@ public class InterruptionController {
 
             currentActionAdventurer.getCards().addAll(cardsToDiscard);
             controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
+            controller.getDeckController().updatePiles();
             controller.getActionController().endInterruption();
             if (isTurnEnd) {
                 controller.drawFloodCards();
@@ -270,6 +271,7 @@ public class InterruptionController {
                 }
 
                 controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
+                controller.getDeckController().updatePiles();
                 controller.getActionController().endInterruption();
             }
         }

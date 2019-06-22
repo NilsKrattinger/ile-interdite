@@ -6,6 +6,7 @@ import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
+import ileinterdite.view.PilesView;
 import ileinterdite.view.DrawView;
 
 import java.util.ArrayList;
@@ -15,14 +16,18 @@ public class DeckController {
 
     private GameController controller; //< A reference to the main controller
 
-    private HashMap<Utils.CardType, Deck> decks;
-    private HashMap<Utils.CardType, DiscardPile> discardPiles;
+    private HashMap<Utils.CardType, Deck> decks; //< The decks in the game
+    private HashMap<Utils.CardType, DiscardPile> discardPiles; //< The discard piles in the game
 
-    private DrawView drawView;
+    private DrawView drawView; //< The view when cards are drawn from a pile
+    private PilesView pilesView; //< The view that shows piles and discard piles
 
     public DeckController(GameController c) {
         this.controller = c;
         drawView = new DrawView();
+        pilesView = new PilesView();
+
+        controller.getWindow().setPilesView(pilesView);
 
         initDecks(controller.getGridController().getGrid());
     }
@@ -111,11 +116,14 @@ public class DeckController {
                     throw new RuntimeException();
             }
 
-            if (!rescueList.isEmpty()) {
-                controller.getInterruptionController().setRescueList(rescueList);
-            }
             controller.getGridController().getGridView().updateCell(linkedCell.getName(), linkedCell.getState());
         }
+
+        if (!rescueList.isEmpty()) {
+            controller.getInterruptionController().setRescueList(rescueList);
+        }
+
+        updatePiles();
         drawView.setCardsToShow(drewCards);
     }
 
@@ -125,5 +133,10 @@ public class DeckController {
 
     public DiscardPile getDiscardPile(Utils.CardType type) {
         return discardPiles.get(type);
+    }
+
+    public void updatePiles() {
+        pilesView.updatePile(Utils.CardType.TREASURE, getDiscardPile(Utils.CardType.TREASURE).getCards());
+        pilesView.updatePile(Utils.CardType.FLOOD, getDiscardPile(Utils.CardType.FLOOD).getCards());
     }
 }
