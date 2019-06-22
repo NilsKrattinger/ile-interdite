@@ -27,7 +27,7 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
         pawns = new HashMap<>();
         cellMap = new HashMap<>();
 
-        gridPanel = new JPanel(new GridLayout(Grid.WIDTH, Grid.HEIGHT));
+        SwingUtilities.invokeLater(() -> gridPanel = new JPanel(new GridLayout(Grid.WIDTH, Grid.HEIGHT)));
     }
 
     public JPanel getMainPanel() {
@@ -37,29 +37,34 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
     public void showGrid(Cell[][] cells) {
         cellComponents = new CellComponent[cells.length][cells.length];
 
-        for (int j = 0; j < cells.length; j++) {
-            for (int i = 0; i < cells[j].length; i++) {
-                Cell cell = cells[j][i];
+        SwingUtilities.invokeLater(() -> {
+            for (int j = 0; j < cells.length; j++) {
+                for (int i = 0; i < cells[j].length; i++) {
+                    Cell cell = cells[j][i];
 
-                CellComponent comp = new CellComponent(cell.getName(), cell.getState(), i + 1, j + 1);
-                gridPanel.add(comp);
+                    CellComponent comp = new CellComponent(cell.getName(), cell.getState(), i + 1, j + 1);
+                    gridPanel.add(comp);
 
-                comp.addObserver(this);
-                cellComponents[j][i] = comp;
-                cellMap.put(cell.getName(), comp);
+                    comp.addObserver(this);
+                    cellComponents[j][i] = comp;
+                    cellMap.put(cell.getName(), comp);
+                }
             }
-        }
-        gridPanel.updateUI();
+            gridPanel.updateUI();
+        });
     }
 
     public void showAdventurers(ArrayList<Adventurer> adventurers) {
         for (Adventurer a : adventurers) {
-            int x = a.getX();
-            int y = a.getY();
+            final Adventurer adv = a;
+            final int x = a.getX();
+            final int y = a.getY();
 
-            PawnComponent comp = new PawnComponent(a.getPawn(), x, y);
-            pawns.put(a.getPawn(), comp);
-            cellComponents[y][x].addPawn(comp);
+            SwingUtilities.invokeLater(() -> {
+                PawnComponent comp = new PawnComponent(adv.getPawn(), x, y);
+                pawns.put(adv.getPawn(), comp);
+                cellComponents[y][x].addPawn(comp);
+            });
         }
     }
 
@@ -70,7 +75,9 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
     public void showSelectableCells(Utils.State[][] states) {
         for (int j = 0; j < states.length; j++) {
             for (int i = 0; i < states[j].length; i++) {
-                cellComponents[j][i].setAccessible(states[j][i]);
+                final Utils.State state = states[j][i];
+                final CellComponent comp = cellComponents[j][i];
+                SwingUtilities.invokeLater(() -> comp.setAccessible(state));
             }
         }
     }
@@ -80,23 +87,26 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
      * @param adv The adventurer to update
      */
     public void updateAdventurer(Adventurer adv) {
-        PawnComponent pawn = pawns.get(adv.getPawn());
-        cellComponents[pawn.getY()][pawn.getX()].removePawn(pawn);
-        pawn.setX(adv.getX());
-        pawn.setY(adv.getY());
+        SwingUtilities.invokeLater(() -> {
+            PawnComponent pawn = pawns.get(adv.getPawn());
+            cellComponents[pawn.getY()][pawn.getX()].removePawn(pawn);
+            pawn.setX(adv.getX());
+            pawn.setY(adv.getY());
 
-        cellComponents[pawn.getY()][pawn.getX()].addPawn(pawn);
+            cellComponents[pawn.getY()][pawn.getX()].addPawn(pawn);
+        });
         resetCells();
     }
 
     public void updateCell(int x, int y, Utils.State state) {
-        cellComponents[y][x].setState(state);
+        SwingUtilities.invokeLater(() -> cellComponents[y][x].setState(state));
         resetCells();
     }
 
     public void updateCell(String name, Utils.State state) {
         if (cellMap.containsKey(name)) {
-            cellMap.get(name).setState(state);
+            final CellComponent comp = cellMap.get(name);
+            SwingUtilities.invokeLater(() -> comp.setState(state));
             resetCells();
         }
     }
@@ -106,11 +116,13 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
     }
 
     public void resetCells() {
-        for (int j = 0; j < cellComponents.length; j++) {
-            for (int i = 0; i < cellComponents[j].length; i++) {
-                cellComponents[j][i].resetAccessible();
+        SwingUtilities.invokeLater(() -> {
+            for (int j = 0; j < cellComponents.length; j++) {
+                for (int i = 0; i < cellComponents[j].length; i++) {
+                    cellComponents[j][i].resetAccessible();
+                }
             }
-        }
+        });
     }
 
     @Override
