@@ -119,20 +119,14 @@ public class GameController {
      * declenche la victoire
      */
     public void victory() {
-        mainView.showEndGame(new VictoryView().getMainPanel());
-
-        //this.endGame()
-        //TODO this.endGame()
+        mainView.showVictory(new VictoryView());
     }
 
     /**
      * declenche la défaite
      */
     public void defeat(boolean waterScale, boolean treasure, boolean heliport, boolean drown) {
-        mainView.showEndGame(new DefeatView(waterScale, treasure, heliport, drown).getMainPanel());
-
-        //this.endGame()
-        //TODO this.endGame()
+        mainView.showDefeat(new DefeatView(waterScale, treasure, heliport, drown));
     }
 
     /**

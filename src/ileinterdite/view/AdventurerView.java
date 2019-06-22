@@ -18,12 +18,16 @@ public class AdventurerView implements IObservable<Message> {
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
     private final CopyOnWriteArrayList<IObserver<Message>> observers;
 
-    private final JPanel mainPanel;
-    private final JLabel nbActionsLabel;
-    private  JPanel adventurerPanel;
+    private JPanel mainPanel;
+    private JLabel nbActionsLabel;
+    private JPanel adventurerPanel;
 
     public AdventurerView(Adventurer ad, HandView handView) {
         observers = new CopyOnWriteArrayList<>();
+        SwingUtilities.invokeLater(() -> initView(ad, handView));
+    }
+
+    private void initView(Adventurer ad, HandView handView) {
         mainPanel = new JPanel(new BorderLayout()) {
             public Dimension getPreferredSize() {
                 Dimension d = super.getPreferredSize();
@@ -31,8 +35,6 @@ public class AdventurerView implements IObservable<Message> {
 
             }
         };
-
-
 
         adventurerPanel = new JPanel(new BorderLayout());
         adventurerPanel.setLayout(new BoxLayout(adventurerPanel, BoxLayout.X_AXIS));
@@ -43,17 +45,8 @@ public class AdventurerView implements IObservable<Message> {
 
 
         mainPanel.add(handMain,BorderLayout.WEST);
-
-
-
         mainPanel.add(adventurerPanel, BorderLayout.CENTER);
-
         mainPanel.add(new JLabel(""),BorderLayout.EAST);
-
-
-
-
-
 
         JPanel actionButtonPanel = new JPanel(new GridLayout(2, 2));
         JButton moveButton = new JButton("Bouger") ;
@@ -111,38 +104,12 @@ public class AdventurerView implements IObservable<Message> {
         adventurerPanel.add(nbActionsPanel);
     }
 
-    public void showAdventurers(ArrayList<Adventurer> adventurers) {
-        JFrame advChoice = new JFrame("Choix aventurier à déplacer");
-        advChoice.setSize(300, 150);
-
-        JPanel main = new JPanel();
-        main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-
-        final JComboBox<String> advList = new JComboBox<>();
-        for (Adventurer a : adventurers) {
-            advList.addItem(a.getClassName() + " (" + a.getName() + ")");
-        }
-        main.add(advList);
-
-        JButton validate = new JButton("Valider");
-        validate.addActionListener(e -> {
-            Message m = new Message(Utils.Action.NAVIGATOR_CHOICE, advList.getSelectedItem().toString());
-
-            notifyObservers(m);
-            advChoice.setVisible(false);
-        });
-        main.add(validate);
-
-        advChoice.add(main);
-        advChoice.setVisible(true);
-    }
-
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
     public void setNbActions(int nbActions) {
-        nbActionsLabel.setText(Integer.toString(nbActions));
+        SwingUtilities.invokeLater(() -> nbActionsLabel.setText(Integer.toString(nbActions)));
     }
 
     @Override
