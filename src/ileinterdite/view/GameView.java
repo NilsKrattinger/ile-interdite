@@ -17,14 +17,20 @@ public class GameView {
     private JPanel handsPanel;
     private JPanel waterScalePanel;
 
-    public GameView(int width, int height) {
-        SwingUtilities.invokeLater(() -> initView(width, height));
+    public GameView() {
+        SwingUtilities.invokeLater(this::initView);
     }
 
-    private void initView(int width, int height) {
+    private void initView() {
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(width, height);
+
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int width = gd.getDisplayMode().getWidth();
+        int height = gd.getDisplayMode().getHeight();
+        Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(window.getGraphicsConfiguration());
+        window.setSize(width - screenInsets.left - screenInsets.right, height - screenInsets.top - screenInsets.bottom);
+        window.setUndecorated(true);
 
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
