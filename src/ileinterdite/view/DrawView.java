@@ -28,6 +28,7 @@ public class DrawView implements ActionListener {
             window.setSize(495, 689);
             window.setLocationRelativeTo(null);
             window.setUndecorated(true);
+            window.setAlwaysOnTop(true);
 
             remakeWindow();
 
