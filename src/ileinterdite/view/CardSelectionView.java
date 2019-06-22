@@ -35,11 +35,13 @@ public class CardSelectionView implements IObservable<Message> {
         cardSelected = new ArrayList<>();
         cards = new ArrayList<>();
         observers = new CopyOnWriteArrayList<>();
-        mainPanel = new JPanel(new BorderLayout());
         cardLabel = new ArrayList<>();
 
-        this.initFrame();
-        window.add(mainPanel);
+        SwingUtilities.invokeLater(() -> {
+            this.initFrame();
+            mainPanel = new JPanel(new BorderLayout());
+            window.add(mainPanel);
+        });
 
     }
 
@@ -49,13 +51,15 @@ public class CardSelectionView implements IObservable<Message> {
      * @param nbCard nb card to remove
      */
     public void update(ArrayList<Card> playerCards, int nbCard, String action) {
-        windowLoad();
-
+        SwingUtilities.invokeLater(this::windowLoad);
 
         cards = playerCards;
-        labelPanel = new JPanel();
-        labelPanel.add(new JLabel(textbuilder(nbCard, action), SwingConstants.CENTER));
-        choicePanel = new JPanel(new GridLayout(1, cards.size() - 1));
+        final int cardsSize = cards.size();
+        SwingUtilities.invokeLater(() -> {
+            labelPanel = new JPanel();
+            labelPanel.add(new JLabel(textbuilder(nbCard, action), SwingConstants.CENTER));
+            choicePanel = new JPanel(new GridLayout(1, cardsSize - 1));
+        });
 
         for (Card card : cards) {
 
@@ -69,70 +73,74 @@ public class CardSelectionView implements IObservable<Message> {
                 Utils.setOpacity(unselectedIco.get(unselectedIco.size() - 1), 128);
 
                 img = unselectedIco.get(unselectedIco.size() - 1);
-                ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 4, img.getHeight() / 4, Image.SCALE_SMOOTH));
-                JLabel cardlLabel = new JLabel("", SwingConstants.CENTER);
-                cardlLabel.setIcon(icon);
-                cardlLabel.addMouseListener(new MouseListener() {
+                final ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 4, img.getHeight() / 4, Image.SCALE_SMOOTH));
+                final ArrayList<BufferedImage> normalImg = new ArrayList<>(normalIco);
+                final ArrayList<BufferedImage> unselectedImg = new ArrayList<>(unselectedIco);
+                SwingUtilities.invokeLater(() -> {
+                    JLabel cardlLabel = new JLabel("", SwingConstants.CENTER);
+                    cardlLabel.setIcon(icon);
+                    cardlLabel.addMouseListener(new MouseListener() {
 
-                    @Override
-                    public void mouseClicked(MouseEvent mouseEvent) {
-                        int cardIndex;
+                        @Override
+                        public void mouseClicked(MouseEvent mouseEvent) {
+                            int cardIndex;
 
-                        cardIndex = cardLabel.indexOf(mouseEvent.getComponent());
-                        if (cardIndex != -1) {
-                            JLabel selectedCard = cardLabel.get(cardIndex);
+                            cardIndex = cardLabel.indexOf(mouseEvent.getComponent());
+                            if (cardIndex != -1) {
+                                JLabel selectedCard = cardLabel.get(cardIndex);
 
-                            if (cardSelected.contains(cardIndex)) {
-                                BufferedImage cardimg = unselectedIco.get(cardIndex);
-                                selectedCard.setIcon(new ImageIcon(cardimg.getScaledInstance(cardimg.getWidth() / 4, cardimg.getHeight() / 4, Image.SCALE_SMOOTH)));
+                                if (cardSelected.contains(cardIndex)) {
+                                    BufferedImage cardimg = unselectedImg.get(cardIndex);
+                                    selectedCard.setIcon(new ImageIcon(cardimg.getScaledInstance(cardimg.getWidth() / 4, cardimg.getHeight() / 4, Image.SCALE_SMOOTH)));
 
-                                cardSelected.remove(cardSelected.indexOf(cardIndex));
-                                selectedCard.repaint();
-                            } else {
-                                BufferedImage cardimg = normalIco.get(cardIndex);
-                                selectedCard.setIcon(new ImageIcon(cardimg.getScaledInstance(cardimg.getWidth() / 4, cardimg.getHeight() / 4, Image.SCALE_SMOOTH)));
+                                    cardSelected.remove(cardSelected.indexOf(cardIndex));
+                                    selectedCard.repaint();
+                                } else {
+                                    BufferedImage cardimg = normalImg.get(cardIndex);
+                                    selectedCard.setIcon(new ImageIcon(cardimg.getScaledInstance(cardimg.getWidth() / 4, cardimg.getHeight() / 4, Image.SCALE_SMOOTH)));
 
-                                cardSelected.add(cardIndex);
-                                selectedCard.repaint();
+                                    cardSelected.add(cardIndex);
+                                    selectedCard.repaint();
+                                }
+                            }
+
+                            if (cardSelected.size() == nbCard) {
+                                Message m = new Message(Utils.Action.CARD_CHOICE, buildStringMessage(cardSelected));
+
+                                mainPanel.remove(choicePanel);
+                                windowClose();
+                                notifyObservers(m);
+
                             }
                         }
 
-                        if (cardSelected.size() == nbCard) {
-                            Message m = new Message(Utils.Action.CARD_CHOICE, buildStringMessage(cardSelected));
-
-                            mainPanel.remove(choicePanel);
-                            windowClose();
-                            notifyObservers(m);
-
+                        @Override
+                        public void mousePressed(MouseEvent mouseEvent) {
                         }
-                    }
 
-                    @Override
-                    public void mousePressed(MouseEvent mouseEvent) {
-                    }
+                        @Override
+                        public void mouseReleased(MouseEvent mouseEvent) {
+                        }
 
-                    @Override
-                    public void mouseReleased(MouseEvent mouseEvent) {
-                    }
+                        @Override
+                        public void mouseEntered(MouseEvent mouseEvent) {
+                        }
 
-                    @Override
-                    public void mouseEntered(MouseEvent mouseEvent) {
-                    }
+                        @Override
+                        public void mouseExited(MouseEvent mouseEvent) {
+                        }
+                    });
 
-                    @Override
-                    public void mouseExited(MouseEvent mouseEvent) {
-                    }
+                    mainPanel.add(labelPanel, BorderLayout.SOUTH);
+
+                    choicePanel.add(cardlLabel);
+
+                    cardLabel.add(cardlLabel);
+                    mainPanel.add(choicePanel, BorderLayout.CENTER);
+
+                    choicePanel.repaint();
+                    window.setVisible(true);
                 });
-
-                mainPanel.add(labelPanel, BorderLayout.SOUTH);
-
-                choicePanel.add(cardlLabel);
-
-                cardLabel.add(cardlLabel);
-                mainPanel.add(choicePanel, BorderLayout.CENTER);
-
-                choicePanel.repaint();
-                window.setVisible(true);
             }
         }
     }
