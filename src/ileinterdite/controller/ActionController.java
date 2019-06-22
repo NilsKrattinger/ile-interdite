@@ -32,6 +32,7 @@ public class ActionController implements IObserver<Message> {
 
     /**
      * Creates the controller that receives interactions made with the window
+     *
      * @param c A reference to the GameController
      */
     public ActionController(GameController c) {
@@ -66,7 +67,8 @@ public class ActionController implements IObserver<Message> {
                 cellStates = controller.getAdventurerController().startCellAction(message);
                 break;
 
-            case GIVE_CARD: case GET_TREASURE:
+            case GIVE_CARD:
+            case GET_TREASURE:
                 setEngineerPower(false);
                 updateGrid();
                 controller.startAdventurerAction(message);
@@ -86,7 +88,8 @@ public class ActionController implements IObserver<Message> {
                 resetAction();
                 break;
 
-            case ADVENTURER_CHOICE: case CARD_CHOICE:
+            case ADVENTURER_CHOICE:
+            case CARD_CHOICE:
                 validateAction(message);
                 break;
 
@@ -121,16 +124,18 @@ public class ActionController implements IObserver<Message> {
     public void newTurn() {
         currentAction = null;
         selectedAction = null;
-        setNbActions(NB_ACTIONS_PER_TURN);
+        setNbActions();
     }
 
     /**
      * Handles the validation of an action from update
+     *
      * @param message The message containing necessary information for handling
      */
     private void validateAction(Message message) {
         switch (selectedAction) {
-            case MOVE: case DRY:
+            case MOVE:
+            case DRY:
                 validateCellAction(message, selectedAction);
                 break;
             case GIVE_CARD:
@@ -141,6 +146,7 @@ public class ActionController implements IObserver<Message> {
 
     /**
      * Handles the validation of an action using the cells
+     *
      * @param message The message containing necessary information for handling
      */
     private void validateCellAction(Message message, Utils.Action action) {
@@ -184,10 +190,10 @@ public class ActionController implements IObserver<Message> {
 
     /**
      * Set the number of actions remaining during this turn
-     * @param nb The number to set, between 0 and NB_ACTIONS_PER_TURN
+     *
      */
-    public void setNbActions(int nb) {
-        this.remainingActions = Math.max(nb, NB_ACTIONS_PER_TURN);
+    private void setNbActions() {
+        this.remainingActions = NB_ACTIONS_PER_TURN;
         controller.getAdventurerController().getCurrentView().setNbActions(this.remainingActions);
     }
 
@@ -232,6 +238,7 @@ public class ActionController implements IObserver<Message> {
 
     /**
      * Sets the power of the engineer (to dry twice).
+     *
      * @param power false to remove the ability to dry a second cell, it will reduce the number of actions if it was
      *              set to true
      */
@@ -247,13 +254,13 @@ public class ActionController implements IObserver<Message> {
      * PAWN CHOICE METHODS     *
      * *********************** */
 
-    public void chooseAdventurers(ArrayList<Adventurer> adventurers, int nbadventurers, boolean showValidation, boolean showCancel){
-        pawnsSelectionView.update(adventurers, nbadventurers, showValidation, showCancel);
+    public void chooseAdventurers(ArrayList<Adventurer> adventurers, int nbAdventurers, boolean showValidation, boolean showCancel) {
+        pawnsSelectionView.update(adventurers, nbAdventurers, showValidation, showCancel);
 
     }
 
-    public void chooseCards(ArrayList<Card> cards, int nbCartes, String action){
-        cardSelectionView.update(cards,nbCartes,action);
+    public void chooseCards(ArrayList<Card> cards, int nbCards, String action) {
+        cardSelectionView.update(cards, nbCards, action);
 
     }
 

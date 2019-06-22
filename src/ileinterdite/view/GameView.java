@@ -1,7 +1,6 @@
 package ileinterdite.view;
 
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,8 +40,8 @@ public class GameView {
 
         /* We put the gridPanel into a panel with a GridBagLayout to take the "GetPreferredSize" in account
            and have a squared grid */
-        JPanel gridContenant = new JPanel(new GridBagLayout());
-        gridPanel = new JPanel(new GridLayout(1,1)) {
+        JPanel gridContainer = new JPanel(new GridBagLayout());
+        gridPanel = new JPanel(new GridLayout(1, 1)) {
             // Code inspired from https://coderanch.com/t/629253/java/create-JPanel-maintains-aspect-ratio#2880512
             // By Louis Lewis
 
@@ -63,13 +62,13 @@ public class GameView {
                 int h = (int) prefSize.getHeight();
 
                 int s = Math.min(w, h);
-                return new Dimension(s,s);
+                return new Dimension(s, s);
             }
         };
 
         gridPanel.setLayout(new GridLayout(1, 1));
-        gridContenant.add(gridPanel);
-        window.add(gridContenant, BorderLayout.CENTER);
+        gridContainer.add(gridPanel);
+        window.add(gridContainer, BorderLayout.CENTER);
 
         handsPanel = new JPanel();
         window.add(handsPanel, BorderLayout.EAST);
@@ -104,7 +103,7 @@ public class GameView {
             bottomPanel.revalidate();
         });
     }
-    
+
     public void setHandViews(HashMap<Adventurer, HandView> handViews) {
         SwingUtilities.invokeLater(() -> {
             handsPanel.setLayout(new GridLayout(handViews.size(), 1));
@@ -119,7 +118,7 @@ public class GameView {
             }
         });
     }
-    
+
     public void setWaterScaleView(WaterScaleView view) {
         SwingUtilities.invokeLater(() -> {
             waterScalePanel.add(view.getMainPanel(), BorderLayout.WEST);
@@ -134,7 +133,7 @@ public class GameView {
     public void showDefeat(DefeatView view) {
         SwingUtilities.invokeLater(() -> showEndGame(view.getMainPanel()));
     }
-    
+
     private void showEndGame(JPanel panel) {
         window.getContentPane().removeAll();
         window.getContentPane().add(panel);

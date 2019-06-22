@@ -30,7 +30,8 @@ public class ActionControllerHelper {
 
     /**
      * Checks if the entered position is valid
-     * @param pos The position to check
+     *
+     * @param pos    The position to check
      * @param states The state of the cells for this action
      * @return true if the position is in bounds and the cell at the given coordinates is accessible
      */
@@ -46,12 +47,12 @@ public class ActionControllerHelper {
         strings = message.split("/");
         for (int i = 0; i < strings.length; i++) {
             strings[i] = strings[i].replaceFirst("^\\s+$", "");
-            if(!strings[i].isEmpty()){
+            if (!strings[i].isEmpty()) {
                 finalString.add(strings[i]);
             }
 
         }
         String[] adventurerClass = new String[finalString.size()];
-        return  finalString.toArray(adventurerClass);
+        return finalString.toArray(adventurerClass);
     }
 }

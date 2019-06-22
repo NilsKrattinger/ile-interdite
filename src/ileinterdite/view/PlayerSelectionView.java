@@ -1,7 +1,10 @@
 package ileinterdite.view;
 
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.util.*;
+import ileinterdite.util.IObservable;
+import ileinterdite.util.IObserver;
+import ileinterdite.util.StartMessage;
+import ileinterdite.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PlayerSelectionView implements IObservable<StartMessage> {
 
-
-    private final CopyOnWriteArrayList<IObserver<StartMessage>>observers;
+    private final CopyOnWriteArrayList<IObserver<StartMessage>> observers;
 
     private JFrame window;
     private JPanel mainPanel;
@@ -41,7 +43,7 @@ public class PlayerSelectionView implements IObservable<StartMessage> {
         SwingUtilities.invokeLater(() -> {
             this.initFrame();
             mainPanel = new JPanel(new BorderLayout());
-            choicePanel = new JPanel(new GridLayout(1, adventurerSize-1));
+            choicePanel = new JPanel(new GridLayout(1, adventurerSize - 1));
         });
 
 
@@ -49,7 +51,7 @@ public class PlayerSelectionView implements IObservable<StartMessage> {
             BufferedImage img = Utils.loadImage("personnages/" + adventurer.getClassName().toLowerCase() + ".png");
             if (img != null) {
                 selectedIco.add(img);
-                final ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() , img.getHeight() , Image.SCALE_SMOOTH));
+                final ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth(), img.getHeight(), Image.SCALE_SMOOTH));
                 SwingUtilities.invokeLater(() -> {
                     JLabel advImgLabel = new JLabel("", SwingConstants.CENTER);
                     advImgLabel.setIcon(icon);
@@ -58,17 +60,18 @@ public class PlayerSelectionView implements IObservable<StartMessage> {
                         @Override
                         public void mouseClicked(MouseEvent mouseEvent) {
                             int cardIndex;
-                            cardIndex = adventurerCardLabels.indexOf(mouseEvent.getComponent());
+                            JLabel component = (JLabel) mouseEvent.getComponent();
+                            cardIndex = adventurerCardLabels.indexOf(component);
                             if (cardIndex != -1) {
                                 JLabel selectedCard = adventurerCardLabels.get(cardIndex);
                                 if (adventurerSelected.contains(cardIndex)) {
-                                    BufferedImage cardimg = normalIco.get(cardIndex);
-                                    selectedCard.setIcon(new ImageIcon(cardimg.getScaledInstance(cardimg.getWidth(), cardimg.getHeight(), Image.SCALE_SMOOTH)));
-                                    adventurerSelected.remove(adventurerSelected.indexOf(cardIndex));
+                                    BufferedImage cardImg = normalIco.get(cardIndex);
+                                    selectedCard.setIcon(new ImageIcon(cardImg.getScaledInstance(cardImg.getWidth(), cardImg.getHeight(), Image.SCALE_SMOOTH)));
+                                    adventurerSelected.remove((Integer) cardIndex);
                                     selectedCard.repaint();
                                 } else {
-                                    BufferedImage cardimg = selectedIco.get(cardIndex);
-                                    selectedCard.setIcon(new ImageIcon(cardimg.getScaledInstance(cardimg.getWidth(), cardimg.getHeight(), Image.SCALE_SMOOTH)));
+                                    BufferedImage cardImg = selectedIco.get(cardIndex);
+                                    selectedCard.setIcon(new ImageIcon(cardImg.getScaledInstance(cardImg.getWidth(), cardImg.getHeight(), Image.SCALE_SMOOTH)));
                                     adventurerSelected.add(cardIndex);
                                     selectedCard.repaint();
                                 }
@@ -112,7 +115,7 @@ public class PlayerSelectionView implements IObservable<StartMessage> {
 
             }
             choicePanel.repaint();
-            JLabel text = new JLabel(textbuilder(nbAdv), SwingConstants.CENTER);
+            JLabel text = new JLabel(textBuilder(nbAdv), SwingConstants.CENTER);
             text.setFont(new Font(text.getFont().getFamily(), text.getFont().getStyle(), 25));
             mainPanel.add(text, BorderLayout.NORTH);
             mainPanel.add(choicePanel, BorderLayout.CENTER);
@@ -124,7 +127,7 @@ public class PlayerSelectionView implements IObservable<StartMessage> {
 
 
     /**
-     * window Initalisation set the look, the size, ect
+     * window Initialisation set the look, the size, ect
      */
     private void initFrame() {
         window = new JFrame();
@@ -135,19 +138,8 @@ public class PlayerSelectionView implements IObservable<StartMessage> {
         window.setUndecorated(true);
     }
 
-    private String textbuilder(int nbCards) {
-        boolean singular;
-        int nbCardtodeff = 0;
-
-        nbCardtodeff = nbCards;
-        singular = nbCardtodeff == 1;
-
-        String string = "";
-        string = "Veuillez choisir ";
-        string = string + nbCardtodeff;
-        string = string + " aventuriers";
-
-        return string;
+    private String textBuilder(int nbCards) {
+        return "Veuillez choisir " + nbCards + " aventuriers";
     }
 
 

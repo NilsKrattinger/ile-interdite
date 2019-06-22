@@ -6,27 +6,18 @@ import ileinterdite.util.Utils;
 import ileinterdite.util.Utils.Pawn;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Diver extends Adventurer {
 
-    public static final Pawn PAWN = Pawn.BLACK;
-    public static final String CLASS_NAME = "Plongeur";
+    private static final Pawn PAWN = Pawn.BLACK;
+    private static final String CLASS_NAME = "Plongeur";
 
     public Diver() {
         super();
     }
 
-    public Diver(Grid grid) {
-        super(grid);
-    }
-
     public Diver(int x, int y) {
         super(x, y);
-    }
-
-    public Diver(Grid grid, int x, int y) {
-        super(grid, x, y);
     }
 
     @Override
@@ -39,11 +30,11 @@ public class Diver extends Adventurer {
         setRemainingCellsUnavailable(tab);
     }
 
-    public void treatBoard(int x, int y, Utils.State[][] tab) {
+    private void treatBoard(int x, int y, Utils.State[][] tab) {
         if (x >= 0 && x < Grid.WIDTH && y >= 0 && y < Grid.WIDTH) {
             Utils.State state = tab[y][x];
             if ((x != this.getX() || y != this.getY()) && (
-                        state == Utils.State.FLOODED || state == Utils.State.NORMAL)) {
+                    state == Utils.State.FLOODED || state == Utils.State.NORMAL)) {
                 tab[y][x] = Utils.State.ACCESSIBLE;
             } else if (state != Utils.State.ACCESSIBLE) {
                 tab[y][x] = Utils.State.INACCESSIBLE;
@@ -59,7 +50,7 @@ public class Diver extends Adventurer {
     }
 
     public Utils.State[][] getRescueCells() {
-        Utils.State[][] cellStates = grid.getStateOfCells();
+        Utils.State[][] cellStates = getGrid().getStateOfCells();
 
         setClosestCellAvailable(cellStates, getX(), getY(), new ArrayList<>(), 0, -1);
         setRemainingCellsUnavailable(cellStates);

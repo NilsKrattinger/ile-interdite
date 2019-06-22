@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HandView implements IObservable<Message> {
@@ -68,18 +67,19 @@ public class HandView implements IObservable<Message> {
             cards.get(i).addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
-                    int index = cards.indexOf(mouseEvent.getComponent());
+                    JLabel component = (JLabel) mouseEvent.getComponent();
+                    int index = cards.indexOf(component);
                     index = (rightToLeft) ? Hand.NB_MAX_CARDS - index - 1 : index;
-                    if (index < hand.getSize()){
-                         if (hand.getCard(index) != null) {
+                    if (index < hand.getSize()) {
+                        if (hand.getCard(index) != null) {
                             Message m = new Message(Utils.Action.USE_TREASURE_CARD, Integer.toString(index), adv);
 
-                            if (Parameters.LOGS){
+                            if (Parameters.LOGS) {
                                 System.out.println(m.action);
                             }
 
                             notifyObservers(m);
-                         }
+                        }
                     }
                 }
 
@@ -157,11 +157,11 @@ public class HandView implements IObservable<Message> {
         }
     }
 
-    public JPanel getMainPanel(){
+    public JPanel getMainPanel() {
         return this.mainPanel;
     }
 
-    public JPanel getMinimizedPanel(){
+    public JPanel getMinimizedPanel() {
         return this.minimizedMainPanel;
     }
 

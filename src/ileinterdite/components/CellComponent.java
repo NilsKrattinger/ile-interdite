@@ -18,13 +18,14 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
     private final CopyOnWriteArrayList<IObserver<Tuple<Integer, Integer>>> observers;
     private final ArrayList<PawnComponent> pawns;
 
-    private int x; private int y;
+    private int x;
+    private int y;
     private BufferedImage image;
     private BufferedImage transparentImage;
     private BufferedImage floodedImage;
     private BufferedImage transparentFloodedImage;
-    private BufferedImage sunkedImage;
-    private BufferedImage transparentSunkedImage;
+    private BufferedImage sunkenImage;
+    private BufferedImage transparentSunkenImage;
     private Utils.State cellState;
     private Utils.State accessible;
     private Rectangle positionInWindow;
@@ -51,10 +52,10 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
                 Utils.setOpacity(transparentFloodedImage, 50);
             }
 
-            sunkedImage = Utils.loadImage("tuiles/Coule.png");
-            if (sunkedImage != null) {
-                transparentSunkedImage = Utils.deepCopy(sunkedImage);
-                Utils.setOpacity(transparentSunkedImage, 50);
+            sunkenImage = Utils.loadImage("tuiles/Coule.png");
+            if (sunkenImage != null) {
+                transparentSunkenImage = Utils.deepCopy(sunkenImage);
+                Utils.setOpacity(transparentSunkenImage, 50);
             }
         }
 
@@ -96,7 +97,7 @@ public class CellComponent extends JPanel implements IObservable<Tuple<Integer, 
             } else if (cellState == Utils.State.FLOODED) {
                 img = (accessible != Utils.State.INACCESSIBLE) ? floodedImage : transparentFloodedImage;
             } else {
-                img = (accessible != Utils.State.INACCESSIBLE) ? sunkedImage : transparentSunkedImage;
+                img = (accessible != Utils.State.INACCESSIBLE) ? sunkenImage : transparentSunkenImage;
             }
 
             g.drawImage(img, 0, 0, g.getClipBounds().width, g.getClipBounds().height, this);

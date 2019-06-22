@@ -1,9 +1,12 @@
 package ileinterdite.controller;
 
 import ileinterdite.factory.BoardFactory;
-import ileinterdite.model.*;
+import ileinterdite.model.Cell;
+import ileinterdite.model.Treasure;
+import ileinterdite.model.TreasureCell;
 import ileinterdite.model.adventurers.Adventurer;
-import ileinterdite.util.*;
+import ileinterdite.util.Message;
+import ileinterdite.util.Utils;
 import ileinterdite.view.DefeatView;
 import ileinterdite.view.GameView;
 import ileinterdite.view.VictoryView;
@@ -13,7 +16,6 @@ import java.util.HashMap;
 
 public class GameController {
 
-    private MainMenuController mainMenuController;
     private ActionController actionController;
     private AdventurerController adventurerController;
     private GridController gridController;
@@ -26,9 +28,8 @@ public class GameController {
     public GameController(MainMenuController cm, int difficulty) {
         this.mainView = new GameView();
 
-        this.mainMenuController = cm;
         this.actionController = new ActionController(this);
-        this.adventurerController = new AdventurerController(this, BoardFactory.getAdventurers(), mainMenuController.getPlayersName());
+        this.adventurerController = new AdventurerController(this, BoardFactory.getAdventurers(), cm.getPlayersName());
         this.gridController = new GridController(this);
         this.deckController = new DeckController(this);
         this.interruptionController = new InterruptionController(this);
@@ -96,14 +97,14 @@ public class GameController {
 
     public void endTurn() {
         deckController.drawTreasureCards(2, getCurrentAdventurer());
-        if(!actionController.isInterrupted()){
+        if (!actionController.isInterrupted()) {
             this.drawFloodCards();
         }
     }
 
-    public void drawFloodCards(){
+    public void drawFloodCards() {
         deckController.drawFloodCards(waterScaleController.getFloodedCardToPick());
-        if (!interruptionController.getAdventurersToRescue().isEmpty()){
+        if (!interruptionController.getAdventurersToRescue().isEmpty()) {
             interruptionController.initRescue();
         } else {
             this.newTurn();
@@ -132,7 +133,7 @@ public class GameController {
     /**
      * Check if its dead to win
      */
-    public void testDefeat() {
+    private void testDefeat() {
         boolean waterScale = waterScaleController.isDeadly();
         boolean treasureLost = this.treasureSink();
         boolean heliportLost = this.heliCellSink();
@@ -143,7 +144,6 @@ public class GameController {
 
     /**
      * Check si les tresors restants ont coulés
-     * @return
      */
     private boolean treasureSink() {
         ArrayList<Treasure> treasuresNotFound = gridController.getGrid().getTreasures();
@@ -165,7 +165,6 @@ public class GameController {
 
     /**
      * Check si l'heliport a coulé
-     * @return
      */
     private boolean heliCellSink() {
         Cell heliCell = null;
@@ -176,6 +175,6 @@ public class GameController {
                 }
             }
         }
-        return heliCell.getState() == Utils.State.SUNKEN;
+        return (heliCell == null) || heliCell.getState() == Utils.State.SUNKEN;
     }
 }

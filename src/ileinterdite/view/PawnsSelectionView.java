@@ -64,10 +64,10 @@ public class PawnsSelectionView implements IObservable<Message> {
             GridBagConstraints c = new GridBagConstraints();
             c.gridx = 0;
             c.gridy = 0;
-            buttonPanel.add(validateButton,c);
+            buttonPanel.add(validateButton, c);
             c.gridx = 2;
             c.gridy = 0;
-            buttonPanel.add(cancelButton,c);
+            buttonPanel.add(cancelButton, c);
 
             window.add(mainPanel);
         });
@@ -75,7 +75,7 @@ public class PawnsSelectionView implements IObservable<Message> {
 
     public void update(ArrayList<Adventurer> availableAdventurers, int nbAdventurers, boolean showValidation, boolean showCancel) {
         resetIcons();
-        
+
         SwingUtilities.invokeLater(() -> {
 
             validateButton.setEnabled(showValidation);
@@ -89,9 +89,9 @@ public class PawnsSelectionView implements IObservable<Message> {
         final int adventurerSize = adventurers.size();
         SwingUtilities.invokeLater(() -> choicePanel = new JPanel(new GridLayout(1, adventurerSize - 1)));
 
-        for (Adventurer adventuer : adventurers) {
+        for (Adventurer adventurer : adventurers) {
 
-            String path = "pions/" + "pion" + adventuer.getPawn().toString();
+            String path = "pions/" + "pion" + adventurer.getPawn().toString();
 
             BufferedImage img = Utils.loadImage(path + ".png");
             if (img != null) {
@@ -109,12 +109,13 @@ public class PawnsSelectionView implements IObservable<Message> {
                         public void mouseClicked(MouseEvent mouseEvent) {
                             int pawnIndex;
 
-                            pawnIndex = pawnsIco.indexOf(mouseEvent.getComponent());
+                            JLabel component = (JLabel) mouseEvent.getComponent();
+                            pawnIndex = pawnsIco.indexOf(component);
                             if (pawnIndex != -1) {
                                 JLabel pawn = pawnsIco.get(pawnIndex);
                                 if (pawnsSelected.contains(pawnIndex)) {
                                     pawn.setIcon(new ImageIcon(normalImg.get(pawnIndex).getScaledInstance(normalImg.get(pawnIndex).getWidth() / 2, normalImg.get(pawnIndex).getHeight() / 2, Image.SCALE_SMOOTH)));
-                                    pawnsSelected.remove(pawnsSelected.indexOf(pawnIndex));
+                                    pawnsSelected.remove((Integer) pawnIndex);
                                 } else {
                                     pawn.setIcon(new ImageIcon(selectedImg.get(pawnIndex).getScaledInstance(selectedImg.get(pawnIndex).getWidth() / 2, selectedImg.get(pawnIndex).getHeight() / 2, Image.SCALE_SMOOTH)));
                                     pawnsSelected.add(pawnIndex);
@@ -153,7 +154,7 @@ public class PawnsSelectionView implements IObservable<Message> {
                     pawnsIco.add(pawnIco);
 
                     pawnPanel.add(pawnIco);
-                    pawnPanel.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
+                    pawnPanel.add(new JLabel(adventurer.getName(), SwingConstants.CENTER));
 
 
                     choicePanel.add(pawnPanel);
@@ -169,13 +170,13 @@ public class PawnsSelectionView implements IObservable<Message> {
         this.createIcons();
         SwingUtilities.invokeLater(() -> {
             for (int i = 0; i < pawnsIco.size(); i++) {
-                pawnsIco.get(i).setIcon(new ImageIcon(normalIco.get(i).getScaledInstance(normalIco.get(i).getWidth() /2, normalIco.get(i).getHeight() /2 , Image.SCALE_SMOOTH)));
+                pawnsIco.get(i).setIcon(new ImageIcon(normalIco.get(i).getScaledInstance(normalIco.get(i).getWidth() / 2, normalIco.get(i).getHeight() / 2, Image.SCALE_SMOOTH)));
             }
         });
     }
 
     /**
-     * window Initalisation set the look, the size, ect
+     * window Initialisation set the look, the size, ect
      */
     private void initFrame() {
         window = new JFrame();
@@ -190,8 +191,6 @@ public class PawnsSelectionView implements IObservable<Message> {
 
     /**
      * Convert a index ArrayList to String with adventurer separated by /
-     * @param pawnsSelected
-     * @return
      */
     private String buildStringMessage(ArrayList<Integer> pawnsSelected) {
         StringBuilder stringMessage = new StringBuilder();
@@ -221,7 +220,7 @@ public class PawnsSelectionView implements IObservable<Message> {
     /**
      * clear window last usage
      */
-    private void resetIcons(){
+    private void resetIcons() {
         pawnsIco.clear();
         pawnsSelected.clear();
         normalIco.clear();

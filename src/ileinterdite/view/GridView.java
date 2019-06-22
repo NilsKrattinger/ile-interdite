@@ -4,7 +4,7 @@ import ileinterdite.components.CellComponent;
 import ileinterdite.components.PawnComponent;
 import ileinterdite.model.Cell;
 import ileinterdite.model.Grid;
-import ileinterdite.model.adventurers.*;
+import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.*;
 
 import javax.swing.*;
@@ -70,6 +70,7 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
 
     /**
      * Shows which cells are selectable
+     *
      * @param states The list of cells with states either ACCESSIBLE or INACCESSIBLE
      */
     public void showSelectableCells(Utils.State[][] states) {
@@ -84,6 +85,7 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
 
     /**
      * Update the position of an adventurer
+     *
      * @param adv The adventurer to update
      */
     public void updateAdventurer(Adventurer adv) {
@@ -117,9 +119,9 @@ public class GridView implements IObservable<Message>, IObserver<Tuple<Integer, 
 
     public void resetCells() {
         SwingUtilities.invokeLater(() -> {
-            for (int j = 0; j < cellComponents.length; j++) {
-                for (int i = 0; i < cellComponents[j].length; i++) {
-                    cellComponents[j][i].resetAccessible();
+            for (CellComponent[] cellComponent : cellComponents) {
+                for (CellComponent component : cellComponent) {
+                    component.resetAccessible();
                 }
             }
         });

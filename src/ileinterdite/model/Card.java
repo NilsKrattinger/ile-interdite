@@ -1,13 +1,10 @@
 package ileinterdite.model;
 
-public abstract class Card{
-	private Grid board;
-	private String name;
+public abstract class Card {
+    private String name;
 
-	public Card(Grid board, String name) {
-        this.board = board;
+    public Card(String name) {
         this.name = name;
-
     }
 
     public String getCardName() {

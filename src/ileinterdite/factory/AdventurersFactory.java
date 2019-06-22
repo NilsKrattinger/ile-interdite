@@ -1,6 +1,7 @@
 package ileinterdite.factory;
 
 import ileinterdite.model.adventurers.*;
+
 import java.util.ArrayList;
 
 public class AdventurersFactory {

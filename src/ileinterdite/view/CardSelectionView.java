@@ -5,6 +5,7 @@ import ileinterdite.util.IObservable;
 import ileinterdite.util.IObserver;
 import ileinterdite.util.Message;
 import ileinterdite.util.Utils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -12,7 +13,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 
 public class CardSelectionView implements IObservable<Message> {
 
@@ -47,13 +47,13 @@ public class CardSelectionView implements IObservable<Message> {
 
     /**
      * draw each card of the array list permit to select one
-     * @param playerCards
+     *
      * @param nbCard nb card to remove
      */
     public void update(ArrayList<Card> playerCards, int nbCard, String action) {
         SwingUtilities.invokeLater(() -> {
             windowLoad();
-    
+
             mainPanel.removeAll();
             mainPanel.revalidate();
         });
@@ -62,7 +62,7 @@ public class CardSelectionView implements IObservable<Message> {
         final int cardsSize = cards.size();
         SwingUtilities.invokeLater(() -> {
             labelPanel = new JPanel();
-            labelPanel.add(new JLabel(textbuilder(nbCard, action), SwingConstants.CENTER));
+            labelPanel.add(new JLabel(textBuilder(nbCard, action), SwingConstants.CENTER));
             choicePanel = new JPanel(new GridLayout(1, cardsSize - 1));
         });
 
@@ -82,27 +82,28 @@ public class CardSelectionView implements IObservable<Message> {
                 final ArrayList<BufferedImage> normalImg = new ArrayList<>(normalIco);
                 final ArrayList<BufferedImage> unselectedImg = new ArrayList<>(unselectedIco);
                 SwingUtilities.invokeLater(() -> {
-                    JLabel cardlLabel = new JLabel("", SwingConstants.CENTER);
-                    cardlLabel.setIcon(icon);
-                    cardlLabel.addMouseListener(new MouseListener() {
+                    JLabel cardLabel = new JLabel("", SwingConstants.CENTER);
+                    cardLabel.setIcon(icon);
+                    cardLabel.addMouseListener(new MouseListener() {
 
                         @Override
                         public void mouseClicked(MouseEvent mouseEvent) {
                             int cardIndex;
 
-                            cardIndex = cardLabel.indexOf(mouseEvent.getComponent());
+                            JLabel component = (JLabel) mouseEvent.getComponent();
+                            cardIndex = CardSelectionView.this.cardLabel.indexOf(component);
                             if (cardIndex != -1) {
-                                JLabel selectedCard = cardLabel.get(cardIndex);
+                                JLabel selectedCard = CardSelectionView.this.cardLabel.get(cardIndex);
 
                                 if (cardSelected.contains(cardIndex)) {
-                                    BufferedImage cardimg = unselectedImg.get(cardIndex);
-                                    selectedCard.setIcon(new ImageIcon(cardimg.getScaledInstance(cardimg.getWidth() / 4, cardimg.getHeight() / 4, Image.SCALE_SMOOTH)));
+                                    BufferedImage cardImg = unselectedImg.get(cardIndex);
+                                    selectedCard.setIcon(new ImageIcon(cardImg.getScaledInstance(cardImg.getWidth() / 4, cardImg.getHeight() / 4, Image.SCALE_SMOOTH)));
 
-                                    cardSelected.remove(cardSelected.indexOf(cardIndex));
+                                    cardSelected.remove((Integer) cardIndex);
                                     selectedCard.repaint();
                                 } else {
-                                    BufferedImage cardimg = normalImg.get(cardIndex);
-                                    selectedCard.setIcon(new ImageIcon(cardimg.getScaledInstance(cardimg.getWidth() / 4, cardimg.getHeight() / 4, Image.SCALE_SMOOTH)));
+                                    BufferedImage cardImg = normalImg.get(cardIndex);
+                                    selectedCard.setIcon(new ImageIcon(cardImg.getScaledInstance(cardImg.getWidth() / 4, cardImg.getHeight() / 4, Image.SCALE_SMOOTH)));
 
                                     cardSelected.add(cardIndex);
                                     selectedCard.repaint();
@@ -138,9 +139,9 @@ public class CardSelectionView implements IObservable<Message> {
 
                     mainPanel.add(labelPanel, BorderLayout.SOUTH);
 
-                    choicePanel.add(cardlLabel);
+                    choicePanel.add(cardLabel);
 
-                    cardLabel.add(cardlLabel);
+                    this.cardLabel.add(cardLabel);
                     mainPanel.add(choicePanel, BorderLayout.CENTER);
 
                     choicePanel.repaint();
@@ -151,7 +152,7 @@ public class CardSelectionView implements IObservable<Message> {
     }
 
     /**
-     * window Initalisation set the look, the size, ect
+     * window Initialisation set the look, the size, ect
      */
     private void initFrame() {
         window = new JFrame();
@@ -164,16 +165,12 @@ public class CardSelectionView implements IObservable<Message> {
 
     }
 
-    private String textbuilder(int nbCards, String action) {
+    private String textBuilder(int nbCards, String action) {
         boolean singular;
-        int nbCardtodeff = 0;
+        singular = nbCards == 1;
 
-        nbCardtodeff = nbCards;
-        singular = nbCardtodeff == 1;
-
-        String string = "";
-        string = "Veuillez choisir ";
-        string = string + nbCardtodeff;
+        String string = "Veuillez choisir ";
+        string = string + nbCards;
 
         if (!singular) {
             string = string + " cartes";
@@ -189,9 +186,6 @@ public class CardSelectionView implements IObservable<Message> {
 
     /**
      * Convert a index ArrayList to String with adventurer separated by /
-     *
-     * @param cardSelected
-     * @return
      */
     private String buildStringMessage(ArrayList<Integer> cardSelected) {
         StringBuilder stringMessage = new StringBuilder();

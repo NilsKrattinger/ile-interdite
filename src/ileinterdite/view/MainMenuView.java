@@ -6,8 +6,6 @@ import ileinterdite.util.StartMessage;
 import ileinterdite.util.Utils;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -18,24 +16,16 @@ public class MainMenuView implements IObservable<StartMessage> {
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
     private final CopyOnWriteArrayList<IObserver<StartMessage>> observers;
 
-    public static final int MIN_PLAYERS = 2;
-    public static final int MAX_PLAYERS = 4;
+    private static final int MIN_PLAYERS = 2;
+    private static final int MAX_PLAYERS = 4;
 
     private JFrame window;
-    private JPanel mainPanel;
-    private JPanel centerPanel;
-    private JPanel upperPanel;
-    private JPanel lowwerPanel;
-    private JPanel nbPlayersPanel;
-    private JPanel optionPanel;
     private JPanel playersNamePanel;
-    private JPanel player;
     private JTextField nbPlayersTextField;
     private ArrayList<JTextField> playerNameFields;
     private JCheckBox demoOption;
     private JCheckBox logOption;
     private JCheckBox randomOption;
-    private JLabel optionLabel;
 
     public MainMenuView() {
         this.observers = new CopyOnWriteArrayList<>();
@@ -45,19 +35,19 @@ public class MainMenuView implements IObservable<StartMessage> {
     private void initView() {
         this.initWindow();
 
-        mainPanel = new JPanel(new BorderLayout());
-        upperPanel = new JPanel();
-        lowwerPanel = new JPanel(new GridBagLayout());
-        centerPanel = new JPanel(new BorderLayout());
-        player = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel upperPanel = new JPanel();
+        JPanel lowerPanel = new JPanel(new GridBagLayout());
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        JPanel player = new JPanel(new BorderLayout());
 
         playersNamePanel = new JPanel();
         playersNamePanel.setLayout(new BoxLayout(playersNamePanel, BoxLayout.Y_AXIS));
         playerNameFields = new ArrayList<>();
 
         ////////////////OPTION PANEL///////////////////
-        optionPanel = new JPanel(new GridLayout(4, 1));
-        optionLabel = new JLabel("Options : ");
+        JPanel optionPanel = new JPanel(new GridLayout(4, 1));
+        JLabel optionLabel = new JLabel("Options : ");
         logOption = new JCheckBox("Afficher les log");
         demoOption = new JCheckBox("Jouer avec la partie de démonstartion");
         randomOption = new JCheckBox("Jouer avec l'aléatoire");
@@ -73,7 +63,7 @@ public class MainMenuView implements IObservable<StartMessage> {
 
         ////////////////Choice Panel///////////////////
 
-        nbPlayersPanel = new JPanel();
+        JPanel nbPlayersPanel = new JPanel();
         nbPlayersTextField = new JTextField("2");
         nbPlayersTextField.setDisabledTextColor(Color.BLACK);
         nbPlayersTextField.setEnabled(false);
@@ -93,11 +83,10 @@ public class MainMenuView implements IObservable<StartMessage> {
         nbPlayersPanel.add(nbPlayersTextField);
         nbPlayersPanel.add(plus);
 
-        player.add(nbPlayersPanel,BorderLayout.NORTH);
-        player.add(playersNamePanel,BorderLayout.CENTER);
+        player.add(nbPlayersPanel, BorderLayout.NORTH);
+        player.add(playersNamePanel, BorderLayout.CENTER);
 
         centerPanel.add(player);
-
 
         //////////////////////////////////////////////
 
@@ -107,7 +96,7 @@ public class MainMenuView implements IObservable<StartMessage> {
         difficulty.setPaintTicks(true);
         difficulty.setSnapToTicks(true);
 
-        Hashtable labelTable = new Hashtable();
+        Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
         labelTable.put(1, new JLabel("Novice"));
         labelTable.put(2, new JLabel("Normal"));
         labelTable.put(3, new JLabel("Elite"));
@@ -117,10 +106,10 @@ public class MainMenuView implements IObservable<StartMessage> {
         difficulty.setPaintLabels(true);
 
         JPanel difficultyPanel = new JPanel(new BorderLayout());
-        JLabel difficultyLabel = new JLabel("Difficulté",SwingConstants.CENTER);
+        JLabel difficultyLabel = new JLabel("Difficulté", SwingConstants.CENTER);
 
 
-        difficultyPanel.add(difficultyLabel,BorderLayout.NORTH);
+        difficultyPanel.add(difficultyLabel, BorderLayout.NORTH);
         difficultyPanel.add(difficulty);
         centerPanel.add(difficultyPanel, BorderLayout.SOUTH);
 
@@ -132,9 +121,11 @@ public class MainMenuView implements IObservable<StartMessage> {
 
             ArrayList<String> playerNames = new ArrayList<>();
             for (JTextField field : playerNameFields) {
-                String playerName = field.getText();
+                String playerName = field.getText().replaceAll("^\\s+$", "");
+                if (playerName.isEmpty()) {
+                    canStart = false;
+                }
                 playerNames.add(playerName);
-
             }
 
             if (canStart) {
@@ -147,7 +138,7 @@ public class MainMenuView implements IObservable<StartMessage> {
                 notifyObservers(m);
                 window.setVisible(false);
             } else {
-                Utils.showInformation("Les noms de joueurs ne peuvent pas être vides !");
+                Utils.showError("Les noms de joueurs ne peuvent pas être vides !");
             }
         });
         GridBagConstraints c = new GridBagConstraints();
@@ -155,18 +146,17 @@ public class MainMenuView implements IObservable<StartMessage> {
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 1;
-        lowwerPanel.add(new JLabel(" "),c);
+        lowerPanel.add(new JLabel(" "), c);
         c.gridy = 1;
-        lowwerPanel.add(validateButton,c);
+        lowerPanel.add(validateButton, c);
 
         //////////////////////////////////////////////
         upperPanel.add(new JLabel("Ile Interdite"));
 
         mainPanel.add(upperPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-        mainPanel.add(lowwerPanel, BorderLayout.SOUTH);
-
-
+        mainPanel.add(lowerPanel, BorderLayout.SOUTH);
+        
         window.add(mainPanel);
 
         updatePlayerNames();

@@ -2,8 +2,8 @@ package ileinterdite.controller;
 
 import ileinterdite.model.Card;
 import ileinterdite.model.Cell;
+import ileinterdite.model.Deck;
 import ileinterdite.model.Hand;
-import ileinterdite.model.*;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Messager;
 import ileinterdite.util.Message;
@@ -36,11 +36,11 @@ public class AdventurerController {
     // Action-specific variables
     private Card selectedCard; //< The card selected by the player during a GIVE_CARD action
     private ArrayList<Adventurer> giveCardList; //< The list of adventurers that the player can send cards to
-    ArrayList<Card> cardsToChoose; //< The list of cards the adventurer can send
 
     /**
      * Creates the controller that handles everything the Adventurers do
-     * @param c A reference to the GameController
+     *
+     * @param c           A reference to the GameController
      * @param adventurers The list of adventurers in the game
      * @param playerNames The names to be given to the adventurers
      */
@@ -110,6 +110,7 @@ public class AdventurerController {
 
     /**
      * Handles a message received from the ActionController
+     *
      * @param m The message sent by the view
      */
     public void handleAction(Message m) {
@@ -131,8 +132,8 @@ public class AdventurerController {
 
     /**
      * Start an action that impacts a cell
+     *
      * @param message The message received from the view
-     * @return
      */
     public Utils.State[][] startCellAction(Message message) {
         return (message.action == Utils.Action.MOVE) ? initMove(currentAdventurer) : initDry(currentAdventurer);
@@ -140,6 +141,7 @@ public class AdventurerController {
 
     /**
      * Start the movement action
+     *
      * @param adventurer The adventurer that will start the movement
      * @return The list of states with either ACCESSIBLE or INACCESSIBLE
      */
@@ -161,10 +163,11 @@ public class AdventurerController {
 
     /**
      * Starts the action to dry a cell
+     *
      * @param adventurer The adventurer that will dry the cell
      * @return The list of states with either ACCESSIBLE or INACCESSIBLE
      */
-    public Utils.State[][] initDry(Adventurer adventurer) {
+    private Utils.State[][] initDry(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
         Utils.State[][] states = adventurer.getDryableCells();
         controller.getGridController().getGridView().showSelectableCells(states);
@@ -175,13 +178,15 @@ public class AdventurerController {
 
     /**
      * Starts the action to give a card
+     *
      * @param adventurer The adventurer that will give one of its cards
      */
-    public void initGiveCard(Adventurer adventurer) {
+    private void initGiveCard(Adventurer adventurer) {
         currentActionAdventurer = adventurer;
         Cell adventurerCell = controller.getGridController().getGrid().getCell(adventurer.getX(), adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
-        cardsToChoose = new ArrayList<>();
+        //< The list of cards the adventurer can send
+        ArrayList<Card> cardsToChoose = new ArrayList<>();
         for (Card card : currentAdventurer.getCards()) {
             if (!card.getCardName().equalsIgnoreCase("Helicoptère") && !card.getCardName().equalsIgnoreCase("Sacs de sable")) {
                 cardsToChoose.add(card);
@@ -193,9 +198,9 @@ public class AdventurerController {
             controller.getActionController().chooseCards(cardsToChoose, 1, "donner");
         } else {
             if (cardsToChoose.size() == 0) {
-                Utils.showInformation("Vous n'avez pas assez de cartes");
+                Utils.showError("Vous n'avez pas assez de cartes");
             } else {
-                Utils.showInformation("Aucun aventurier ne peut recevoir de carte ici");
+                Utils.showError("Aucun aventurier ne peut recevoir de carte ici");
             }
         }
     }
@@ -206,6 +211,7 @@ public class AdventurerController {
 
     /**
      * Move the current adventurer
+     *
      * @param pos The position where the adventurer will move
      */
     public void movement(Tuple<Integer, Integer> pos) {
@@ -214,6 +220,7 @@ public class AdventurerController {
 
     /**
      * Move an adventurer
+     *
      * @param pos The position where the adventurer will move
      * @param adv The adventurer to move
      */
@@ -258,8 +265,6 @@ public class AdventurerController {
 
     /**
      * Ajoute la carte card à la main de aventurier adventurer s'il a moins du nombre max de cartes dans sa main
-     * @param adventurer
-     * @param card
      */
     public void giveCard(Adventurer adventurer, Card card) {
         if (adventurer != null && card != null && adventurer.getNumberOfCards() < Hand.NB_MAX_CARDS) {
@@ -272,15 +277,6 @@ public class AdventurerController {
      * ***************** */
     public ArrayList<Adventurer> getAdventurers() {
         return adventurers;
-    }
-
-    public Adventurer getAdventurerFromName(String adventurerName) {
-        for (Adventurer adventurer : this.getAdventurers()) {
-            if (adventurer.getName().equals(adventurerName)) {
-                return adventurer;
-            }
-        }
-        return null;
     }
 
     public Adventurer getCurrentAdventurer() {

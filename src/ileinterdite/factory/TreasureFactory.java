@@ -1,7 +1,8 @@
 package ileinterdite.factory;
 
-import java.util.ArrayList;
 import ileinterdite.model.Treasure;
+
+import java.util.ArrayList;
 
 public class TreasureFactory {
     public static ArrayList<Treasure> treasureFactory() {

@@ -6,8 +6,8 @@ import ileinterdite.util.Utils.Pawn;
 
 public class Pilot extends Adventurer {
 
-    public static final Pawn PAWN = Pawn.BLUE;
-    public static final String CLASS_NAME = "Pilote";
+    private static final Pawn PAWN = Pawn.BLUE;
+    private static final String CLASS_NAME = "Pilote";
 
     private boolean powerAvailable = true;
 
@@ -15,16 +15,8 @@ public class Pilot extends Adventurer {
         super(0, 0);
     }
 
-    public Pilot(Grid grid) {
-        super(grid);
-    }
-
     public Pilot(int x, int y) {
         super(x, y);
-    }
-
-    public Pilot(Grid grid, int x, int y) {
-        super(grid, x, y);
     }
 
     @Override
@@ -34,8 +26,6 @@ public class Pilot extends Adventurer {
 
     /**
      * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par le pilote
-     *
-     * @param tab
      */
     @Override
     public void cellChoiceMoving(Utils.State[][] tab) {
@@ -57,6 +47,7 @@ public class Pilot extends Adventurer {
 
     /**
      * Si la case n'est pas une case adjacente passe la disponibilité du pouvoir à faux.
+     *
      * @param newX int
      * @param newY int
      */
@@ -72,7 +63,7 @@ public class Pilot extends Adventurer {
     }
 
     /**
-     * rend le pouvoire utilisable
+     * rend le pouvoir utilisable
      */
     @Override
     public void newTurn() {
@@ -91,11 +82,11 @@ public class Pilot extends Adventurer {
         return CLASS_NAME;
     }
 
-    public boolean isPowerAvailable() {
+    private boolean isPowerAvailable() {
         return this.powerAvailable;
     }
 
-    public void setPowerAvailable(boolean powerAvailable) {
+    private void setPowerAvailable(boolean powerAvailable) {
         this.powerAvailable = powerAvailable;
     }
 

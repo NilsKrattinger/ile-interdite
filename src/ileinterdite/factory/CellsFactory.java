@@ -12,16 +12,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CellsFactory {
-    private static BufferedReader reader;
-
-
     public static Cell[] cellsFactory(String filepath, ArrayList<Adventurer> adventurers, Treasure[] treasures) {
         Cell[] cells = new Cell[24];
-        Utils.State cellState = null;
+        Utils.State cellState;
         String[][] cellAttributes = new String[24][5];
 
         try {
-            reader = Utils.bufferInit(filepath);
+            BufferedReader reader = Utils.bufferInit(filepath);
             for (int i = 0; i < 24; i++) {
                 cellAttributes[i][0] = reader.readLine();
                 cellAttributes[i][1] = reader.readLine();

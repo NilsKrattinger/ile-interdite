@@ -2,6 +2,7 @@ package ileinterdite.view;
 
 import ileinterdite.components.TreasureComponent;
 import ileinterdite.model.Treasure;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

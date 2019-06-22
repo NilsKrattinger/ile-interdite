@@ -5,7 +5,6 @@ import ileinterdite.model.Grid;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.IObserver;
 import ileinterdite.util.Message;
-import ileinterdite.util.Parameters;
 import ileinterdite.view.GridView;
 
 import java.util.ArrayList;
@@ -21,8 +20,9 @@ public class GridControllerHelper {
 
     /**
      * Spawn adventurers on the grid
+     *
      * @param adventurers The list of adventurers to spawn
-     * @param grid The grid where they must spawn
+     * @param grid        The grid where they must spawn
      */
     public static void spawnAdventurers(ArrayList<Adventurer> adventurers, Grid grid) {
         for (Adventurer adventurer : adventurers) {
