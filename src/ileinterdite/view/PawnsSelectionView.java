@@ -8,8 +8,6 @@ import ileinterdite.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -76,8 +74,9 @@ public class PawnsSelectionView implements IObservable<Message> {
     }
 
     public void update(ArrayList<Adventurer> availableAdventurers, int nbAdventurers, boolean showValidation, boolean showCancel) {
+        resetIcons();
+        
         SwingUtilities.invokeLater(() -> {
-            windowLoad();
 
             validateButton.setEnabled(showValidation);
             validateButton.setVisible(showValidation);
@@ -85,7 +84,7 @@ public class PawnsSelectionView implements IObservable<Message> {
             cancelButton.setEnabled(showCancel);
             cancelButton.setVisible(showCancel);
         });
-        adventurers = availableAdventurers;
+        adventurers = new ArrayList<>(availableAdventurers);
 
         final int adventurerSize = adventurers.size();
         SwingUtilities.invokeLater(() -> choicePanel = new JPanel(new GridLayout(1, adventurerSize - 1)));
@@ -161,6 +160,7 @@ public class PawnsSelectionView implements IObservable<Message> {
                     mainPanel.add(choicePanel, BorderLayout.CENTER);
 
                     choicePanel.repaint();
+                    mainPanel.revalidate();
                     window.setVisible(true);
                 });
             }
@@ -221,9 +221,11 @@ public class PawnsSelectionView implements IObservable<Message> {
     /**
      * clear window last usage
      */
-    private void  windowLoad(){
+    private void resetIcons(){
         pawnsIco.clear();
         pawnsSelected.clear();
+        normalIco.clear();
+        selectedIco.clear();
     }
 
     @Override
