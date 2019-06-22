@@ -31,6 +31,7 @@ public class InterruptionController {
     private ArrayList<Adventurer> selectableAdventurers; //< The list of adventurers that can be chosen for the helicopter group
     private ArrayList<Adventurer> helicopterList; //< The list of passengers in the helicopter
     private ArrayList<Card> cardsToDiscard; //< The cards chosen to discard
+    private ArrayList<Card> specialCardsToUse; //< The special discarded cards to use
 
 
     public InterruptionController(GameController c) {
@@ -147,17 +148,22 @@ public class InterruptionController {
     }
 
     public void startCardInterruption(Message m) {
-        cellStates = controller.getGridController().getGrid().getStateOfCells();
         currentActionAdventurer = m.adventurer;
 
-        Card c = InterruptionControllerHelper.getTreasureCard(m.adventurer, Integer.valueOf(m.message));
+        Card card = InterruptionControllerHelper.getTreasureCard(m.adventurer, Integer.valueOf(m.message));
+        startCardInterruption(m.adventurer, card);
+    }
+
+    private void startCardInterruption(Adventurer adv, Card c) {
+        cellStates = controller.getGridController().getGrid().getStateOfCells();
+        
         if (c.getCardName().equalsIgnoreCase("Sacs de sable")) {
             startSandCardInterruption();
         } else if (c.getCardName().equalsIgnoreCase("Helicoptère")) {
-            if (InterruptionControllerHelper.checkVictory(controller.getGridController().getGrid(), m.adventurer, controller.getAdventurers())) {
+            if (InterruptionControllerHelper.checkVictory(controller.getGridController().getGrid(), adv, controller.getAdventurers())) {
                 controller.victory();
             } else {
-                startHelicopterCardInterruption(controller.getGridController().getGrid().getCell(m.adventurer.getX(), m.adventurer.getY()).getAdventurers());
+                startHelicopterCardInterruption(controller.getGridController().getGrid().getCell(adv.getX(), adv.getY()).getAdventurers());
             }
         }
 
@@ -194,6 +200,7 @@ public class InterruptionController {
 
             ArrayList<Card> cardsInHand = new ArrayList<>(cardsToDiscard);
             List<String> cardNames = new LinkedList<>(Arrays.asList(ActionControllerHelper.splitSelectionViewNames(m.message)));
+            specialCardsToUse = new ArrayList<>();
 
             for (Card card : cardsInHand) {
                 int index = cardNames.indexOf(card.getCardName());
@@ -201,13 +208,21 @@ public class InterruptionController {
                     cardNames.remove(index);
                     cardsToDiscard.remove(card);
                     discardTreasureCards.addCard(card);
+
+                    if (card.getCardName().equalsIgnoreCase("Helicoptère") || card.getCardName().equalsIgnoreCase("Sacs de sable")) {
+                        if (Utils.askQuestion("Voulez-vous utiliser votre carte " + card.getCardName() + " au lieu de la défausser ?")) {
+                            specialCardsToUse.add(card);
+                        }
+                    }
                 }
             }
 
             currentActionAdventurer.getCards().addAll(cardsToDiscard);
             controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
             controller.getActionController().endInterruption();
-            if (isTurnEnd) {
+            if (!specialCardsToUse.isEmpty()) {
+                startCardInterruption(currentActionAdventurer, specialCardsToUse.remove(0));
+            } else if (isTurnEnd) {
                 controller.drawFloodCards();
             }
         }
@@ -271,6 +286,12 @@ public class InterruptionController {
 
                 controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
                 controller.getActionController().endInterruption();
+
+                if (!specialCardsToUse.isEmpty()) {
+                    startCardInterruption(currentActionAdventurer, specialCardsToUse.remove(0));
+                } else if (isTurnEnd) {
+                    controller.drawFloodCards();
+                }
             }
         }
     }

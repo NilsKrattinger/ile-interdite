@@ -124,6 +124,19 @@ public class Utils {
     }
 
     /**
+     * Permet de poser une question à laquelle l'utilisateur répond par oui ou non
+     * @param question texte à afficher
+     * @return true si l'utilisateur répond oui, false sinon
+     */
+    public static Boolean askQuestion(String question) {
+        if (Parameters.LOGS) { System.out.println("Divers.askQuestion(" + question + ")"); }
+        int answer = JOptionPane.showConfirmDialog (null, question, "", JOptionPane.YES_NO_OPTION) ;
+        if (Parameters.LOGS) { System.out.println("\tréponse : " + (answer == JOptionPane.YES_OPTION ? "Oui" : "Non")); }
+        return answer == JOptionPane.YES_OPTION;
+    }
+
+
+    /**
      * Permet d'initialiser un buffer avec le fichier passé et parametres et retourne un buffer
      *
      * @throws FileNotFoundException Si le fichier n'existe pas
