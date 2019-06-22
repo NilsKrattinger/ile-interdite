@@ -8,17 +8,20 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class GameView {
-    private final JFrame window;
+    private JFrame window;
 
-    private final JPanel bottomPanel;
-    private final JPanel advViewPanel;
+    private JPanel bottomPanel;
+    private JPanel advViewPanel;
 
-    private final JPanel gridPanel;
-    private final JPanel handsPanel;
-    private final JPanel waterScalePanel;
+    private JPanel gridPanel;
+    private JPanel handsPanel;
+    private JPanel waterScalePanel;
 
     public GameView(int width, int height) {
+        SwingUtilities.invokeLater(() -> initView(width, height));
+    }
 
+    private void initView(int width, int height) {
         this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(width, height);
@@ -64,50 +67,65 @@ public class GameView {
 
         handsPanel = new JPanel();
         window.add(handsPanel, BorderLayout.EAST);
-        
+
         waterScalePanel = new JPanel(new GridLayout(1, 1));
         window.add(waterScalePanel, BorderLayout.WEST);
     }
 
     public void setVisible() {
-        window.setVisible(true);
+        SwingUtilities.invokeLater(() -> window.setVisible(true));
     }
 
     public void setAdventurerView(AdventurerView view) {
-        advViewPanel.removeAll();
-        advViewPanel.add(view.getMainPanel());
-        advViewPanel.repaint();
+        SwingUtilities.invokeLater(() -> {
+            advViewPanel.removeAll();
+            advViewPanel.add(view.getMainPanel());
+            advViewPanel.revalidate();
+        });
     }
 
     public void setGridView(GridView view) {
-        gridPanel.add(view.getMainPanel());
+        SwingUtilities.invokeLater(() -> {
+            gridPanel.add(view.getMainPanel());
+            gridPanel.revalidate();
+        });
     }
 
     public void setTreasureView(TreasureView treasureView) {
-        bottomPanel.add(treasureView.getMainPanel());
+        SwingUtilities.invokeLater(() -> {
+            bottomPanel.add(treasureView.getMainPanel());
+            bottomPanel.revalidate();
+        });
     }
     
     public void setHandViews(HashMap<Adventurer, HandView> handViews) {
-        handsPanel.setLayout(new GridLayout(handViews.size(), 1));
-        for (Adventurer adv : handViews.keySet()) {
-            JPanel tempPanel = new JPanel();
-            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
-            tempPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        SwingUtilities.invokeLater(() -> {
+            handsPanel.setLayout(new GridLayout(handViews.size(), 1));
+            for (Adventurer adv : handViews.keySet()) {
+                JPanel tempPanel = new JPanel();
+                tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
+                tempPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-            tempPanel.add(new JLabel(adv.getName() + " (" + adv.getClassName() + ")"));
-            tempPanel.add(handViews.get(adv).getMinimizedPanel());
-            handsPanel.add(tempPanel);
-        }
+                tempPanel.add(new JLabel(adv.getName() + " (" + adv.getClassName() + ")"));
+                tempPanel.add(handViews.get(adv).getMinimizedPanel());
+                handsPanel.add(tempPanel);
+            }
+        });
     }
     
     public void setWaterScaleView(WaterScaleView view) {
-        waterScalePanel.add(view.getMainPanel(), BorderLayout.WEST);
+        SwingUtilities.invokeLater(() -> {
+            waterScalePanel.add(view.getMainPanel(), BorderLayout.WEST);
+            waterScalePanel.revalidate();
+        });
     }
     
     public void showEndGame(JPanel panel) {
-        window.getContentPane().removeAll();
-        window.getContentPane().add(panel);
-        window.repaint();
-        panel.repaint();
+        SwingUtilities.invokeLater(() -> {
+            window.getContentPane().removeAll();
+            window.getContentPane().add(panel);
+            window.revalidate();
+            panel.repaint();
+        });
     }
 }
