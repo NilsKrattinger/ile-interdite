@@ -219,6 +219,7 @@ public class InterruptionController {
 
             currentActionAdventurer.getCards().addAll(cardsToDiscard);
             controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
+            controller.getDeckController().updatePiles();
             controller.getActionController().endInterruption();
             if (!specialCardsToUse.isEmpty()) {
                 startCardInterruption(currentActionAdventurer, specialCardsToUse.remove(0));
@@ -285,6 +286,7 @@ public class InterruptionController {
                 }
 
                 controller.getAdventurerController().getHandViewFor(currentActionAdventurer).update(currentActionAdventurer);
+                controller.getDeckController().updatePiles();
                 controller.getActionController().endInterruption();
 
                 if (!specialCardsToUse.isEmpty()) {
