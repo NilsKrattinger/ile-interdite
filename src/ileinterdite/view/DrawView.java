@@ -32,7 +32,7 @@ public class DrawView implements ActionListener {
 
             remakeWindow();
 
-            updater = new Timer(1500, this);
+            updater = new Timer(900, this);
         });
     }
 
