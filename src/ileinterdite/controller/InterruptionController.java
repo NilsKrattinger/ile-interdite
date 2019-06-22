@@ -38,6 +38,11 @@ public class InterruptionController {
     }
 
     public void handleMessage(Message m) {
+        if (currentAction == null) {
+            controller.getActionController().endInterruption();
+            return;
+        }
+
         switch (currentAction) {
             case DISCARD:
                 discard(m);
