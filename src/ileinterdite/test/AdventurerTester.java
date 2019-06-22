@@ -51,7 +51,7 @@ public class AdventurerTester {
     }
 
     /**
-     * Create a new grid with an Explorer, a Pilot, a Diven and an Engineer at START_POS coordinated.
+     * Create a new grid with an Explorer, a Pilot, a Diver and an Engineer at START_POS coordinated.
      * This may be used to get quickly started for a test.
      * @param adventurers An empty ArrayList that will be filled with the adventurers created.
      * @return Grid
@@ -121,7 +121,7 @@ public class AdventurerTester {
 
     @Test
     public void testCellChoiceMoving() {
-        /**
+        /*
          * 0 => Explorer
          * 1 => Pilot
          * 2 => Diver
@@ -138,7 +138,7 @@ public class AdventurerTester {
 
     @Test
     public void testMove() {
-        /**
+        /*
          * 0 => Explorer
          * 1 => Pilot
          * 2 => Diver

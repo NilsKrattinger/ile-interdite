@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class MainMenuController implements IObserver<StartMessage> {
 
     private ArrayList<String> playerName = new ArrayList<>();
-    private Boolean playerSlection = false;
+    private boolean playerSelection = false;
     private int difficulty = 0;
 
     public ArrayList<String> getPlayersName() {
@@ -21,7 +21,7 @@ public class MainMenuController implements IObserver<StartMessage> {
 
     @Override
     public void update(IObservable<StartMessage> o, StartMessage message) {
-        if (!playerSlection) {
+        if (!playerSelection) {
             playerName = message.playerName;
             Parameters.LOGS = message.logOption;
             Parameters.DEMOMAP = message.demoOption;
@@ -31,13 +31,13 @@ public class MainMenuController implements IObserver<StartMessage> {
             BoardFactory.initBoardFactory();
             if (!Parameters.RANDOM) {
                 new PlayerSelectionView(BoardFactory.getAdventurers(), playerName.size()).addObserver(this);
-                playerSlection = true;
+                playerSelection = true;
             } else {
-                GameController c = new GameController(this, difficulty);
+                new GameController(this, difficulty);
             }
         } else {
             BoardFactory.setAdventurers(message.adventurers);
-            GameController c = new GameController(this, difficulty);
+            new GameController(this, difficulty);
         }
     }
 }

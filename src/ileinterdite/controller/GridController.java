@@ -62,16 +62,15 @@ public class GridController {
      * ACTIONS ON GRID *
      * *************** */
 
-    public void dry(Tuple<Integer, Integer> pos){
+    public void dry(Tuple<Integer, Integer> pos) {
         grid.dry(pos.x, pos.y);
         gridView.updateCell(pos.x, pos.y, Utils.State.NORMAL);
     }
 
     /**
-     *  Vérifie que l'aventurier peut récupérer un trésor, puis si c'est le cas, retire le trésor de la liste des trésors
-     *  non récupérés, puis défausse les cartes utilisées par l'aventurier pour récupérer le trésor dans la défausse des
-     *  cartes trésors
-     * @param adventurer
+     * Vérifie que l'aventurier peut récupérer un trésor, puis si c'est le cas, retire le trésor de la liste des trésors
+     * non récupérés, puis défausse les cartes utilisées par l'aventurier pour récupérer le trésor dans la défausse des
+     * cartes trésors
      */
     public void collectTreasure(Adventurer adventurer) {
         Treasure collectibleTreasure = adventurer.getAvailableTreasure();
@@ -96,16 +95,16 @@ public class GridController {
             controller.getAdventurerController().getHandViewFor(adventurer).update(adventurer);
             treasureView.collectTreasure(treasure);
 
-            String congratMessage = "Félicitations ! Vous avez collecté " + treasure.getName() + ". ";
+            String congratsMessage = "Félicitations ! Vous avez collecté " + treasure.getName() + ". ";
             int nbTreasuresRemaining = grid.getTreasures().size();
             if (nbTreasuresRemaining > 0) {
-                congratMessage += "Plus que " + nbTreasuresRemaining + ((nbTreasuresRemaining == 1) ? " trésor" : " trésors") + " à collecter !" ;
+                congratsMessage += "Plus que " + nbTreasuresRemaining + ((nbTreasuresRemaining == 1) ? " trésor" : " trésors") + " à collecter !";
             } else {
-                congratMessage += "Vous avez collecté tous les trésors, rendez-vous sur l'héliport avant qu'il ne soit trop tard !";
+                congratsMessage += "Vous avez collecté tous les trésors, rendez-vous sur l'héliport avant qu'il ne soit trop tard !";
             }
-            Utils.showInformation(congratMessage);
+            Utils.showInformation(congratsMessage);
         } else {
-            Utils.showInformation("Vous ne pouvez pas récupérer de trésor actuellement");
+            Utils.showError("Vous ne pouvez pas récupérer de trésor actuellement");
         }
     }
 

@@ -1,6 +1,5 @@
 package ileinterdite.view;
 
-import ileinterdite.model.Hand;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.util.IObservable;
 import ileinterdite.util.IObserver;
@@ -10,9 +9,7 @@ import ileinterdite.util.Utils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 
 public class AdventurerView implements IObservable<Message> {
     // We use CopyOnWriteArrayList to avoid ConcurrentModificationException if the observer unregisters while notifications are being sent
@@ -20,7 +17,6 @@ public class AdventurerView implements IObservable<Message> {
 
     private JPanel mainPanel;
     private JLabel nbActionsLabel;
-    private JPanel adventurerPanel;
 
     public AdventurerView(Adventurer ad, HandView handView) {
         observers = new CopyOnWriteArrayList<>();
@@ -36,7 +32,7 @@ public class AdventurerView implements IObservable<Message> {
             }
         };
 
-        adventurerPanel = new JPanel(new BorderLayout());
+        JPanel adventurerPanel = new JPanel(new BorderLayout());
         adventurerPanel.setLayout(new BoxLayout(adventurerPanel, BoxLayout.X_AXIS));
 
         JPanel handMain = handView.getMainPanel();
@@ -44,15 +40,15 @@ public class AdventurerView implements IObservable<Message> {
         adventurerPanel.add(handMain);
 
 
-        mainPanel.add(handMain,BorderLayout.WEST);
+        mainPanel.add(handMain, BorderLayout.WEST);
         mainPanel.add(adventurerPanel, BorderLayout.CENTER);
-        mainPanel.add(new JLabel(""),BorderLayout.EAST);
+        mainPanel.add(new JLabel(""), BorderLayout.EAST);
 
         JPanel actionButtonPanel = new JPanel(new GridLayout(2, 2));
-        JButton moveButton = new JButton("Bouger") ;
+        JButton moveButton = new JButton("Bouger");
         moveButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.MOVE)));
 
-        JButton dryButton = new JButton( "Assécher");
+        JButton dryButton = new JButton("Assécher");
         dryButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.DRY)));
 
         JButton giveCardButton = new JButton("Donner carte");

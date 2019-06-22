@@ -17,7 +17,7 @@ public class SpawnCell extends Cell {
 
     @Override
     public void spawnAdventurer(int x, int y) {
-        super.spawnAdventurer(x,y);
+        super.spawnAdventurer(x, y);
         this.adventurerSpawn.move(x, y);
     }
 }

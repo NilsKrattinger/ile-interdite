@@ -3,7 +3,9 @@ package ileinterdite.model;
 import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Stack;
 
 public class Deck {
 
@@ -20,58 +22,46 @@ public class Deck {
         this.discardPile = discard;
     }
 
-	public Utils.CardType getCardType() {
-		return cardType;
-	}
+    public Utils.CardType getCardType() {
+        return cardType;
+    }
 
-	public Stack<Card> getCards() {
-		return cards;
-	}
+    public Stack<Card> getCards() {
+        return cards;
+    }
 
-	/**
-	 * permet de picher un cetain nombre de cartes
-	 * @param nbCards nb de cartes a piocher
-	 * @return
-	 */
-	public ArrayList<Card> drawCards (int nbCards){
-		ArrayList<Card> drawedCards = new ArrayList<>();
+    /**
+     * permet de picher un cetain nombre de cartes
+     *
+     * @param nbCards nb de cartes a piocher
+     */
+    public ArrayList<Card> drawCards(int nbCards) {
+        ArrayList<Card> drewCards = new ArrayList<>();
 
-		for (int i = 0; i < nbCards; i++) {
+        for (int i = 0; i < nbCards; i++) {
             if (cards.size() == 0) {
                 discardPile.shuffle();
                 addAtTheTop(discardPile.getCards());
                 discardPile.clearPile();
             }
 
-			drawedCards.add(this.cards.pop());
-		}
-		return drawedCards;
-	}
+            drewCards.add(this.cards.pop());
+        }
+        return drewCards;
+    }
 
-	/**
-	 * ajoute des cartes en bas de la pile sans changer le haut
-	 * @param cards
-	 */
-	public void addAtTheBottom(ArrayList<Card> cards){
-		Stack<Card> decKTmp = new Stack<>();
-		decKTmp.addAll(cards);
-		decKTmp.addAll(this.cards);
-		this.cards = decKTmp;
-	}
+    /**
+     * Ajoute toutes les carte en haut de la pioche
+     */
+    public void addAtTheTop(ArrayList<Card> newCards) {
+        cards.addAll(newCards);
 
-	/**
-	 * Ajoute toutes les carte en haut de la pioche
-	 * @param newCards
-	 */
-	public void addAtTheTop(ArrayList<Card> newCards){
-		cards.addAll(newCards);
+    }
 
-	}
-
-	public void shuffle(){
-	    if (Parameters.RANDOM) {
+    public void shuffle() {
+        if (Parameters.RANDOM) {
             Collections.shuffle(cards);
         }
-	}
+    }
 
 }

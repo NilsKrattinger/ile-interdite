@@ -1,6 +1,8 @@
 package ileinterdite.controller;
 
-import ileinterdite.model.*;
+import ileinterdite.model.Card;
+import ileinterdite.model.DiscardPile;
+import ileinterdite.model.Hand;
 import ileinterdite.model.adventurers.Adventurer;
 import ileinterdite.model.adventurers.Navigator;
 import ileinterdite.util.Message;
@@ -51,7 +53,7 @@ public class InterruptionController {
                 rescue(m, ActionControllerHelper.getPositionFromMessage(m.message));
                 break;
             case NAVIGATOR_CHOICE:
-                if(m.action != Utils.Action.CANCEL_ACTION) {
+                if (m.action != Utils.Action.CANCEL_ACTION) {
                     currentAction = Utils.Action.MOVE;
                     String[] adventurerClass = ActionControllerHelper.splitSelectionViewNames(m.message);
                     currentActionAdventurer = findAdventurerByClassName(adventurerClass[0]);
@@ -81,7 +83,8 @@ public class InterruptionController {
             case HELICOPTER_CARD_ADVENTURER_CHOICE:
                 selectHelicopterPassengers(m);
                 break;
-            case SAND_CARD_ACTION: case HELICOPTER_CARD_CELL_CHOICE:
+            case SAND_CARD_ACTION:
+            case HELICOPTER_CARD_CELL_CHOICE:
                 validateTreasureCardCell(m);
                 break;
         }
@@ -119,18 +122,14 @@ public class InterruptionController {
         currentAction = Utils.Action.RESCUE;
         cellStates = currentActionAdventurer.getRescueCells();
         controller.getActionController().startInterruption();
-        if(InterruptionControllerHelper.isSavePossible(cellStates)) {
-            Utils.showInformation("ATTENTION l'aventurier " + currentActionAdventurer.getName() + " boit la tasse, Choisissez vite une case jusqu'à laquelle il va nager !");
+        if (InterruptionControllerHelper.isSavePossible(cellStates)) {
+            Utils.showWarning("ATTENTION l'aventurier " + currentActionAdventurer.getName() + " boit la tasse, Choisissez vite une case jusqu'à laquelle il va nager !");
             controller.getGridController().getGridView().showSelectableCells(cellStates);
         } else {
             controller.defeat(false, false, false, true);
         }
     }
 
-    /**
-     *
-     * @param adventurer
-     */
     public void initDiscard(Adventurer adventurer, ArrayList<Card> cards, boolean endTurn) {
         this.isTurnEnd = endTurn;
         currentAction = Utils.Action.DISCARD;
@@ -189,7 +188,7 @@ public class InterruptionController {
     /**
      *
      */
-    public void discard(Message m) {
+    private void discard(Message m) {
         if (m.action == Utils.Action.CARD_CHOICE) {
             DiscardPile discardTreasureCards = controller.getDeckController().getDiscardPile(Utils.CardType.TREASURE);
 
@@ -214,7 +213,7 @@ public class InterruptionController {
         }
     }
 
-    public void rescue(Message m, Tuple<Integer, Integer> pos) {
+    private void rescue(Message m, Tuple<Integer, Integer> pos) {
         if (m.action == Utils.Action.VALIDATE_ACTION) {
             if (ActionControllerHelper.checkPosition(pos, cellStates)) {
                 controller.getAdventurerController().movement(pos, currentActionAdventurer);
@@ -237,7 +236,7 @@ public class InterruptionController {
                 for (String name : names) {
                     helicopterList.add(findAdventurerByClassName(name));
                 }
-    
+
                 showHelicopterCells();
             } else {
                 controller.getActionController().chooseAdventurers(selectableAdventurers, selectableAdventurers.size(), true, false);

@@ -8,22 +8,22 @@ import java.util.ArrayList;
 
 public abstract class Adventurer {
 
-	Grid grid;
-	private Hand hand;
-	String name;
-	private int x;
-	private int y;
+    private Grid grid;
+    private Hand hand;
+    private String name;
+    private int x;
+    private int y;
 
-	public Adventurer() {
-	    this(0, 0);
+    public Adventurer() {
+        this(0, 0);
     }
 
     public Adventurer(Grid grid) {
         this(grid, 0, 0);
     }
 
-	public Adventurer(int x, int y) {
-	    this(null, x, y);
+    public Adventurer(int x, int y) {
+        this(null, x, y);
     }
 
     public Adventurer(Grid grid, int x, int y) {
@@ -35,23 +35,24 @@ public abstract class Adventurer {
 
     /**
      * Gets the pawn of the current adventurer, for the bg color and text color
-     * @return
      */
     public abstract Pawn getPawn();
 
-	/**
-	 * Methode qui retourne un tableau avec les case  accessible par l'aventurier
-	 * @return State[][] avec une marque accesible ou non
-	 */
-	public Utils.State[][] getAccessibleCells() {
+    /**
+     * Methode qui retourne un tableau avec les case  accessible par l'aventurier
+     *
+     * @return State[][] avec une marque accesible ou non
+     */
+    public Utils.State[][] getAccessibleCells() {
         Utils.State[][] cellsState = grid.getStateOfCells();
-		cellChoiceMoving(cellsState);
+        cellChoiceMoving(cellsState);
 
-		return cellsState;
-	}
+        return cellsState;
+    }
 
     /**
      * Methode qui retourne un tableau avec les case  accessible par l'aventurier déplacer par le navigateur
+     *
      * @return State[][] avec une marque accesible ou non
      */
     public Utils.State[][] getPowerNavigatorAccessibleCells() {
@@ -69,42 +70,43 @@ public abstract class Adventurer {
         return cellsState;
     }
 
-	/**
-	 * Methode qui retourne un tableau avec les case assechables par l'aventurier
-	 * @return State[][] avec une marque assechable ou non
-	 */
-	public Utils.State[][] getDryableCells() {
+    /**
+     * Methode qui retourne un tableau avec les case assechables par l'aventurier
+     *
+     * @return State[][] avec une marque assechable ou non
+     */
+    public Utils.State[][] getDryableCells() {
         Utils.State[][] cellsState = grid.getStateOfCells();
-		cellChoiceDrying(cellsState);
+        cellChoiceDrying(cellsState);
 
-		return cellsState;
-	}
+        return cellsState;
+    }
 
-	/**
-	 * Deplace l'aventurier sur la nouvelle case et le supprime de son ancien emplacement
-	 * @param newX int
-	 * @param newY int
-	 */
-	public void move(int newX, int newY) {
-		int currX = this.getX();
-		int currY = this.getY();
-		grid.move(newX,newY,currX,currY,this);
-		this.x = newX;
-		this.y = newY;
-	}
+    /**
+     * Deplace l'aventurier sur la nouvelle case et le supprime de son ancien emplacement
+     *
+     * @param newX int
+     * @param newY int
+     */
+    public void move(int newX, int newY) {
+        int currX = this.getX();
+        int currY = this.getY();
+        grid.move(newX, newY, currX, currY, this);
+        this.x = newX;
+        this.y = newY;
+    }
 
     /**
      * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est accessible ou non par l'aventurier
-     * @param tab
      */
     public void cellChoiceMoving(Utils.State[][] tab) {
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
                 Utils.State state = tab[j][i];
                 if ((state == Utils.State.FLOODED || state == Utils.State.NORMAL)
-                        && (this.getY() == j && (this.getX() == i-1
-                        || this.getX() == i+1) || this.getX() == i
-                        && (this.getY() == j-1 || this.getY() == j+1))) {
+                        && (this.getY() == j && (this.getX() == i - 1
+                        || this.getX() == i + 1) || this.getX() == i
+                        && (this.getY() == j - 1 || this.getY() == j + 1))) {
                     tab[j][i] = Utils.State.ACCESSIBLE;
                 } else {
                     tab[j][i] = Utils.State.INACCESSIBLE;
@@ -116,13 +118,12 @@ public abstract class Adventurer {
     /**
      * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile,
      * si elle est accessible ou non par l'aventurier déplacé par le Navigateur
-     * @param tab
      */
-    public void cellPowerNavigatorChoiceMoving(Utils.State[][] tab, int x, int y, int distance) {
+    private void cellPowerNavigatorChoiceMoving(Utils.State[][] tab, int x, int y, int distance) {
         if (x < 0 || y < 0 || x >= Grid.WIDTH || y >= Grid.HEIGHT) {
             return;
         }
-        
+
         Utils.State currState = tab[y][x];
         if (currState == Utils.State.NORMAL || currState == Utils.State.FLOODED) {
             if ((x != this.getX() || y != this.getY())) {
@@ -143,15 +144,14 @@ public abstract class Adventurer {
 
     /**
      * transforme le tableau d'état des tuiles donné en paramètre en un tableau qui indique pour chaque tuile, si elle est assechable ou non par l'aventurier
-     * @param tab
      */
     public void cellChoiceDrying(Utils.State[][] tab) {
         for (int j = 0; j < Grid.HEIGHT; j++) {
             for (int i = 0; i < Grid.WIDTH; i++) {
                 Utils.State state = tab[j][i];
                 if ((state == Utils.State.FLOODED)
-                        && ((this.getY() == j && (this.getX() >= i-1 && this.getX() <= i+1))
-                        || (this.getX() == i && (this.getY() >= j-1 && this.getY() <= j+1)))) {
+                        && ((this.getY() == j && (this.getX() >= i - 1 && this.getX() <= i + 1))
+                        || (this.getX() == i && (this.getY() >= j - 1 && this.getY() <= j + 1)))) {
                     tab[j][i] = Utils.State.ACCESSIBLE;
                 } else {
                     tab[j][i] = Utils.State.INACCESSIBLE;
@@ -160,7 +160,7 @@ public abstract class Adventurer {
         }
     }
 
-    public void newTurn(){
+    public void newTurn() {
 
     }
 
@@ -170,6 +170,10 @@ public abstract class Adventurer {
 
     public int getY() {
         return y;
+    }
+
+    protected Grid getGrid() {
+        return grid;
     }
 
     public void setGrid(Grid grid) {
@@ -191,10 +195,8 @@ public abstract class Adventurer {
         return hand;
     }
 
-    public ArrayList<Card> getCards() { return this.getHand().getCards(); }
-
-    public void setHand(Hand hand) {
-        this.hand = hand;
+    public ArrayList<Card> getCards() {
+        return this.getHand().getCards();
     }
 
     public int getNumberOfCards() {
@@ -206,8 +208,9 @@ public abstract class Adventurer {
     }
 
     /**
-     *  Vérifie que l'aventurier dispose d'au moins 4 cartes du même du trésor et qu'il est bien sur la tuile associée
-     *  au trésor dont il a les 4 cartes
+     * Vérifie que l'aventurier dispose d'au moins 4 cartes du même du trésor et qu'il est bien sur la tuile associée
+     * au trésor dont il a les 4 cartes
+     *
      * @return le trésor qu'il peut récupérer ou null s'il ne peut en récupérer aucun (moins de 4 cartes, pas 4 cartes
      * du même trésor ou pas sur la tuile associée à ses 4 cartes
      */
@@ -223,8 +226,8 @@ public abstract class Adventurer {
                         nbTreasureCards++;
                     }
                 }
-                if (nbTreasureCards >= 4 && grid.getCell(this.getX(),this.getY()) instanceof TreasureCell) {
-                    TreasureCell adventurerCell = (TreasureCell) this.grid.getCell(this.getX(),this.getY());
+                if (nbTreasureCards >= 4 && grid.getCell(this.getX(), this.getY()) instanceof TreasureCell) {
+                    TreasureCell adventurerCell = (TreasureCell) this.grid.getCell(this.getX(), this.getY());
                     if (adventurerCell.getTreasure().getName().equalsIgnoreCase(treasureName)) {
                         return grid.getTreasure(treasureName);
                     }

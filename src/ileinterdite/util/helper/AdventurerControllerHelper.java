@@ -17,8 +17,9 @@ public class AdventurerControllerHelper {
 
     /**
      * Get the list of adventurers with their name for the game
+     *
      * @param players The list of generated adventurers
-     * @param names The names of the players
+     * @param names   The names of the players
      * @return An ArrayList containing the correct number of adventurers with the right names
      */
     public static ArrayList<Adventurer> getPlayers(ArrayList<Adventurer> players, ArrayList<String> names) {
@@ -32,8 +33,9 @@ public class AdventurerControllerHelper {
 
     /**
      * Shuffle the players and remove the unnecessary players
+     *
      * @param adventurers The list of adventurers to be shuffled
-     * @param nbPlayers The number of players in the game
+     * @param nbPlayers   The number of players in the game
      */
     private static void randomPlayer(ArrayList<Adventurer> adventurers, int nbPlayers) {
         if (Parameters.RANDOM) {
@@ -46,8 +48,9 @@ public class AdventurerControllerHelper {
 
     /**
      * Associate all adventurers with their corresponding view
+     *
      * @param adventurers The list of adventurers in the game
-     * @param observer The observer that will listen to all interactions
+     * @param observer    The observer that will listen to all interactions
      */
     public static void createViews(ArrayList<Adventurer> adventurers, IObserver<Message> observer) {
         adventurerViews = new HashMap<>();
@@ -66,6 +69,7 @@ public class AdventurerControllerHelper {
 
     /**
      * Get the link between adventurers and their view
+     *
      * @return A Hashmap linking adventurers with their views, with the observer listening to them
      */
     public static HashMap<Adventurer, AdventurerView> getAdventurerViews() {
@@ -74,6 +78,7 @@ public class AdventurerControllerHelper {
 
     /**
      * Get the link between adventurers and their hand view
+     *
      * @return A Hashmap linking adventurers with their views, with the observer listening to them
      */
     public static HashMap<Adventurer, HandView> getAdventurerHandViews() {

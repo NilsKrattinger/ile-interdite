@@ -12,21 +12,18 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class BoardFactory {
-    private static final int[] EMPTYCELLINDEX = {0, 1, 4, 5, 6, 11, 24, 29, 30, 31, 34, 35};
-    private static final String DEFAULTCELLFILE = "res/cell.txt";
+    private static final int[] EMPTY_CELL_INDEX = {0, 1, 4, 5, 6, 11, 24, 29, 30, 31, 34, 35};
+    private static final String DEFAULT_CELL_FILE = "res/cell.txt";
     private static ArrayList<Adventurer> adventurers;
     private static Cell[][] cells;
     private static ArrayList<Treasure> treasures;
 
     /**
-     * initialise le plateau de jeu et créée :
-     * les tuilles
+     * initialise le plateau de jeu et crée :
+     * les tuiles
      * les aventurier
-     *
-     * @return
      */
     public static void initBoardFactory() {
-        ArrayList<Cell> boardCellList = new ArrayList<>();
         Cell[] builtCells;
 
         Cell emptyCell = new Cell();
@@ -36,19 +33,19 @@ public class BoardFactory {
 
         String filepath;
         if (!Parameters.DEMOMAP) {
-            filepath = DEFAULTCELLFILE;
+            filepath = DEFAULT_CELL_FILE;
         } else {
             filepath = "res/DEMOMAP.txt";
         }
 
-        builtCells = CellsFactory.cellsFactory(filepath,adventurers,treasures.toArray(new Treasure[treasures.size()]));
-        boardCellList.addAll(Arrays.asList(builtCells));
+        builtCells = CellsFactory.cellsFactory(filepath, adventurers, treasures.toArray(new Treasure[0]));
+        ArrayList<Cell> boardCellList = new ArrayList<>(Arrays.asList(builtCells));
 
         if (!Parameters.DEMOMAP) {
             Collections.shuffle(boardCellList);
         }
         // On place les cases "vide"
-        for (int i : EMPTYCELLINDEX) {
+        for (int i : EMPTY_CELL_INDEX) {
             boardCellList.add(i, emptyCell);
         }
 

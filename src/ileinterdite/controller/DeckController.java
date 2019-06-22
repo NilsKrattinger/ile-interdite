@@ -29,8 +29,6 @@ public class DeckController {
 
     /**
      * Create all of the deck and cards
-     *
-     * @param grid
      */
     private void initDecks(Grid grid) {
         Deck deckTmp;
@@ -55,12 +53,12 @@ public class DeckController {
     }
 
     public void drawTreasureCards(int nbCard, Adventurer adv) {
-        ArrayList<Card> drawedCards = this.decks.get(Utils.CardType.TREASURE).drawCards(nbCard);
+        ArrayList<Card> drewCards = this.decks.get(Utils.CardType.TREASURE).drawCards(nbCard);
         ArrayList<Card> tempAdventurerHandCards = new ArrayList<>(adv.getCards());
         adv.getHand().clearHand();
-        for (Card drawedCard : drawedCards) {
-            if (!drawedCard.getCardName().equalsIgnoreCase("Montee des eaux")) {
-                tempAdventurerHandCards.add(drawedCard);
+        for (Card drewCard : drewCards) {
+            if (!drewCard.getCardName().equalsIgnoreCase("Montee des eaux")) {
+                tempAdventurerHandCards.add(drewCard);
             } else {
                 controller.getWaterScaleController().increaseWaterScale();
                 if (!discardPiles.get(Utils.CardType.FLOOD).getCards().isEmpty()) {
@@ -69,7 +67,7 @@ public class DeckController {
                     this.decks.get(Utils.CardType.FLOOD).addAtTheTop(discardFloodCards);
                     this.discardPiles.get(Utils.CardType.FLOOD).clearPile();
                 }
-                this.discardPiles.get(Utils.CardType.TREASURE).addCard(drawedCard);
+                this.discardPiles.get(Utils.CardType.TREASURE).addCard(drewCard);
             }
         }
         if (tempAdventurerHandCards.size() > Hand.NB_MAX_CARDS) {
@@ -80,18 +78,17 @@ public class DeckController {
             }
         }
 
-        drawView.setCardsToShow(drawedCards);
+        drawView.setCardsToShow(drewCards);
     }
 
     /**
      * Change state of card et put in the discard pile if needed.
-     * @param nbCard
      */
     public void drawFloodCards(int nbCard) {
-        ArrayList<Card> drawedCard = decks.get(Utils.CardType.FLOOD).drawCards(nbCard);
+        ArrayList<Card> drewCards = decks.get(Utils.CardType.FLOOD).drawCards(nbCard);
         ArrayList<Adventurer> rescueList = new ArrayList<>();
         Utils.State state;
-        for (Card card : drawedCard) {
+        for (Card card : drewCards) {
             FloodCard floodCard;
             floodCard = (FloodCard) card;
             Cell linkedCell = floodCard.getLinkedCell();
@@ -106,7 +103,7 @@ public class DeckController {
                     rescueList.addAll(floodCard.getLinkedCell().getAdventurers());
                     break;
                 case SUNKEN:
-                    if (Parameters.LOGS){
+                    if (Parameters.LOGS) {
                         System.out.println("Carte inondation : " + card.getCardName() + " supprimée : Tuile déjà coulée");
                     }
                     break;
@@ -119,7 +116,7 @@ public class DeckController {
             }
             controller.getGridController().getGridView().updateCell(linkedCell.getName(), linkedCell.getState());
         }
-        drawView.setCardsToShow(drawedCard);
+        drawView.setCardsToShow(drewCards);
     }
 
     public Deck getDeck(Utils.CardType type) {
