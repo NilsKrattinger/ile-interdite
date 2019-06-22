@@ -10,13 +10,15 @@ public class WaterScaleView {
     private WaterScaleComponent scale;
 
     public WaterScaleView() {
-        mainPanel = new JPanel();
-        scale = new WaterScaleComponent();
-        mainPanel.add(scale);
+        SwingUtilities.invokeLater(() -> {
+            mainPanel = new JPanel();
+            scale = new WaterScaleComponent();
+            mainPanel.add(scale);
+        });
     }
 
     public void setScale(int level) {
-        scale.setLevel(level);
+        SwingUtilities.invokeLater(() -> scale.setLevel(level));
     }
 
     public JPanel getMainPanel() {

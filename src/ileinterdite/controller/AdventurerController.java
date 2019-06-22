@@ -36,6 +36,7 @@ public class AdventurerController {
     // Action-specific variables
     private Card selectedCard; //< The card selected by the player during a GIVE_CARD action
     private ArrayList<Adventurer> giveCardList; //< The list of adventurers that the player can send cards to
+    ArrayList<Card> cardsToChoose; //< The list of cards the adventurer can send
 
     /**
      * Creates the controller that handles everything the Adventurers do
@@ -180,12 +181,18 @@ public class AdventurerController {
         currentActionAdventurer = adventurer;
         Cell adventurerCell = controller.getGridController().getGrid().getCell(adventurer.getX(), adventurer.getY());
         int nbOfAdventurersOnCell = adventurerCell.getAdventurers().size();
-        if ((nbOfAdventurersOnCell >= 2 || adventurer instanceof Messager) && adventurer.getNumberOfCards() > 0) {
+        cardsToChoose = new ArrayList<>();
+        for (Card card : currentAdventurer.getCards()) {
+            if (!card.getCardName().equalsIgnoreCase("Helicoptère") && !card.getCardName().equalsIgnoreCase("Sacs de sable")) {
+                cardsToChoose.add(card);
+            }
+        }
+        if ((nbOfAdventurersOnCell >= 2 || adventurer instanceof Messager) && cardsToChoose.size() > 0) {
             giveCardList = new ArrayList<>((adventurer instanceof Messager) ? getAdventurers() : adventurerCell.getAdventurers());
             giveCardList.remove(adventurer);
-            controller.getActionController().chooseCards(currentAdventurer.getCards(), 1, "donner");
+            controller.getActionController().chooseCards(cardsToChoose, 1, "donner");
         } else {
-            if (adventurer.getNumberOfCards() == 0) {
+            if (cardsToChoose.size() == 0) {
                 Utils.showInformation("Vous n'avez pas assez de cartes");
             } else {
                 Utils.showInformation("Aucun aventurier ne peut recevoir de carte ici");
@@ -240,7 +247,7 @@ public class AdventurerController {
                     ArrayList<Card> tempAdventurerHandCards = new ArrayList<>(adv.getCards());
                     tempAdventurerHandCards.add(selectedCard);
                     adv.getHand().clearHand();
-                    this.controller.getInterruptionController().initDiscard(adv, tempAdventurerHandCards);
+                    this.controller.getInterruptionController().initDiscard(adv, tempAdventurerHandCards, false);
                 } else {
                     giveCard(adv, selectedCard);
                     adventurerHandViews.get(adv).update(adv);

@@ -28,6 +28,8 @@ public class PawnsSelectionView implements IObservable<Message> {
     private ArrayList<JLabel> pawnsIco;
     private ArrayList<Integer> pawnsSelected;
     private ArrayList<Adventurer> adventurers;
+    private ArrayList<BufferedImage> normalIco;
+    private ArrayList<BufferedImage> selectedIco;
     private JPanel choicePanel;
 
 
@@ -35,128 +37,141 @@ public class PawnsSelectionView implements IObservable<Message> {
         pawnsSelected = new ArrayList<>();
         adventurers = new ArrayList<>();
         observers = new CopyOnWriteArrayList<>();
-        mainPanel = new JPanel(new BorderLayout());
         pawnsIco = new ArrayList<>();
 
-        this.initFrame();
-        validateButton = new JButton("Valider");
-        validateButton.addActionListener(actionEvent -> {
-            Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
+        normalIco = new ArrayList<>();
+        selectedIco = new ArrayList<>();
 
-            mainPanel.remove(choicePanel);
-            notifyObservers(m);
-            windowClose();
+        SwingUtilities.invokeLater(() -> {
+            mainPanel = new JPanel(new BorderLayout());
+            this.initFrame();
+            validateButton = new JButton("Valider");
+            validateButton.addActionListener(actionEvent -> {
+                Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
 
+                mainPanel.remove(choicePanel);
+                windowClose();
+                notifyObservers(m);
+            });
 
+            cancelButton = new JButton("Annuler");
+            cancelButton.addActionListener(actionEvent -> {
+                Message m = new Message(Utils.Action.CANCEL_ACTION, null);
+                windowClose();
+                notifyObservers(m);
+            });
+
+            buttonPanel = new JPanel();
+            buttonPanel.setLayout(new GridBagLayout());
+            GridBagConstraints c = new GridBagConstraints();
+            c.gridx = 0;
+            c.gridy = 0;
+            buttonPanel.add(validateButton,c);
+            c.gridx = 2;
+            c.gridy = 0;
+            buttonPanel.add(cancelButton,c);
+
+            window.add(mainPanel);
         });
-
-        cancelButton = new JButton("Annuler");
-        cancelButton.addActionListener(actionEvent -> {
-            Message m = new Message(Utils.Action.CANCEL_ACTION, null);
-            window.setVisible(false);
-            notifyObservers(m);
-        });
-
-        buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        buttonPanel.add(validateButton,c);
-        c.gridx = 2;
-        c.gridy = 0;
-        buttonPanel.add(cancelButton,c);
-
-        //mainPanel.add(cancelButton, BorderLayout.SOUTH);
-        window.add(mainPanel);
-
     }
 
     public void update(ArrayList<Adventurer> availableAdventurers, int nbAdventurers, boolean showValidation, boolean showCancel) {
-        windowLoad();
+        SwingUtilities.invokeLater(() -> {
+            windowLoad();
 
-        validateButton.setEnabled(showValidation);
-        validateButton.setVisible(showValidation);
+            validateButton.setEnabled(showValidation);
+            validateButton.setVisible(showValidation);
 
-        cancelButton.setEnabled(showCancel);
-        cancelButton.setVisible(showCancel);
-
-
+            cancelButton.setEnabled(showCancel);
+            cancelButton.setVisible(showCancel);
+        });
         adventurers = availableAdventurers;
 
-        choicePanel = new JPanel(new GridLayout(1, adventurers.size() - 1));
+        final int adventurerSize = adventurers.size();
+        SwingUtilities.invokeLater(() -> choicePanel = new JPanel(new GridLayout(1, adventurerSize - 1)));
 
         for (Adventurer adventuer : adventurers) {
 
             String path = "pions/" + "pion" + adventuer.getPawn().toString();
 
-            JPanel pawnPanel = new JPanel(new GridLayout(2, 1));
-
             BufferedImage img = Utils.loadImage(path + ".png");
             if (img != null) {
-                ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 2, img.getHeight() / 2, Image.SCALE_SMOOTH));
-                JLabel pawnIco = new JLabel("", SwingConstants.CENTER);
-                pawnIco.setIcon(icon);
-                pawnIco.addMouseListener(new MouseListener() {
+                selectedIco.add(img);
+                final ImageIcon icon = new ImageIcon(img.getScaledInstance(img.getWidth() / 2, img.getHeight() / 2, Image.SCALE_SMOOTH));
+                final ArrayList<BufferedImage> normalImg = new ArrayList<>(normalIco);
+                final ArrayList<BufferedImage> selectedImg = new ArrayList<>(selectedIco);
+                SwingUtilities.invokeLater(() -> {
+                    JPanel pawnPanel = new JPanel(new GridLayout(2, 1));
+                    JLabel pawnIco = new JLabel("", SwingConstants.CENTER);
+                    pawnIco.setIcon(icon);
+                    pawnIco.addMouseListener(new MouseListener() {
 
-                    @Override
-                    public void mouseClicked(MouseEvent mouseEvent) {
-                        int pawnIndex;
+                        @Override
+                        public void mouseClicked(MouseEvent mouseEvent) {
+                            int pawnIndex;
 
-                        pawnIndex = pawnsIco.indexOf(mouseEvent.getComponent());
-                        if (pawnIndex != -1) {
-                            JLabel pawn = pawnsIco.get(pawnIndex);
-                            if (pawnsSelected.contains(pawnIndex)){
-                                pawn.getParent().setBackground(Color.lightGray);
-                                pawnsSelected.remove(pawnsSelected.indexOf(pawnIndex));
-                            } else {
-                                pawn.getParent().setBackground(Color.WHITE);
-                                pawnsSelected.add(pawnIndex);
+                            pawnIndex = pawnsIco.indexOf(mouseEvent.getComponent());
+                            if (pawnIndex != -1) {
+                                JLabel pawn = pawnsIco.get(pawnIndex);
+                                if (pawnsSelected.contains(pawnIndex)) {
+                                    pawn.setIcon(new ImageIcon(normalImg.get(pawnIndex).getScaledInstance(normalImg.get(pawnIndex).getWidth() / 2, normalImg.get(pawnIndex).getHeight() / 2, Image.SCALE_SMOOTH)));
+                                    pawnsSelected.remove(pawnsSelected.indexOf(pawnIndex));
+                                } else {
+                                    pawn.setIcon(new ImageIcon(selectedImg.get(pawnIndex).getScaledInstance(selectedImg.get(pawnIndex).getWidth() / 2, selectedImg.get(pawnIndex).getHeight() / 2, Image.SCALE_SMOOTH)));
+                                    pawnsSelected.add(pawnIndex);
+                                }
+                            }
+
+                            if (pawnsSelected.size() == nbAdventurers) {
+                                Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
+
+                                mainPanel.remove(choicePanel);
+                                windowClose();
+                                notifyObservers(m);
+
                             }
                         }
 
-                        if (pawnsSelected.size() == nbAdventurers) {
-                            Message m = new Message(Utils.Action.ADVENTURER_CHOICE, buildStringMessage(pawnsSelected));
-
-                            mainPanel.remove(choicePanel);
-                            notifyObservers(m);
-                            windowClose();
-
+                        @Override
+                        public void mousePressed(MouseEvent mouseEvent) {
                         }
-                    }
 
-                    @Override
-                    public void mousePressed(MouseEvent mouseEvent) {
-                    }
+                        @Override
+                        public void mouseReleased(MouseEvent mouseEvent) {
+                        }
 
-                    @Override
-                    public void mouseReleased(MouseEvent mouseEvent) {
-                    }
+                        @Override
+                        public void mouseEntered(MouseEvent mouseEvent) {
+                        }
 
-                    @Override
-                    public void mouseEntered(MouseEvent mouseEvent) {
-                    }
+                        @Override
+                        public void mouseExited(MouseEvent mouseEvent) {
+                        }
+                    });
 
-                    @Override
-                    public void mouseExited(MouseEvent mouseEvent) {
-                    }
+                    mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+                    pawnsIco.add(pawnIco);
+
+                    pawnPanel.add(pawnIco);
+                    pawnPanel.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
+
+
+                    choicePanel.add(pawnPanel);
+                    mainPanel.add(choicePanel, BorderLayout.CENTER);
+
+                    choicePanel.repaint();
+                    window.setVisible(true);
                 });
-
-                mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-                pawnsIco.add(pawnIco);
-
-                pawnPanel.add(pawnIco);
-                pawnPanel.add(new JLabel(adventuer.getName(), SwingConstants.CENTER));
-                pawnPanel.setBackground(Color.lightGray);
-
-                choicePanel.add(pawnPanel);
-                mainPanel.add(choicePanel, BorderLayout.CENTER);
-
-                choicePanel.repaint();
-                window.setVisible(true);
             }
         }
+
+        this.createIcons();
+        SwingUtilities.invokeLater(() -> {
+            for (int i = 0; i < pawnsIco.size(); i++) {
+                pawnsIco.get(i).setIcon(new ImageIcon(normalIco.get(i).getScaledInstance(normalIco.get(i).getWidth() /2, normalIco.get(i).getHeight() /2 , Image.SCALE_SMOOTH)));
+            }
+        });
     }
 
     /**
@@ -193,6 +208,14 @@ public class PawnsSelectionView implements IObservable<Message> {
 
         window.setVisible(false);
 
+    }
+
+    private void createIcons() {
+        for (BufferedImage img : selectedIco) {
+            normalIco.add(Utils.deepCopy(img));
+            Utils.setOpacity(normalIco.get(normalIco.size() - 1), 128);
+
+        }
     }
 
     /**

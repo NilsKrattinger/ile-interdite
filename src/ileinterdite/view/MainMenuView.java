@@ -39,6 +39,10 @@ public class MainMenuView implements IObservable<StartMessage> {
 
     public MainMenuView() {
         this.observers = new CopyOnWriteArrayList<>();
+        SwingUtilities.invokeLater(this::initView);
+    }
+
+    private void initView() {
         this.initWindow();
 
         mainPanel = new JPanel(new BorderLayout());
@@ -197,7 +201,7 @@ public class MainMenuView implements IObservable<StartMessage> {
 
 
     public void setVisible() {
-        this.window.setVisible(true);
+        SwingUtilities.invokeLater(() -> this.window.setVisible(true));
     }
 
     @Override

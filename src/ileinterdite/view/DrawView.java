@@ -1,6 +1,7 @@
 package ileinterdite.view;
 
 import ileinterdite.model.Card;
+import ileinterdite.util.Parameters;
 import ileinterdite.util.Utils;
 
 import javax.swing.*;
@@ -21,15 +22,18 @@ public class DrawView implements ActionListener {
     public DrawView() {
         cardsToShow = new ArrayList<>();
 
-        window = new JFrame();
-        window.setTitle("Cartes piochées");
-        window.setSize(495, 689);
-        window.setLocationRelativeTo(null);
-        window.setUndecorated(true);
+        SwingUtilities.invokeLater(() -> {
+            window = new JFrame();
+            window.setTitle("Cartes piochées");
+            window.setSize(495, 689);
+            window.setLocationRelativeTo(null);
+            window.setUndecorated(true);
+            window.setAlwaysOnTop(true);
 
-        remakeWindow();
+            remakeWindow();
 
-        updater = new Timer(1500, this);
+            updater = new Timer(900, this);
+        });
     }
 
     private void remakeWindow() {
@@ -44,17 +48,19 @@ public class DrawView implements ActionListener {
             BufferedImage img = Utils.loadImage("cartes/" + card.getCardName() + ".png");
             if (img != null) {
                 this.cardsToShow.add(img);
-            } else {
+            } else if (Parameters.LOGS) {
                 System.out.println("cartes/" + card.getCardName().replaceAll("[\\s']", "") + ".png non trouvé");
             }
         }
 
-        if (!window.isVisible()) {
-            remakeWindow();
-            window.setVisible(true);
-            updateCard();
-            updater.start();
-        }
+        SwingUtilities.invokeLater(() -> {
+            if (!window.isVisible()) {
+                remakeWindow();
+                window.setVisible(true);
+                updateCard();
+                updater.start();
+            }
+        });
     }
 
     @Override
@@ -85,9 +91,5 @@ public class DrawView implements ActionListener {
             updater.stop();
             window.setVisible(false);
         }
-    }
-
-    public JFrame getWindow() {
-        return window;
     }
 }

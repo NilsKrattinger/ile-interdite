@@ -30,7 +30,7 @@ public class MainMenuController implements IObserver<StartMessage> {
 
             BoardFactory.initBoardFactory();
             if (!Parameters.RANDOM) {
-                new PlayerSelectionView(BoardFactory.getAdventurers(), playerName.size(), this);
+                new PlayerSelectionView(BoardFactory.getAdventurers(), playerName.size()).addObserver(this);
                 playerSlection = true;
             } else {
                 GameController c = new GameController(this, difficulty);
