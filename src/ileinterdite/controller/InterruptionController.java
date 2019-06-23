@@ -224,6 +224,7 @@ public class InterruptionController {
             if (!specialCardsToUse.isEmpty()) {
                 startCardInterruption(currentActionAdventurer, specialCardsToUse.remove(0));
             } else if (isTurnEnd) {
+                isTurnEnd = false;
                 controller.drawFloodCards();
             }
         }
@@ -292,6 +293,7 @@ public class InterruptionController {
                 if (specialCardsToUse != null && !specialCardsToUse.isEmpty()) {
                     startCardInterruption(currentActionAdventurer, specialCardsToUse.remove(0));
                 } else if (isTurnEnd) {
+                    isTurnEnd = false;
                     controller.drawFloodCards();
                 }
             }
