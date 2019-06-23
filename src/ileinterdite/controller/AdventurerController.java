@@ -247,7 +247,6 @@ public class AdventurerController {
             if (adv.getClassName().equalsIgnoreCase(selectedAdventurerName)) {
                 currentActionAdventurer.getCards().remove(selectedCard);
                 adventurerHandViews.get(currentActionAdventurer).update(currentActionAdventurer);
-                this.controller.getActionController().reduceNbActions();
 
                 int nbOfCardsInReceiverHand = adv.getNumberOfCards();
                 if (nbOfCardsInReceiverHand == 5) {
@@ -258,6 +257,7 @@ public class AdventurerController {
                 } else {
                     giveCard(adv, selectedCard);
                     adventurerHandViews.get(adv).update(adv);
+                    this.controller.getActionController().reduceNbActions();
                 }
             }
         }

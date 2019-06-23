@@ -222,10 +222,13 @@ public class InterruptionController {
             controller.getDeckController().updatePiles();
             controller.getActionController().endInterruption();
             if (!specialCardsToUse.isEmpty()) {
+                controller.getActionController().reduceNbActions(); // Give card doesn't reduce nb actions if the receiver must discard
                 startCardInterruption(currentActionAdventurer, specialCardsToUse.remove(0));
             } else if (isTurnEnd) {
                 isTurnEnd = false;
                 controller.drawFloodCards();
+            } else {
+                controller.getActionController().reduceNbActions(); // Give card doesn't reduce nb actions if the receiver must discard
             }
         }
     }
