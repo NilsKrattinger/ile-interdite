@@ -48,8 +48,8 @@ public class MainMenuView implements IObservable<StartMessage> {
         ////////////////OPTION PANEL///////////////////
         JPanel optionPanel = new JPanel(new GridLayout(4, 1));
         JLabel optionLabel = new JLabel("Options : ");
-        logOption = new JCheckBox("Afficher les log");
-        demoOption = new JCheckBox("Jouer avec la partie de démonstartion");
+        logOption = new JCheckBox("Afficher les logs");
+        demoOption = new JCheckBox("Jouer avec la partie de démonstration");
         randomOption = new JCheckBox("Jouer avec l'aléatoire");
         randomOption.setSelected(true);
 
