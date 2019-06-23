@@ -46,15 +46,27 @@ public class AdventurerView implements IObservable<Message> {
 
         JPanel actionButtonPanel = new JPanel(new GridLayout(2, 2));
         JButton moveButton = new JButton("Bouger");
+        BufferedImage moveImg = Utils.loadImage("icones/iconMove" + ".png");
+        ImageIcon moveIco =  new ImageIcon(moveImg.getScaledInstance(moveImg.getWidth() / 2, moveImg.getHeight() / 2, Image.SCALE_SMOOTH));
+        moveButton.setIcon(moveIco);
         moveButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.MOVE)));
 
         JButton dryButton = new JButton("Assécher");
+        BufferedImage dryImg = Utils.loadImage("icones/iconDry" + ".png");
+        ImageIcon dryIco =  new ImageIcon(dryImg.getScaledInstance(dryImg.getWidth() / 2, dryImg.getHeight() / 2, Image.SCALE_SMOOTH));
+        dryButton.setIcon(dryIco);
         dryButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.DRY)));
 
         JButton giveCardButton = new JButton("Donner carte");
+        BufferedImage giveImg = Utils.loadImage("icones/iconGive" + ".png");
+        ImageIcon giveIco =  new ImageIcon(giveImg.getScaledInstance(giveImg.getWidth() / 2, giveImg.getHeight() / 2, Image.SCALE_SMOOTH));
+        giveCardButton.setIcon(giveIco);
         giveCardButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.GIVE_CARD)));
 
         JButton getTreasureButton = new JButton("Récupérer Trésor");
+        BufferedImage getImg = Utils.loadImage("icones/iconGet" + ".png");
+        ImageIcon getIco =  new ImageIcon(getImg.getScaledInstance(getImg.getWidth() / 2, getImg.getHeight() / 2, Image.SCALE_SMOOTH));
+        getTreasureButton.setIcon(getIco);
         getTreasureButton.addActionListener(e -> notifyObservers(new Message(Utils.Action.GET_TREASURE)));
 
         actionButtonPanel.add(moveButton);
